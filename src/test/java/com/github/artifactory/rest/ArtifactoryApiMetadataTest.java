@@ -29,7 +29,6 @@ import org.jclouds.apis.Apis;
 import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
-import com.github.artifactory.rest.ArtifactoryApiMetadata;
 import com.google.common.reflect.TypeToken;
 
 /**

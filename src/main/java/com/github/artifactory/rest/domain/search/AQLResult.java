@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.artifactory.rest.domain.storage;
+package com.github.artifactory.rest.domain.search;
 
 import java.util.List;
 
@@ -27,20 +27,16 @@ import com.google.common.collect.ImmutableList;
 @AutoValue
 public abstract class AQLResult {
 
-   public abstract String version();
+   public abstract List<Result> results();
 
-   public abstract String revision();
-
-   public abstract List<String> addons();
-
-   public abstract String license();
+   public abstract Range range();
 
    AQLResult() {
    }
 
-   @SerializedNames({ "version", "revision", "addons", "license" })
-   public static AQLResult create(String version, String revision, List<String> addons, String license) {
-      return new AutoValue_AQLResult(version, revision,
-            addons != null ? ImmutableList.copyOf(addons) : ImmutableList.<String> of(), license);
+   @SerializedNames({ "results", "range" })
+   public static AQLResult create(List<Result> results, Range range) {
+      return new AutoValue_AQLResult(results != null ? ImmutableList.copyOf(results) : ImmutableList.<Result> of(),
+            range);
    }
 }

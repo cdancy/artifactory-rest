@@ -26,11 +26,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.RequestFilters;
 
-import com.github.artifactory.rest.domain.storage.AQLResult;
+import com.github.artifactory.rest.domain.search.AQLResult;
+import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/api/search")
+@RequestFilters(ArtifactoryAuthentication.class)
 public interface SearchApi {
 
    @Named("search:aql")

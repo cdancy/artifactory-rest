@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 
 import com.github.artifactory.rest.ArtifactoryApi;
 import com.github.artifactory.rest.domain.system.Version;
-import com.github.artifactory.rest.features.SystemApi;
 import com.github.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;

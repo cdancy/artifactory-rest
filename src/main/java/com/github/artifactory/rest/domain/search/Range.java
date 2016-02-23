@@ -14,29 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.artifactory.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+package com.github.artifactory.rest.domain.search;
 
-import org.testng.annotations.Test;
+import org.jclouds.json.SerializedNames;
 
-import com.github.artifactory.rest.BaseArtifactoryApiLiveTest;
-import com.github.artifactory.rest.domain.system.Version;
+import com.google.auto.value.AutoValue;
 
-@Test(groups = "live", testName = "SystemApiLiveTest")
-public class SystemApiLiveTest extends BaseArtifactoryApiLiveTest {
+@AutoValue
+public abstract class Range {
 
-   private final String versionRegex = "^\\d+\\.\\d+\\.\\d+$";
+   public abstract int start_pos();
 
-   @Test
-   public void testGetVersion() {
-      Version version = api().version();
-      assertNotNull(version);
-      assertTrue(version.version().matches(versionRegex));
+   public abstract int end_pos();
+
+   public abstract int total();
+
+   Range() {
    }
 
-   private SystemApi api() {
-      return api.systemApi();
+   @SerializedNames({ "start_pos", "end_pos", "total" })
+   public static Range create(int start_pos, int end_pos, int total) {
+      return new AutoValue_Range(start_pos, end_pos, total);
    }
 }

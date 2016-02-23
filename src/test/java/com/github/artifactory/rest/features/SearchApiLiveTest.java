@@ -16,18 +16,20 @@
  */
 package com.github.artifactory.rest.features;
 
+import static org.testng.Assert.assertNotNull;
+
 import org.testng.annotations.Test;
 
 import com.github.artifactory.rest.BaseArtifactoryApiLiveTest;
-import com.github.artifactory.rest.features.SearchApi;
+import com.github.artifactory.rest.domain.search.AQLResult;
 
 @Test(groups = "live", testName = "SearchApiLiveTest")
 public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testAql() {
-      // Version version = api().assertNotNull(version);
-      // assertTrue(version.version().matches(versionRegex));
+      AQLResult res = api().aql("items.find({\"repo\":{\"$eq\":\"plugins-release\"}})");
+      assertNotNull(res);
    }
 
    private SearchApi api() {

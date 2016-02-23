@@ -19,7 +19,6 @@ package com.github.artifactory.rest.features;
 import org.testng.annotations.Test;
 
 import com.github.artifactory.rest.BaseArtifactoryApiLiveTest;
-import com.github.artifactory.rest.features.StoragApi;
 
 @Test(groups = "live", testName = "StorageApiLiveTest")
 public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {

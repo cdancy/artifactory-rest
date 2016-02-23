@@ -26,7 +26,7 @@
     </parent>
   
     <!-- TODO: when out of labs, switch to org.jclouds.api -->
-    <artifactId>artifactory</artifactId>
+    <artifactId>artifactory-rest</artifactId>
     <name>jclouds artifactory api</name>
     <description>jclouds components to access an implementation of artifactory</description>
     <packaging>bundle</packaging>
@@ -35,8 +35,7 @@
        	<maven.compiler.source>1.7</maven.compiler.source>
    		<maven.compiler.target>1.7</maven.compiler.target>
         <test.artifactory.endpoint>http://127.0.0.1:8081/artifactory</test.artifactory.endpoint>
-        <test.artifactory.identity>admin</test.artifactory.identity>
-        <test.artifactory.credential>reroot</test.artifactory.credential>
+        <test.artifactory.credential>admin:password</test.artifactory.credential>
         <test.artifactory.api-version>4.5.1</test.artifactory.api-version>
         <jclouds.osgi.export>org.jclouds.artifactory*;version="${project.version}"</jclouds.osgi.export>
         <jclouds.osgi.import>
@@ -61,6 +60,11 @@
             <artifactId>auto-value</artifactId>
             <scope>provided</scope>
         </dependency>
+    	<dependency>
+      		<groupId>org.apache.jclouds.driver</groupId>
+      		<artifactId>jclouds-okhttp</artifactId>
+      		<version>${jclouds.version}</version>
+    	</dependency>
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.apache.jclouds</groupId>
@@ -110,7 +114,6 @@
                                 <configuration>
                                     <systemPropertyVariables>
                                         <test.artifactory.endpoint>${test.artifactory.endpoint}</test.artifactory.endpoint>
-                                        <test.artifactory.identity>${test.artifactory.identity}</test.artifactory.identity>
                                         <test.artifactory.credential>${test.artifactory.credential}</test.artifactory.credential>
                                         <test.artifactory.api-version>${test.artifactory.api-version}</test.artifactory.api-version>
                                     </systemPropertyVariables>

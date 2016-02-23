@@ -17,12 +17,12 @@
 package com.github.artifactory.rest.features;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
 import com.github.artifactory.rest.ArtifactoryApi;
-import com.github.artifactory.rest.domain.storage.AQLResult;
-import com.github.artifactory.rest.features.SearchApi;
+import com.github.artifactory.rest.domain.search.AQLResult;
 import com.github.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -42,10 +42,9 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       SearchApi api = jcloudsApi.searchApi();
       try {
          AQLResult res = api.aql("items.find({\"repo\":{\"$eq\":\"libs-release-local\"}})");
-         // Version version = api.version();
          assertNotNull(res);
-         // assertTrue(version.version().matches(versionRegex));
-         // assertSent(server, "GET", "/api/system/version");
+         assertTrue(res.results().size() == 1);
+         assertSent(server, "POST", "/api/search/aql");
       } finally {
          jcloudsApi.close();
          server.shutdown();

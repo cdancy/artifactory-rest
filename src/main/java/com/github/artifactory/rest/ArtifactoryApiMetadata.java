@@ -23,7 +23,10 @@ import java.util.Properties;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
+import com.github.artifactory.rest.config.ArtifactoryHttpApiModule;
 import com.google.auto.service.AutoService;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 @AutoService(ApiMetadata.class)
 public class ArtifactoryApiMetadata extends BaseHttpApiMetadata<ArtifactoryApi> {
@@ -53,11 +56,13 @@ public class ArtifactoryApiMetadata extends BaseHttpApiMetadata<ArtifactoryApi> 
 
       protected Builder() {
          super(ArtifactoryApi.class);
-         id("artifactory").name("Artifactory API").identityName("Optional Username").credentialName("Optional Password")
-               .defaultIdentity("admin").defaultCredential("password")
+         id("artifactory").name("Artifactory REST API").identityName("N/A")
+               .credentialName("Basic auth or JFrog service key").defaultIdentity("N/A")
+               .defaultCredential("admin:password")
                .documentation(URI.create("https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API"))
                .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:8081/artifactory")
-               .defaultProperties(ArtifactoryApiMetadata.defaultProperties());
+               .defaultProperties(ArtifactoryApiMetadata.defaultProperties())
+               .defaultModules(ImmutableSet.<Class<? extends Module>> of(ArtifactoryHttpApiModule.class));
       }
 
       @Override
