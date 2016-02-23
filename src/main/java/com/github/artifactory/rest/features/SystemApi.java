@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory.features;
+package com.github.artifactory.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -23,7 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import com.github.jclouds.artifactory.domain.system.Version;
+import com.github.artifactory.rest.domain.system.Version;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/api/system")

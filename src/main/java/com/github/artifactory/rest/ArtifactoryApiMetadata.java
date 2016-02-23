@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory;
+package com.github.artifactory.rest;
 
 import java.net.URI;
 import java.util.Properties;

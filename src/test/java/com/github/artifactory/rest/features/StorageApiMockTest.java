@@ -14,41 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jclouds.artifactory.features;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+package com.github.artifactory.rest.features;
 
 import org.testng.annotations.Test;
 
-import com.github.jclouds.artifactory.ArtifactoryApi;
-import com.github.jclouds.artifactory.domain.system.Version;
-import com.github.jclouds.artifactory.internal.BaseArtifactoryMockTest;
+import com.github.artifactory.rest.ArtifactoryApi;
+import com.github.artifactory.rest.features.StoragApi;
+import com.github.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
- * Mock tests for the {@link com.github.jclouds.artifactory.features.SystemApi}
+ * Mock tests for the {@link com.github.jclouds.artifactory.features.StorageApi}
  * class.
  */
-@Test(groups = "unit", testName = "SystemApiMockTest")
-public class SystemApiMockTest extends BaseArtifactoryMockTest {
+@Test(groups = "unit", testName = "StorageApiMockTest")
+public class StorageApiMockTest extends BaseArtifactoryMockTest {
 
-   private final String versionRegex = "^\\d+\\.\\d+\\.\\d+$";
-
-   public void testGetVersion() throws Exception {
+   public void testSetItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
-      server.enqueue(new MockResponse().setBody(payloadFromResource("/version.json")).setResponseCode(200));
-      ArtifactoryApi etcdJavaApi = api(server.getUrl("/"));
-      SystemApi api = etcdJavaApi.systemApi();
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/aql.json")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      StoragApi api = jcloudsApi.storageApi();
       try {
-         Version version = api.version();
-         assertNotNull(version);
-         assertTrue(version.version().matches(versionRegex));
-         assertSent(server, "GET", "/api/system/version");
+         // Version version = api.version();
+         // assertNotNull(version);
+         // assertTrue(version.version().matches(versionRegex));
+         // assertSent(server, "GET", "/api/system/version");
       } finally {
-         etcdJavaApi.close();
+         jcloudsApi.close();
          server.shutdown();
       }
    }

@@ -1,0 +1,21 @@
+{  
+   "results":[  
+      {  
+         "repo":"libs-release-local",
+         "path":"org/jfrog/artifactory",
+         "name":"artifactory.war",
+         "type":"item type",
+         "size":"75500000",
+         "created":"2015-01-01T10:10;10",
+         "created_by":"Jfrog",
+         "modified":"2015-01-01T10:10;10",
+         "modified_by":"Jfrog",
+         "updated":"2015-01-01T10:10;10"
+      }
+   ],
+   "range":{  
+      "start_pos":0,
+      "end_pos":1,
+      "total":1
+   }
+}

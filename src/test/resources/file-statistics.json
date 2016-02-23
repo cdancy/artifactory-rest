@@ -1,0 +1,6 @@
+{  
+   "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/foo/1.0/foo-1.0.jar",
+   "lastDownloaded":"Timestamp (ms)",
+   "downloadCount":1337,
+   "lastDownloadedBy":"user1"
+}

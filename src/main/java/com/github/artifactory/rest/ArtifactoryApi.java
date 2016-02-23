@@ -15,15 +15,23 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory;
+package com.github.artifactory.rest;
 
 import java.io.Closeable;
 
 import org.jclouds.rest.annotations.Delegate;
 
-import com.github.jclouds.artifactory.features.SystemApi;
+import com.github.artifactory.rest.features.SearchApi;
+import com.github.artifactory.rest.features.StoragApi;
+import com.github.artifactory.rest.features.SystemApi;
 
 public interface ArtifactoryApi extends Closeable {
+
+   @Delegate
+   SearchApi searchApi();
+
+   @Delegate
+   StoragApi storageApi();
 
    @Delegate
    SystemApi systemApi();

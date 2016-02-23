@@ -14,29 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jclouds.artifactory.features;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+package com.github.artifactory.rest.features;
 
 import org.testng.annotations.Test;
 
-import com.github.jclouds.artifactory.BaseArtifactoryApiLiveTest;
-import com.github.jclouds.artifactory.domain.system.Version;
+import com.github.artifactory.rest.BaseArtifactoryApiLiveTest;
+import com.github.artifactory.rest.features.StoragApi;
 
-@Test(groups = "live", testName = "SystemApiLiveTest")
-public class SystemApiLiveTest extends BaseArtifactoryApiLiveTest {
-
-   private final String versionRegex = "^\\d+\\.\\d+\\.\\d+$";
+@Test(groups = "live", testName = "StorageApiLiveTest")
+public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
-   public void testGetVersion() {
-      Version version = api().version();
-      assertNotNull(version);
-      assertTrue(version.version().matches(versionRegex));
+   public void testSetItemProperties() {
+      // Version version = api().assertNotNull(version);
+      // assertTrue(version.version().matches(versionRegex));
    }
 
-   private SystemApi api() {
-      return api.systemApi();
+   private StoragApi api() {
+      return api.storageApi();
    }
 }

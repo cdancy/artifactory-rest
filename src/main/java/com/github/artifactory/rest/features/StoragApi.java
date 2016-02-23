@@ -15,32 +15,26 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory.domain.system;
+package com.github.artifactory.rest.features;
 
-import java.util.List;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
-import org.jclouds.json.SerializedNames;
+import org.jclouds.rest.annotations.QueryParams;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableList;
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/api/storage")
+public interface StoragApi {
 
-@AutoValue
-public abstract class Version {
-
-   public abstract String version();
-
-   public abstract String revision();
-
-   public abstract List<String> addons();
-
-   public abstract String license();
-
-   Version() {
-   }
-
-   @SerializedNames({ "version", "revision", "addons", "license" })
-   public static Version create(String version, String revision, List<String> addons, String license) {
-      return new AutoValue_Version(version, revision,
-            addons != null ? ImmutableList.copyOf(addons) : ImmutableList.<String> of(), license);
-   }
+   @Named("storage:set-item-properties")
+   @Path("/{repoKey}/{itemPath}")
+   @QueryParams(keys = { "recursive" }, values = { "1" })
+   @PUT
+   void setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+         @QueryParam("properties") String commaSeparatedListOfKeyValuePairs);
 }

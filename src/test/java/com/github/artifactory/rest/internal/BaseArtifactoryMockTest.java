@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory.internal;
+package com.github.artifactory.rest.internal;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
 
-import com.github.jclouds.artifactory.ArtifactoryApi;
+import com.github.artifactory.rest.ArtifactoryApi;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.gson.JsonParser;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.jclouds.artifactory;
+package com.github.artifactory.rest;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -29,6 +29,7 @@ import org.jclouds.apis.Apis;
 import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
+import com.github.artifactory.rest.ArtifactoryApiMetadata;
 import com.google.common.reflect.TypeToken;
 
 /**

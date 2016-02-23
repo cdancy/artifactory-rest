@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jclouds.artifactory;
 
-import java.util.Properties;
+package com.github.artifactory.rest.domain.system;
 
-import org.jclouds.Constants;
-import org.jclouds.apis.BaseApiLiveTest;
-import org.testng.annotations.Test;
+import java.util.List;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import org.jclouds.json.SerializedNames;
 
-@Test(groups = "live")
-public class BaseArtifactoryApiLiveTest extends BaseApiLiveTest<ArtifactoryApi> {
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 
-   public BaseArtifactoryApiLiveTest() {
-      provider = "artifactory";
+@AutoValue
+public abstract class Version {
+
+   public abstract String version();
+
+   public abstract String revision();
+
+   public abstract List<String> addons();
+
+   public abstract String license();
+
+   Version() {
    }
 
-   @Override
-   protected Iterable<Module> setupModules() {
-      return ImmutableSet.<Module> of(getLoggingModule());
-   }
-
-   @Override
-   protected Properties setupProperties() {
-      Properties overrides = super.setupProperties();
-      overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
-      return overrides;
+   @SerializedNames({ "version", "revision", "addons", "license" })
+   public static Version create(String version, String revision, List<String> addons, String license) {
+      return new AutoValue_Version(version, revision,
+            addons != null ? ImmutableList.copyOf(addons) : ImmutableList.<String> of(), license);
    }
 }

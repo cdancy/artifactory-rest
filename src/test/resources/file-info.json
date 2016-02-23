@@ -1,0 +1,24 @@
+{  
+   "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom",
+   "downloadUri":"http://localhost:8080/artifactory/libs-release-local/org/acme/lib/ver/lib-ver.pom",
+   "repo":"libs-release-local",
+   "path":"/org/acme/lib/ver/lib-ver.pom",
+   "remoteUrl":"http://some-remote-repo/mvn/org/acme/lib/ver/lib-ver.pom",
+   "created":"ISO8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)",
+   "createdBy":"userY",
+   "lastModified":"ISO8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)",
+   "modifiedBy":"userX",
+   "lastUpdated":"ISO8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)",
+   "size":"1024",
+   "mimeType":"application/pom+xml",
+   "checksums":{  
+      "md5":"string",
+      "sha1":"string",
+      "sha256":"string"
+   },
+   "originalChecksums":{  
+      "md5":"string",
+      "sha1":"string",
+      "sha256":"string"
+   }
+}
