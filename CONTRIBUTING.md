@@ -24,8 +24,6 @@
 
 `ISSUE-1234: terse and to the point message describing change`
     
-
-
 * Make sure you have added the necessary tests for your changes.
 * Run _all_ the tests to assure nothing else was accidentally broken.
 * Make sure you've done a squash and rebase before submitting
