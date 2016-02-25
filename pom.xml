@@ -34,8 +34,8 @@
     <properties>
        	<maven.compiler.source>1.7</maven.compiler.source>
    		<maven.compiler.target>1.7</maven.compiler.target>
-        <test.artifactory.endpoint>http://127.0.0.1:8081/artifactory</test.artifactory.endpoint>
-        <test.artifactory.credential>admin:password</test.artifactory.credential>
+        <test.artifactory.endpoint>https://meshbincam.pega.com/artifactory</test.artifactory.endpoint>
+        <test.artifactory.credential>cambuild:pega135</test.artifactory.credential>
         <test.artifactory.api-version>4.5.1</test.artifactory.api-version>
         <jclouds.osgi.export>org.jclouds.artifactory*;version="${project.version}"</jclouds.osgi.export>
         <jclouds.osgi.import>

@@ -19,22 +19,42 @@ package com.github.artifactory.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
 
-@Consumes(MediaType.APPLICATION_JSON)
+import com.github.artifactory.rest.domain.storage.ItemProperties;
+import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.github.artifactory.rest.options.CreateItemProperties;
+import com.github.artifactory.rest.options.DeleteItemProperties;
+
 @Path("/api/storage")
-public interface StoragApi {
+@Consumes(MediaType.APPLICATION_JSON)
+@RequestFilters(ArtifactoryAuthentication.class)
+public interface StorageApi {
 
    @Named("storage:set-item-properties")
    @Path("/{repoKey}/{itemPath}")
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @PUT
-   void setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-         @QueryParam("properties") String commaSeparatedListOfKeyValuePairs);
+   boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+         CreateItemProperties properties);
+
+   @Named("storage:get-item-properties")
+   @Path("/{repoKey}/{itemPath}")
+   @GET
+   ItemProperties getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+
+   @Named("storage:delete-item-properties")
+   @Path("/{repoKey}/{itemPath}")
+   @QueryParams(keys = { "recursive" }, values = { "1" })
+   @DELETE
+   boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+         DeleteItemProperties properties);
 }

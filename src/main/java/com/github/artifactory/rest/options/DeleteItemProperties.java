@@ -14,33 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.artifactory.rest.options;
 
-package com.github.artifactory.rest;
+import static com.github.artifactory.rest.util.Preconditions2.checkNotEmpty;
 
-import java.io.Closeable;
+import java.util.Collection;
 
-import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
-import com.github.artifactory.rest.features.ArtifactApi;
-import com.github.artifactory.rest.features.RepositoryApi;
-import com.github.artifactory.rest.features.SearchApi;
-import com.github.artifactory.rest.features.StorageApi;
-import com.github.artifactory.rest.features.SystemApi;
+public class DeleteItemProperties extends BaseHttpRequestOptions {
 
-public interface ArtifactoryApi extends Closeable {
+   public DeleteItemProperties add(String key) {
+      checkNotEmpty(key, "`key` can not be empty");
+      Collection<String> existingProps = this.queryParameters.get("properties");
+      existingProps.add(key);
+      return this;
+   }
 
-   @Delegate
-   ArtifactApi artifactApi();
+   public static class Builder {
 
-   @Delegate
-   RepositoryApi respositoryApi();
-
-   @Delegate
-   SearchApi searchApi();
-
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+      /**
+       * @see DeleteItemProperties#add
+       */
+      public static DeleteItemProperties add(String key) {
+         DeleteItemProperties options = new DeleteItemProperties();
+         return options.add(key);
+      }
+   }
 }

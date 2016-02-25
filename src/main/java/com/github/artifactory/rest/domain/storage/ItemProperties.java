@@ -15,32 +15,29 @@
  * limitations under the License.
  */
 
-package com.github.artifactory.rest;
+package com.github.artifactory.rest.domain.storage;
 
-import java.io.Closeable;
+import java.util.List;
+import java.util.Map;
 
-import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.json.SerializedNames;
 
-import com.github.artifactory.rest.features.ArtifactApi;
-import com.github.artifactory.rest.features.RepositoryApi;
-import com.github.artifactory.rest.features.SearchApi;
-import com.github.artifactory.rest.features.StorageApi;
-import com.github.artifactory.rest.features.SystemApi;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
 
-public interface ArtifactoryApi extends Closeable {
+@AutoValue
+public abstract class ItemProperties {
 
-   @Delegate
-   ArtifactApi artifactApi();
+   public abstract String uri();
 
-   @Delegate
-   RepositoryApi respositoryApi();
+   public abstract Map<String, List<String>> properties();
 
-   @Delegate
-   SearchApi searchApi();
+   ItemProperties() {
+   }
 
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   @SerializedNames({ "uri", "properties" })
+   public static ItemProperties create(String uri, Map<String, List<String>> properties) {
+      return new AutoValue_ItemProperties(uri,
+            properties != null ? ImmutableMap.copyOf(properties) : ImmutableMap.<String, List<String>> of());
+   }
 }

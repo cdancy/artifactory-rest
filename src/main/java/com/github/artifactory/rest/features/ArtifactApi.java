@@ -19,27 +19,37 @@ package com.github.artifactory.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.io.Payload;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.RequestFilters;
 
-import com.github.artifactory.rest.domain.search.AQLResult;
+import com.github.artifactory.rest.domain.artifact.Artifact;
 import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.google.common.net.HttpHeaders;
 
-@Path("/api/search")
+@Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(ArtifactoryAuthentication.class)
-public interface SearchApi {
+public interface ArtifactApi {
 
-   @Named("search:aql")
-   @Path("/aql")
-   @Produces(MediaType.TEXT_PLAIN)
-   @Payload("{aql_query}")
-   @POST
-   AQLResult aql(@PayloadParam("aql_query") String query);
+   @Named("artifact:deploy")
+   @Path("/{repoKey}/{itemPath}")
+   @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
+   @PUT
+   Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+         Payload inputStream);
+
+   @Named("artifact:delete")
+   @Path("/{repoKey}/{itemPath}")
+   @Fallback(FalseOnNotFoundOr404.class)
+   @DELETE
+   boolean deleteArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 }

@@ -14,33 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.artifactory.rest.util;
 
-package com.github.artifactory.rest;
+import java.util.Collection;
 
-import java.io.Closeable;
+import com.google.common.base.Joiner;
 
-import org.jclouds.rest.annotations.Delegate;
+public class ArtifactoryUtils {
 
-import com.github.artifactory.rest.features.ArtifactApi;
-import com.github.artifactory.rest.features.RepositoryApi;
-import com.github.artifactory.rest.features.SearchApi;
-import com.github.artifactory.rest.features.StorageApi;
-import com.github.artifactory.rest.features.SystemApi;
-
-public interface ArtifactoryApi extends Closeable {
-
-   @Delegate
-   ArtifactApi artifactApi();
-
-   @Delegate
-   RepositoryApi respositoryApi();
-
-   @Delegate
-   SearchApi searchApi();
-
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   public static String collectionToString(Collection<String> collection) {
+      Joiner joiner = Joiner.on(",").skipNulls();
+      return joiner.join(collection);
+   }
 }

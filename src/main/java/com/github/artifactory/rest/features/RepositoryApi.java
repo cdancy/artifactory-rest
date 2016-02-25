@@ -19,18 +19,30 @@ package com.github.artifactory.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import com.github.artifactory.rest.domain.system.Version;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
 
-@Path("/api/system")
+import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
+
+@Path("/api/repositories")
 @Consumes(MediaType.APPLICATION_JSON)
-public interface SystemApi {
+@RequestFilters(ArtifactoryAuthentication.class)
+public interface RepositoryApi {
 
-   @Named("system:version")
-   @Path("/version")
-   @GET
-   Version version();
+   @Named("repository:create")
+   @Path("/{repoKey}")
+   @QueryParams(keys = { "pos" }, values = { "2" })
+   @PUT
+   boolean createRepository(@PathParam("repoKey") String repoKey);
+
+   @Named("repository:delete")
+   @Path("/{repoKey}")
+   @DELETE
+   boolean deleteRepository(@PathParam("repoKey") String repoKey);
 }

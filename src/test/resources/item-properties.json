@@ -1,10 +1,8 @@
 {  
-   "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme",
+   "uri":"http://localhost:8080/artifactory/api/storage/libs-snapshot-local/hello/world",
    "properties":{  
-      "p1":[  
-         "v1",
-         "v2",
-         "v3"
+      "hello":[  
+         "world"
       ],
       "p2":[  
          "v4",

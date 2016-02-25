@@ -1,0 +1,18 @@
+{  
+   "uri":"http://localhost:8080/artifactory/libs-release-local/my/jar/1.0/jar-1.0.jar",
+   "downloadUri":"http://localhost:8080/artifactory/libs-release-local/my/jar/1.0/jar-1.0.jar",
+   "repo":"libs-release-local",
+   "path":"/my/jar/1.0/jar-1.0.jar",
+   "created":"ISO8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)",
+   "createdBy":"userY",
+   "size":"1024",
+   "mimeType":"application/java-archive",
+   "checksums":{  
+      "md5":"string",
+      "sha1":"string"
+   },
+   "originalChecksums":{  
+      "md5":"string",
+      "sha1":"string"
+   }
+}

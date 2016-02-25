@@ -59,10 +59,13 @@ public class ArtifactoryAuthentication implements HttpRequestFilter {
       /*
        * client can pass in credential string in 1 of 3 ways:
        * 
-       * 1.) As colon delimited username and password: admin:password 2.) As
-       * base64 encoded value of colon delimited username and password:
-       * YWRtaW46cGFzc3dvcmQ= 3.) As JFrog api key which can be obtained from
-       * Artifactory portal:
+       * 1.) As colon delimited username and password: admin:password
+       * 
+       * 2.) As base64 encoded value of colon delimited username and password:
+       * YWRtaW46cGFzc3dvcmQ=
+       * 
+       * 3.) As JFrog api key which can be obtained from Artifactory portal:
+       * 
        * AKCp2TfiyqrqHmfzUzeQhJmQrDyEx1o2S25pcC2hLzCTu65rpVhEoL1G6ppHn4exmHYfCiyT4
        */
       String foundCredential = currentCreds.credential;

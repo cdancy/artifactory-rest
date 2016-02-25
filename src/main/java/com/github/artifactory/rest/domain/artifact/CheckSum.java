@@ -15,32 +15,27 @@
  * limitations under the License.
  */
 
-package com.github.artifactory.rest;
+package com.github.artifactory.rest.domain.artifact;
 
-import java.io.Closeable;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import org.jclouds.rest.annotations.Delegate;
+import com.google.auto.value.AutoValue;
 
-import com.github.artifactory.rest.features.ArtifactApi;
-import com.github.artifactory.rest.features.RepositoryApi;
-import com.github.artifactory.rest.features.SearchApi;
-import com.github.artifactory.rest.features.StorageApi;
-import com.github.artifactory.rest.features.SystemApi;
+@AutoValue
+public abstract class CheckSum {
 
-public interface ArtifactoryApi extends Closeable {
+   @Nullable
+   public abstract String md5();
 
-   @Delegate
-   ArtifactApi artifactApi();
+   @Nullable
+   public abstract String sha1();
 
-   @Delegate
-   RepositoryApi respositoryApi();
+   CheckSum() {
+   }
 
-   @Delegate
-   SearchApi searchApi();
-
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   @SerializedNames({ "md5", "sha1" })
+   public static CheckSum create(String md5, String sha1) {
+      return new AutoValue_CheckSum(md5, sha1);
+   }
 }
