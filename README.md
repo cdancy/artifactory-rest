@@ -7,15 +7,12 @@ artifactory-rest is a java-based client used to interact with Artifactory's REST
 
 Client's can be built like so:
 
-	ArtifactoryApi artifactoryApi = ContextBuilder.newBuilder("artifactory")
-	.endpoint("http://127.0.0.1:8081/artifactory")
-	.credentials("N/A", "admin:password")
-	.buildApi(ArtifactoryApi.class);
-	
-	boolean deleted = artifactoryApi
-						.artifactApi()
-						.deleteArtifact("libs-release-local", 
-										"hello/world/1.0/hello-world-1.0.jar");
+      ArtifactoryClient client = new ArtifactoryClient.Builder()
+      .endPoint("http://127.0.0.1:8081/artifactory")
+      .credentials("admin:password")
+      .build();
+
+      Version version = client.api().systemApi().version();
 
 ## Credentials
 

@@ -26,6 +26,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 
@@ -53,6 +55,7 @@ public interface StorageApi {
 
    @Named("storage:delete-item-properties")
    @Path("/{repoKey}/{itemPath}")
+   @Fallback(FalseOnNotFoundOr404.class)
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @DELETE
    boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
