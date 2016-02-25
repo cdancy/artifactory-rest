@@ -33,6 +33,10 @@ TODO: explain how to troubleshoot potential issues
     
 ## Testing
 
-Runnign tests can be done like so:
+Running mock tests can be done like so:
 
-	mvn clean install -Plive -Ptest.artifactory.endpoint=http://127.0.0.1:8081/artifactory
+	gradle clean build mockTest 
+	
+Running integration tests can be done like so (also runs mock tests):
+
+	gradle clean build integTest -PtestArtifactoryEndpoint=http://127.0.0.1:8081/artifactory -PtestArtifactoryCredential=admin:password

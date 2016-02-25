@@ -1,0 +1,111 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile ('org.apache.jclouds:jclouds-core:1.9.2') 
+    compile ('org.apache.jclouds.driver:jclouds-okhttp:1.9.2') 
+    compile ('com.google.auto.service:auto-service:1.0-rc2') 
+    compile ('com.google.auto.value:auto-value:1.1') 
+    testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests') 
+    testCompile ('org.testng:testng:6.8.21') 
+    testCompile ('org.assertj:assertj-core:1.7.0') 
+    testCompile ('com.squareup.okhttp:mockwebserver:2.2.0') 
+    testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
+    testCompile ('ch.qos.logback:logback-core:1.1.2') 
+    testCompile ('ch.qos.logback:logback-classic:1.1.2') 
+}
+
+ext.compatibilityVersion = '1.7'
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Artifactory REST client',
+                   'Implementation-Version': version,
+                   'Built-By': System.getProperty('user.name'),
+                   'Built-Date': new Date(),
+                   'Built-JDK': System.getProperty('java.version'),
+                   'Built-Gradle': gradle.gradleVersion
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+	javadoc.failOnError false
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += ["-Xlint:-options"]
+}
+
+task mockTest(type: Test) {
+    useTestNG() 
+	include "**/*MockTest.class"
+	testLogging {
+		showStandardStreams = true
+		events 'started', 'passed', 'failed'
+	}
+}
+
+task integTest(type: Test, dependsOn: ['mockTest']) {
+    useTestNG() 
+	include "**/*LiveTest.class"
+	testLogging {
+		showStandardStreams = true
+		events 'started', 'passed', 'failed'
+	}    
+    systemProperties = ["test.artifactory.endpoint" : "${testArtifactoryEndpoint}",
+    					"test.artifactory.credential" : "${testArtifactoryCredential}"]
+}
+
+artifactory {
+	contextUrl = artifactoryURL
+	publish {
+		repository {
+			repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
+			username = artifactoryUser
+			password = artifactoryPassword
+			maven = true
+		}
+		defaults {
+			publications ('artifactoryJava')
+		}
+	}
+}
+
+publishing {
+	publications {
+		artifactoryJava(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
+}
+
+
+

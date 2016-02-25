@@ -2,7 +2,9 @@
 syntax: glob
 target/
 test-output/
+build/
 bin/
+.gradle/
 .settings/
 .classpath
 .project
