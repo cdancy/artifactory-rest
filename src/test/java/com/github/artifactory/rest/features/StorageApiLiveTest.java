@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 import com.github.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.github.artifactory.rest.domain.artifact.Artifact;
 import com.github.artifactory.rest.domain.storage.ItemProperties;
-import com.github.artifactory.rest.options.CreateItemProperties;
+import com.github.artifactory.rest.options.SetItemProperties;
 import com.github.artifactory.rest.options.DeleteItemProperties;
 
 @Test(groups = "live", testName = "StorageApiLiveTest")
@@ -53,7 +53,7 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
    @Test
    public void testSetItemProperties() {
       boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""),
-            CreateItemProperties.Builder.add("hello", "world"));
+            SetItemProperties.Builder.add("hello", "world"));
       assertTrue(itemSet);
    }
 

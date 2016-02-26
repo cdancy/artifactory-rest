@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import com.github.artifactory.rest.ArtifactoryApi;
 import com.github.artifactory.rest.domain.storage.ItemProperties;
 import com.github.artifactory.rest.internal.BaseArtifactoryMockTest;
-import com.github.artifactory.rest.options.CreateItemProperties;
+import com.github.artifactory.rest.options.SetItemProperties;
 import com.github.artifactory.rest.options.DeleteItemProperties;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -45,7 +45,7 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       StorageApi api = jcloudsApi.storageApi();
       try {
          boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world",
-               CreateItemProperties.Builder.add("hello", "world"));
+               SetItemProperties.Builder.add("hello", "world"));
          assertTrue(itemSet);
          assertSent(server, "PUT", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello%3Dworld");
       } finally {

@@ -34,7 +34,8 @@ public class DeleteItemProperties extends BaseHttpRequestOptions {
    public static class Builder {
 
       /**
-       * @see DeleteItemProperties#add
+       * @param key name of key to delete
+       * @return instance of DeleteItemProperties
        */
       public static DeleteItemProperties add(String key) {
          DeleteItemProperties options = new DeleteItemProperties();

@@ -23,9 +23,9 @@ import java.util.Collection;
 
 import org.jclouds.http.options.BaseHttpRequestOptions;
 
-public class CreateItemProperties extends BaseHttpRequestOptions {
+public class SetItemProperties extends BaseHttpRequestOptions {
 
-   public CreateItemProperties add(String key, String value) {
+   public SetItemProperties add(String key, String value) {
       checkNotEmpty(key, "`key` can not be empty");
       checkNotEmpty(value, "`value` can not be empty");
       String keyValuePair = key + "=" + value;
@@ -46,10 +46,12 @@ public class CreateItemProperties extends BaseHttpRequestOptions {
    public static class Builder {
 
       /**
-       * @see CreateItemProperties#add
+       * @param key name of key to add
+       * @param value value to set key to
+       * @return instance of SetItemProperties
        */
-      public static CreateItemProperties add(String key, String value) {
-         CreateItemProperties options = new CreateItemProperties();
+      public static SetItemProperties add(String key, String value) {
+         SetItemProperties options = new SetItemProperties();
          return options.add(key, value);
       }
    }

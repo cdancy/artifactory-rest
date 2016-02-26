@@ -30,6 +30,8 @@ public class Preconditions2 {
     * 
     * @param nullableString
     *           string to verify. Can be null or empty.
+    *
+    * @return String we attempted to check
     */
    public static String checkNotEmpty(String nullableString) {
       return Preconditions2.checkNotEmpty(nullableString, "Argument can't be null or empty");
@@ -43,6 +45,8 @@ public class Preconditions2 {
     *           string to verify. Can be null or empty.
     * @param message
     *           message to show in case of exception
+    *
+    * @return String we attempted to check
     */
    public static String checkNotEmpty(String nullableString, String message) {
       checkArgument(nullableString != null && nullableString.length() > 0, message);

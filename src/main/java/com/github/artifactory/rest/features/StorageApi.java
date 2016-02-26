@@ -33,7 +33,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 
 import com.github.artifactory.rest.domain.storage.ItemProperties;
 import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
-import com.github.artifactory.rest.options.CreateItemProperties;
+import com.github.artifactory.rest.options.SetItemProperties;
 import com.github.artifactory.rest.options.DeleteItemProperties;
 
 @Path("/api/storage")
@@ -46,7 +46,7 @@ public interface StorageApi {
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @PUT
    boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-         CreateItemProperties properties);
+         SetItemProperties properties);
 
    @Named("storage:get-item-properties")
    @Path("/{repoKey}/{itemPath}")
