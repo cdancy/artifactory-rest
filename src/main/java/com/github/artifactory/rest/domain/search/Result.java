@@ -17,6 +17,7 @@
 
 package com.github.artifactory.rest.domain.search;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
@@ -24,33 +25,40 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class Result {
 
-   public abstract String repo();
+    public abstract String repo();
 
-   public abstract String path();
+    public abstract String path();
 
-   public abstract String name();
+    public abstract String name();
 
-   public abstract String type();
+    @Nullable
+    public abstract String type();
 
-   public abstract String size();
+    @Nullable
+    public abstract String size();
 
-   public abstract String created();
+    @Nullable
+    public abstract String created();
 
-   public abstract String created_by();
+    @Nullable
+    public abstract String created_by();
 
-   public abstract String modified();
+    @Nullable
+    public abstract String modified();
 
-   public abstract String modified_by();
+    @Nullable
+    public abstract String modified_by();
 
-   public abstract String updated();
+    @Nullable
+    public abstract String updated();
 
-   Result() {
-   }
+    Result() {
+    }
 
-   @SerializedNames({ "repo", "path", "name", "type", "size", "created", "created_by", "modified", "modified_by",
+    @SerializedNames({ "repo", "path", "name", "type", "size", "created", "created_by", "modified", "modified_by",
          "updated" })
-   public static Result create(String repo, String path, String name, String type, String size, String created,
+    public static Result create(String repo, String path, String name, String type, String size, String created,
          String created_by, String modified, String modified_by, String updated) {
       return new AutoValue_Result(repo, path, name, type, size, created, created_by, modified, modified_by, updated);
-   }
+    }
 }

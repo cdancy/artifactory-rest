@@ -28,6 +28,7 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.AuthorizationException;
+import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
@@ -48,9 +49,18 @@ public class ArtifactoryErrorHandler implements HttpErrorHandler {
          message = message != null ? message
                : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response.getStatusLine());
          switch (response.getStatusCode()) {
+            case 400:
+                if (command.getCurrentRequest().getMethod().equals("POST")) {
+                    if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/aql")) {
+                        if (message != null && message.indexOf("Fail to parse query") != -1) {
+                            exception = new IllegalArgumentException(message, exception);
+                        }
+                    }
+                }
+                break;
             case 401:
-               exception = new AuthorizationException(message, exception);
-               break;
+                exception = new AuthorizationException(message, exception);
+                break;
          }
       } finally {
          closeQuietly(response.getPayload());
