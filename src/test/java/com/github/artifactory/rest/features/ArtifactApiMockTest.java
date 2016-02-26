@@ -18,8 +18,10 @@ package com.github.artifactory.rest.features;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import org.apache.commons.io.IOUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
@@ -29,6 +31,9 @@ import com.github.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
+import java.io.InputStream;
+import java.io.StringWriter;
+
 /**
  * Mock tests for the {@link com.github.artifactory.rest.features.ArtifactApi}
  * class.
@@ -36,7 +41,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 @Test(groups = "unit", testName = "ArtifactApiMockTest")
 public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
 
-   public void testDeployArtifact() throws Exception {
+    public void testDeployArtifact() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       String payload = payloadFromResource("/artifact.json");
@@ -54,9 +59,48 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testDeleteArtifact() throws Exception {
+    public void testRetrieveArtifact() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/retrieve-artifact.txt");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt");
+            assertNotNull(inputStream);
+
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(inputStream, writer, "UTF-8");
+
+            assertTrue(writer.toString().equals(payload));
+            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testRetrieveNonExistentArtifact() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/retrieve-artifact.txt");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(404));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt");
+            assertNull(inputStream);
+            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testDeleteArtifact() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setResponseCode(204));
@@ -70,9 +114,9 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testDeleteNonExistentArtifact() throws Exception {
+    public void testDeleteNonExistentArtifact() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       String payload = payloadFromResource("/artifact.json");
@@ -87,5 +131,5 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 }

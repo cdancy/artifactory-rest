@@ -21,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URL;
@@ -110,5 +111,11 @@ public class BaseArtifactoryMockTest {
       assertEquals(request.getHeader("Content-Type"), APPLICATION_JSON);
       assertEquals(parser.parse(request.getUtf8Body()), parser.parse(json));
       return request;
+   }
+
+   protected RecordedRequest assertSentIgnoreContentType(MockWebServer server, String method, String path, String body)
+           throws InterruptedException {
+       RecordedRequest request = assertSent(server, method, path);
+       return request;
    }
 }

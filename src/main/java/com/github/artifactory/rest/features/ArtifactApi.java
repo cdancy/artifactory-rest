@@ -18,14 +18,11 @@
 package com.github.artifactory.rest.features;
 
 import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.io.Payload;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
@@ -34,6 +31,8 @@ import org.jclouds.rest.annotations.RequestFilters;
 import com.github.artifactory.rest.domain.artifact.Artifact;
 import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
 import com.google.common.net.HttpHeaders;
+
+import java.io.InputStream;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -46,6 +45,12 @@ public interface ArtifactApi {
    @PUT
    Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
          Payload inputStream);
+
+   @Named("artifact:retrieve")
+   @Path("/{repoKey}/{itemPath}")
+   @Fallback(NullOnNotFoundOr404.class)
+   @GET
+   InputStream retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 
    @Named("artifact:delete")
    @Path("/{repoKey}/{itemPath}")
