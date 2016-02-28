@@ -21,9 +21,12 @@ import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import com.github.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.io.Payload;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.RequestFilters;
@@ -33,6 +36,7 @@ import com.github.artifactory.rest.filters.ArtifactoryAuthentication;
 import com.google.common.net.HttpHeaders;
 
 import java.io.InputStream;
+import java.util.Map;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -44,13 +48,14 @@ public interface ArtifactApi {
    @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
    @PUT
    Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-         Payload inputStream);
+                           Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
 
    @Named("artifact:retrieve")
    @Path("/{repoKey}/{itemPath}")
    @Fallback(NullOnNotFoundOr404.class)
    @GET
-   InputStream retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+   InputStream retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+                                @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
 
    @Named("artifact:delete")
    @Path("/{repoKey}/{itemPath}")

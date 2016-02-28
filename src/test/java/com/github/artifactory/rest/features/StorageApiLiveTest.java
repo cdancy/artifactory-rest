@@ -45,7 +45,7 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
       tempArtifact = randomFile();
       itemPath = randomPath();
       artifact = api.artifactApi().deployArtifact(repoKey, itemPath + "/" + tempArtifact.getName(),
-            Payloads.newPayload(tempArtifact));
+            Payloads.newPayload(tempArtifact), null);
       assertNotNull(artifact);
       assertTrue(artifact.repo().equals(repoKey));
    }

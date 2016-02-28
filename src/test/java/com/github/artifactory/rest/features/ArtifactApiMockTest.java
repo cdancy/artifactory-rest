@@ -33,6 +33,8 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mock tests for the {@link com.github.artifactory.rest.features.ArtifactApi}
@@ -50,7 +52,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
       ArtifactApi api = jcloudsApi.artifactApi();
       try {
          Artifact artifact = api.deployArtifact("libs-release-local", "my/jar/1.0/jar-1.0.jar",
-               Payloads.newPayload(payload));
+               Payloads.newPayload(payload), null);
 
          assertNotNull(artifact);
          assertTrue(artifact.repo().equals("libs-release-local"));
@@ -61,6 +63,28 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
       }
     }
 
+    public void testDeployArtifactWithProperties() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/artifact.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put("hello", "world");
+            Artifact artifact = api.deployArtifact("libs-release-local", "my/jar/1.0/jar-1.0.jar",
+                    Payloads.newPayload(payload), properties);
+
+            assertNotNull(artifact);
+            assertTrue(artifact.repo().equals("libs-release-local"));
+            assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar;hello=world");
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testRetrieveArtifact() throws Exception {
         MockWebServer server = mockArtifactoryJavaWebServer();
 
@@ -69,7 +93,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
         try {
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt");
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
             assertNotNull(inputStream);
 
             StringWriter writer = new StringWriter();
@@ -77,6 +101,51 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
 
             assertTrue(writer.toString().equals(payload));
             assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testRetrieveArtifactWithProperties() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/retrieve-artifact.txt");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put("hello", "world");
+
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
+            assertNotNull(inputStream);
+
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(inputStream, writer, "UTF-8");
+
+            assertTrue(writer.toString().equals(payload));
+            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", payload);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testRetrieveArtifactWithIllegalPropertyValue() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/retrieve-artifact.txt");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(404));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put("hello", "world");
+
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
+            assertNull(inputStream);
+            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", payload);
         } finally {
             jcloudsApi.close();
             server.shutdown();
@@ -91,7 +160,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
         try {
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt");
+            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
             assertNull(inputStream);
             assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
         } finally {
