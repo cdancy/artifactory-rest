@@ -24,12 +24,12 @@ import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.storage.ItemProperties;
-import com.cdancy.artifactory.rest.features.StorageApi;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
-import com.cdancy.artifactory.rest.options.DeleteItemProperties;
-import com.cdancy.artifactory.rest.options.SetItemProperties;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mock tests for the {@link com.cdancy.artifactory.rest.features.StorageApi}
@@ -45,8 +45,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       StorageApi api = jcloudsApi.storageApi();
       try {
-         boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world",
-               SetItemProperties.Builder.add("hello", "world"));
+         Map<String, String> props = new HashMap<String, String>();
+         props.put("hello", "world");
+         boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world", props);
          assertTrue(itemSet);
          assertSent(server, "PUT", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello%3Dworld");
       } finally {
@@ -81,10 +82,11 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       StorageApi api = jcloudsApi.storageApi();
       try {
-         boolean propertyDeleted = api.deleteItemProperties("libs-snapshot-local", "hello/world",
-               DeleteItemProperties.Builder.add("hello"));
+         Map<String, String> props = new HashMap<String, String>();
+         props.put("hello", "world");
+         boolean propertyDeleted = api.deleteItemProperties("libs-snapshot-local", "hello/world", props);
          assertTrue(propertyDeleted);
-         assertSent(server, "DELETE", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello");
+         assertSent(server, "DELETE", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello%3Dworld");
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -98,10 +100,11 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       StorageApi api = jcloudsApi.storageApi();
       try {
-         boolean propertyDeleted = api.deleteItemProperties("libs-snapshot-local", "hello/world",
-               DeleteItemProperties.Builder.add("hello"));
+         Map<String, String> props = new HashMap<String, String>();
+         props.put("hello", "world");
+         boolean propertyDeleted = api.deleteItemProperties("libs-snapshot-local", "hello/world", props);
          assertFalse(propertyDeleted);
-         assertSent(server, "DELETE", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello");
+         assertSent(server, "DELETE", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello%3Dworld");
       } finally {
          jcloudsApi.close();
          server.shutdown();

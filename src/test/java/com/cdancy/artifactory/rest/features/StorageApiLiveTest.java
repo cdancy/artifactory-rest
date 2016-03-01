@@ -20,6 +20,8 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
@@ -29,9 +31,6 @@ import org.testng.annotations.Test;
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.storage.ItemProperties;
-import com.cdancy.artifactory.rest.features.StorageApi;
-import com.cdancy.artifactory.rest.options.DeleteItemProperties;
-import com.cdancy.artifactory.rest.options.SetItemProperties;
 
 @Test(groups = "live", testName = "StorageApiLiveTest")
 public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
@@ -53,8 +52,9 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testSetItemProperties() {
-      boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""),
-            SetItemProperties.Builder.add("hello", "world"));
+      Map<String, String> props = new HashMap<String, String>();
+      props.put("hello", "world");
+      boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
       assertTrue(itemSet);
    }
 
@@ -66,15 +66,17 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test(dependsOnMethods = "testGetItemProperties")
    public void testDeleteItemProperties() {
-      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""),
-            DeleteItemProperties.Builder.add("hello"));
+      Map<String, String> props = new HashMap<String, String>();
+      props.put("hello", "world");
+      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
       assertTrue(itemDelete);
    }
 
    @Test(dependsOnMethods = "testDeleteItemProperties")
    public void testDeleteNonExistentItemProperties() {
-      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""),
-            DeleteItemProperties.Builder.add("hello"));
+      Map<String, String> props = new HashMap<String, String>();
+      props.put("hello", "world");
+      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
       assertTrue(itemDelete);
    }
 
