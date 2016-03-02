@@ -34,8 +34,10 @@ public class BindPropertiesToPath implements Binder {
         Map<String, String> props = (Map<String, String>) properties;
         checkArgument(props.size() > 0, "properties Map cannot be empty");
 
+        int size = props.size();
         StringBuilder propertiesProp = new StringBuilder();
         for (Map.Entry<String, String> prop : props.entrySet()) {
+            size -= 1;
             String potentialKey = prop.getKey().trim();
             if (potentialKey.length() > 0) {
                 propertiesProp.append(potentialKey);
@@ -44,19 +46,17 @@ public class BindPropertiesToPath implements Binder {
                     if (potentialValue.length() > 0)
                         propertiesProp.append("=").append(potentialValue);
                 }
-                propertiesProp.append(",");
+                if (size > 0)
+                    propertiesProp.append("|");
             }
         }
-
 
         if (propertiesProp.length() == 0) {
             throw new IllegalArgumentException("properties did not have any valid key/value pairs");
         }
 
-        if (propertiesProp.charAt(propertiesProp.length() - 1) == ',') {
-            propertiesProp.setLength(propertiesProp.length() - 1);
-        }
-
         return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
+        //String newEndPoint = request.getEndpoint().toString() + "%26properties%3Dfish%3Dbear%2Cmonkey%3Dturtle";
+        //return (R) request.toBuilder().endpoint(newEndPoint).build();
     }
 }

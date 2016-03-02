@@ -29,14 +29,11 @@ import javax.ws.rs.core.MediaType;
 import com.cdancy.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import com.cdancy.artifactory.rest.binders.BindPropertiesToPath;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.QueryParams;
-import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.*;
 
-import com.cdancy.artifactory.rest.domain.storage.ItemProperties;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
 
+import java.util.List;
 import java.util.Map;
 
 @Path("/api/storage")
@@ -53,8 +50,10 @@ public interface StorageApi {
 
    @Named("storage:get-item-properties")
    @Path("/{repoKey}/{itemPath}")
+   @QueryParams(keys = { "properties" })
+   @SelectJson({"properties"})
    @GET
-   ItemProperties getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+   Map<String, List<String>> getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 
    @Named("storage:delete-item-properties")
    @Path("/{repoKey}/{itemPath}")

@@ -23,12 +23,12 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
-import com.cdancy.artifactory.rest.domain.storage.ItemProperties;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,9 +47,11 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       try {
          Map<String, String> props = new HashMap<String, String>();
          props.put("hello", "world");
-         boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world", props);
+          props.put("bear", "fish");
+
+          boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world", props);
          assertTrue(itemSet);
-         assertSent(server, "PUT", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello%3Dworld");
+         assertSent(server, "PUT", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=bear%3Dfish%7Chello%3Dworld");
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -63,12 +65,12 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       StorageApi api = jcloudsApi.storageApi();
       try {
-         ItemProperties itemProperties = api.getItemProperties("libs-snapshot-local", "hello/world");
+         Map<String, List<String>> itemProperties = api.getItemProperties("libs-snapshot-local", "hello/world");
          assertNotNull(itemProperties);
-         assertTrue(itemProperties.properties().size() > 0);
-         assertTrue(itemProperties.properties().containsKey("hello"));
-         assertTrue(itemProperties.properties().get("hello").contains("world"));
-         assertSent(server, "GET", "/api/storage/libs-snapshot-local/hello/world");
+         assertTrue(itemProperties.size() > 0);
+         assertTrue(itemProperties.containsKey("hello"));
+         assertTrue(itemProperties.get("hello").contains("world"));
+         assertSent(server, "GET", "/api/storage/libs-snapshot-local/hello/world?properties");
       } finally {
          jcloudsApi.close();
          server.shutdown();

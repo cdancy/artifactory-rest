@@ -21,6 +21,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jclouds.io.Payloads;
@@ -30,7 +31,6 @@ import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
-import com.cdancy.artifactory.rest.domain.storage.ItemProperties;
 
 @Test(groups = "live", testName = "StorageApiLiveTest")
 public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
@@ -52,24 +52,30 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testSetItemProperties() {
-      Map<String, String> props = new HashMap<String, String>();
-      props.put("hello", "world");
-      boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-      assertTrue(itemSet);
+       Map<String, String> props = new HashMap<String, String>();
+       props.put("hello", "world");
+       props.put("bear", "fish");
+       boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+       assertTrue(itemSet);
    }
 
    @Test(dependsOnMethods = "testSetItemProperties")
    public void testGetItemProperties() {
-      ItemProperties itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
-      assertNotNull(itemProperties);
+       Map<String, List<String>> itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
+       assertNotNull(itemProperties);
+       assertTrue(itemProperties.size() > 0);
+       assertTrue(itemProperties.containsKey("hello"));
+       assertTrue(itemProperties.get("hello").contains("world"));
+       assertTrue(itemProperties.containsKey("bear"));
+       assertTrue(itemProperties.get("bear").contains("fish"));
    }
 
    @Test(dependsOnMethods = "testGetItemProperties")
    public void testDeleteItemProperties() {
-      Map<String, String> props = new HashMap<String, String>();
-      props.put("hello", "world");
-      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-      assertTrue(itemDelete);
+       Map<String, String> props = new HashMap<String, String>();
+       props.put("hello", "world");
+       boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+       assertTrue(itemDelete);
    }
 
    @Test(dependsOnMethods = "testDeleteItemProperties")
