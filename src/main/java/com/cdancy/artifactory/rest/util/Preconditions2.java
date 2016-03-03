@@ -26,18 +26,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class Preconditions2 {
 
    /**
-    * Will throw an exception if the argument is null or empty.
-    * 
-    * @param nullableString
-    *           string to verify. Can be null or empty.
-    *
-    * @return String we attempted to check
-    */
-   public static String checkNotEmpty(String nullableString) {
-      return Preconditions2.checkNotEmpty(nullableString, "Argument can't be null or empty");
-   }
-
-   /**
     * Will throw an exception if the argument is null or empty. Accepts a custom
     * error message.
     * 

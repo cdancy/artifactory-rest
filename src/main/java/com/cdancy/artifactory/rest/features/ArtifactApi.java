@@ -25,26 +25,24 @@ import com.cdancy.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
 
+import com.cdancy.artifactory.rest.functions.HttpResponseToFile;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.io.Payload;
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.Headers;
-import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.*;
 
 import com.google.common.net.HttpHeaders;
 
-import java.io.InputStream;
+import java.io.File;
 import java.util.Map;
 
 @Path("/")
-@Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(ArtifactoryAuthentication.class)
 public interface ArtifactApi {
 
    @Named("artifact:deploy")
+   @Consumes(MediaType.APPLICATION_JSON)
    @Path("/{repoKey}/{itemPath}")
    @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
    @PUT
@@ -52,11 +50,13 @@ public interface ArtifactApi {
                            Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
 
    @Named("artifact:retrieve")
+   @Consumes(MediaType.APPLICATION_OCTET_STREAM)
    @Path("/{repoKey}/{itemPath}")
+   @ResponseParser(HttpResponseToFile.class)
    @Fallback(NullOnNotFoundOr404.class)
    @GET
-   InputStream retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                                @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
+   File retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+                         @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
 
    @Named("artifact:delete")
    @Path("/{repoKey}/{itemPath}")

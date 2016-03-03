@@ -19,10 +19,6 @@ package com.cdancy.artifactory.rest;
 
 import org.jclouds.ContextBuilder;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
 public class ArtifactoryClient {
 
     private String endPoint;
@@ -30,13 +26,13 @@ public class ArtifactoryClient {
     private final ArtifactoryApi artifactoryApi;
 
     public ArtifactoryClient(final String endPoint, final String credentials) {
-       this.endPoint = endPoint;
-       this.credentials = credentials;
+        this.endPoint = endPoint;
+        this.credentials = credentials;
 
-       configureParameters();
+        configureParameters();
 
-       this.artifactoryApi = ContextBuilder.newBuilder(new ArtifactoryApiMetadata.Builder().build()).endpoint(endPoint())
-               .credentials("N/A", credentials()).buildApi(ArtifactoryApi.class);
+        this.artifactoryApi = ContextBuilder.newBuilder(new ArtifactoryApiMetadata.Builder().build()).endpoint(endPoint())
+                .credentials("N/A", credentials()).buildApi(ArtifactoryApi.class);
     }
 
     private void configureParameters() {
@@ -72,15 +68,16 @@ public class ArtifactoryClient {
     }
 
     public String endPoint() {
-      return endPoint;
-   }
+        return endPoint;
+    }
+
     public String credentials() {
-      return credentials;
-   }
+        return credentials;
+    }
 
     public ArtifactoryApi api() {
-      return artifactoryApi;
-   }
+        return artifactoryApi;
+    }
 
     public static class Builder {
         private String endPoint;
@@ -105,7 +102,7 @@ public class ArtifactoryClient {
         }
 
         public ArtifactoryClient build() {
-         return new ArtifactoryClient(endPoint, credentials);
+            return new ArtifactoryClient(endPoint, credentials);
         }
-   }
+    }
 }

@@ -19,6 +19,7 @@ package com.cdancy.artifactory.rest.features;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import com.sun.media.jfxmedia.Media;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
@@ -27,6 +28,8 @@ import com.cdancy.artifactory.rest.features.SearchApi;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+
+import javax.ws.rs.core.MediaType;
 
 /**
  * Mock tests for the {@link com.cdancy.artifactory.rest.features.SearchApi}
@@ -45,7 +48,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
          AQLResult res = api.aql("items.find({\"repo\":{\"$eq\":\"libs-release-local\"}})");
          assertNotNull(res);
          assertTrue(res.results().size() == 1);
-         assertSent(server, "POST", "/api/search/aql");
+         assertSent(server, "POST", "/api/search/aql", MediaType.APPLICATION_JSON);
       } finally {
          jcloudsApi.close();
          server.shutdown();

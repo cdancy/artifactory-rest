@@ -16,14 +16,151 @@
  */
 package com.cdancy.artifactory.rest.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Throwables;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 public class ArtifactoryUtils {
 
-   public static String collectionToString(Collection<String> collection) {
-      Joiner joiner = Joiner.on(",").skipNulls();
+   public static final String LOCATION_HEADER = "Artifactory-Rest-File-Location";
+
+   public static File resolveInputStream(InputStream inputStream, File destination) {
+
+      FileOutputStream outputStream = null;
+      try {
+
+         if (destination.exists()) {
+            if (!destination.delete()) {
+               throw new RuntimeException("Failed to delete previous file @ " + destination.getAbsolutePath());
+            }
+         }
+
+         byte[] buffer = new byte[8192];
+         outputStream = new FileOutputStream(destination);
+         IOUtils.copyLarge(inputStream, outputStream, buffer);
+
+      } catch (Exception e) {
+         Throwables.propagate(e);
+      } finally {
+         if (outputStream != null) {
+            try {
+               outputStream.close();
+            } catch (Exception e2) {
+               Throwables.propagate(e2);
+            }
+         }
+      }
+
+      return destination;
+   }
+
+   public static File getGradleFile(GAVCoordinates gavCoordinates, String fileName, String etag) {
+      File gradleFile = new File(getGradleFilesDir(), gavCoordinates.group +
+              "/" + gavCoordinates.artifact +
+              "/" + gavCoordinates.version +
+              "/" + etag +
+              "/" + fileName);
+      if (!gradleFile.getParentFile().exists()) {
+         try {
+            FileUtils.forceMkdir(gradleFile.getParentFile());
+         } catch (Exception e) {
+            Throwables.propagate(e);
+         }
+      }
+
+      return gradleFile;
+   }
+
+   public static String getBasePath(URL url, String endpoint) {
+      String pathFromUrl = url.toString().replaceFirst(endpoint, "");
+      if (url.getQuery() != null) {
+         int index = url.getQuery().lastIndexOf("?");
+         if (index != -1) {
+            pathFromUrl = url.getQuery().substring(0, index);
+         }
+      }
+
+      return pathFromUrl;
+   }
+
+   public static void main(String [] args) throws Exception {
+      File fish = getGradleFilesDir();
+      URL url = new URL("https://meshbincam.pega.com/artifactory/builds-prpc-dev-local/com/pega/prpc/assemblies/coreAssembly/HEAD-10642/coreAssembly-HEAD-10642.zip");
+      String endpoint = "https://meshbincam.pega.com/artifactory";
+
+      String bear = getBasePath(url, endpoint);
+      System.out.println("foudn home: " + fish.getAbsolutePath());
+      System.out.println("foudn url: " + bear);
+      String [] stuff = bear.split("/");
+
+      List<String> gavArray = Arrays.asList(Arrays.copyOfRange(stuff, 2, stuff.length));
+      List<String> groupArray = gavArray.subList(0, gavArray.size() - 3);
+      String group = collectionToString(groupArray, ".");
+      String artifact = gavArray.get(groupArray.size());
+      String version = gavArray.get(groupArray.size() + 1);
+      System.out.println(group);
+      System.out.println(artifact);
+      System.out.println(version);
+
+
+   }
+
+   public static GAVCoordinates gavFromURL(URL url, URL endpoint) {
+      GAVCoordinates gavCoordinates = new GAVCoordinates();
+
+      String sanitizedURL = getBasePath(url, endpoint.toString());
+      String [] sanitizedURLParts = sanitizedURL.split("/");
+
+      List<String> gavArray = Arrays.asList(Arrays.copyOfRange(sanitizedURLParts, 2, sanitizedURLParts.length));
+      List<String> groupArray = gavArray.subList(0, gavArray.size() - 3);
+
+      gavCoordinates.group = collectionToString(groupArray, ".");
+      gavCoordinates.artifact = gavArray.get(groupArray.size());
+      gavCoordinates.version = gavArray.get(groupArray.size() + 1);
+
+      return gavCoordinates;
+   }
+
+   public static File getGradleFilesDir() {
+      File gradleFilesDir = new File(getGradleHome(), "/caches/modules-2/files-2.1");
+      if (!gradleFilesDir.exists()) {
+         try {
+            FileUtils.forceMkdir(gradleFilesDir);
+         } catch (Exception e) {
+            Throwables.propagate(e);
+         }
+      }
+      return gradleFilesDir;
+   }
+
+   public static File getGradleHome() {
+      String possibleGradleHome = System.getenv("GRADLE_HOME");
+      if (possibleGradleHome == null) {
+         possibleGradleHome = System.getProperty("user.home") + "/.gradle";
+      }
+      File gradleHome = new File(possibleGradleHome);
+      if (!gradleHome.exists()) {
+         try {
+            FileUtils.forceMkdir(gradleHome);
+         } catch (Exception e) {
+            Throwables.propagate(e);
+         }
+      }
+      return gradleHome;
+   }
+
+   public static String collectionToString(Collection<String> collection, String separator) {
+      Joiner joiner = Joiner.on(separator != null ? separator : ",").skipNulls();
       return joiner.join(collection);
    }
 }

@@ -16,26 +16,24 @@
  */
 package com.cdancy.artifactory.rest.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
+import com.cdancy.artifactory.rest.ArtifactoryApi;
+import com.cdancy.artifactory.rest.domain.artifact.Artifact;
+import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
+import com.google.common.net.HttpHeaders;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
-import com.cdancy.artifactory.rest.ArtifactoryApi;
-import com.cdancy.artifactory.rest.domain.artifact.Artifact;
-import com.cdancy.artifactory.rest.features.ArtifactApi;
-import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
-
-import java.io.InputStream;
+import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.testng.Assert.*;
 
 /**
  * Mock tests for the {@link com.cdancy.artifactory.rest.features.ArtifactApi}
@@ -57,7 +55,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
 
          assertNotNull(artifact);
          assertTrue(artifact.repo().equals("libs-release-local"));
-         assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar");
+         assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar", MediaType.APPLICATION_JSON);
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -79,7 +77,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
 
             assertNotNull(artifact);
             assertTrue(artifact.repo().equals("libs-release-local"));
-            assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar;hello=world");
+            assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar;hello=world", MediaType.APPLICATION_JSON);
         } finally {
             jcloudsApi.close();
             server.shutdown();
@@ -90,19 +88,29 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         MockWebServer server = mockArtifactoryJavaWebServer();
 
         String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        server.enqueue(new MockResponse().
+                setBody(payload).
+                setHeader("X-Artifactory-Filename", "jar-1.0.txt").
+                setHeader("X-Checksum-Md5", randomString()).
+                setResponseCode(200));
+
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
+        File inputStream = null;
         try {
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
+            inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
             assertNotNull(inputStream);
+            assertTrue(inputStream.exists());
 
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(inputStream, writer, "UTF-8");
+            String content = FileUtils.readFileToString(inputStream);
 
-            assertTrue(writer.toString().equals(payload));
-            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
+            assertTrue(content.toString().equals(payload));
+            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
+            if (inputStream != null && inputStream.exists()) {
+                FileUtils.deleteQuietly(inputStream.getParentFile());
+            }
+
             jcloudsApi.close();
             server.shutdown();
         }
@@ -112,22 +120,31 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         MockWebServer server = mockArtifactoryJavaWebServer();
 
         String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        server.enqueue(new MockResponse().
+                setBody(payload).
+                setHeader("X-Artifactory-Filename", "jar-1.0.txt").
+                setHeader("X-Checksum-Md5", randomString()).
+                setResponseCode(200));
+
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
+        File inputStream = null;
         try {
             Map<String, String> properties = new HashMap<String, String>();
             properties.put("hello", "world");
 
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
-            assertNotNull(inputStream);
+            inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
+            assertTrue(inputStream.exists());
 
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(inputStream, writer, "UTF-8");
+            String content = FileUtils.readFileToString(inputStream);
 
-            assertTrue(writer.toString().equals(payload));
-            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", payload);
+            assertTrue(content.toString().equals(payload));
+            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
+            if (inputStream != null && inputStream.exists()) {
+                FileUtils.deleteQuietly(inputStream.getParentFile());
+            }
+
             jcloudsApi.close();
             server.shutdown();
         }
@@ -144,9 +161,9 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
             Map<String, String> properties = new HashMap<String, String>();
             properties.put("hello", "world");
 
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
+            File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
             assertNull(inputStream);
-            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", payload);
+            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
             jcloudsApi.close();
             server.shutdown();
@@ -161,9 +178,9 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
         try {
-            InputStream inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
+            File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
             assertNull(inputStream);
-            assertSentIgnoreContentType(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", payload);
+            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
             jcloudsApi.close();
             server.shutdown();
@@ -179,7 +196,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
       try {
          boolean deleted = api.deleteArtifact("libs-release-local", "my/jar/1.0/jar-1.0.jar");
          assertTrue(deleted);
-         assertSent(server, "DELETE", "/libs-release-local/my/jar/1.0/jar-1.0.jar");
+         assertSent(server, "DELETE", "/libs-release-local/my/jar/1.0/jar-1.0.jar", MediaType.WILDCARD);
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -196,7 +213,7 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
       try {
          boolean deleted = api.deleteArtifact("libs-release-local", "my/jar/1.0/jar-1.0.jar");
          assertFalse(deleted);
-         assertSent(server, "DELETE", "/libs-release-local/my/jar/1.0/jar-1.0.jar");
+         assertSent(server, "DELETE", "/libs-release-local/my/jar/1.0/jar-1.0.jar", MediaType.WILDCARD);
       } finally {
          jcloudsApi.close();
          server.shutdown();

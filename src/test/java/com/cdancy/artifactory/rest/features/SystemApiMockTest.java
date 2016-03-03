@@ -28,6 +28,8 @@ import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
+import javax.ws.rs.core.MediaType;
+
 /**
  * Mock tests for the {@link com.cdancy.artifactory.rest.features.SystemApi}
  * class.
@@ -47,7 +49,7 @@ public class SystemApiMockTest extends BaseArtifactoryMockTest {
          Version version = api.version();
          assertNotNull(version);
          assertTrue(version.version().matches(versionRegex));
-         assertSent(server, "GET", "/api/system/version");
+         assertSent(server, "GET", "/api/system/version", MediaType.APPLICATION_JSON);
       } finally {
          jcloudsApi.close();
          server.shutdown();

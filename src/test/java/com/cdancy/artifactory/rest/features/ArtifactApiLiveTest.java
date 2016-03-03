@@ -22,13 +22,13 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
-import com.cdancy.artifactory.rest.features.ArtifactApi;
 import com.google.common.base.Throwables;
 import org.apache.commons.io.FileUtils;
 import org.jclouds.io.Payloads;
@@ -44,6 +44,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     private String itemPath;
     private String itemPathWithProperties;
     private Map<String, String> itemProperties = new HashMap<String, String>();
+    private List<File> filesToDelete = new CopyOnWriteArrayList<File>();
 
     @BeforeClass
     public void testInitialize() {
@@ -67,19 +68,16 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     public void testRetrieveArtifact() {
         File tempFile = null;
         try {
-            InputStream inputStream = api().retrieveArtifact(repoKey, itemPath + "/" + tempArtifact.getName(), null);
-            assertNotNull(inputStream);
-            tempFile = new File(System.getProperty("java.io.tmpdir"), randomUUID() + ".txt");
-            FileUtils.copyInputStreamToFile(inputStream, tempFile);
+            tempFile = api().retrieveArtifact(repoKey, itemPath + "/" + tempArtifact.getName(), null);
+            assertNotNull(tempFile);
+            assertTrue(tempFile.exists());
+            filesToDelete.add(tempFile);
 
             String expectedText = FileUtils.readFileToString(tempArtifact);
             String randomFileText = FileUtils.readFileToString(tempFile);
             assertTrue(expectedText.equals(randomFileText));
         } catch (Exception e) {
             Throwables.propagate(e);
-        } finally {
-            if (tempFile != null && tempFile.exists())
-                FileUtils.deleteQuietly(tempFile);
         }
     }
 
@@ -96,23 +94,20 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         assertTrue(artifact.repo().equals(repoKey));
     }
 
-    @Test (dependsOnMethods = "testDeployArtifactWithProperties")
+    @Test(dependsOnMethods = "testDeployArtifactWithProperties")
     public void testRetrieveArtifactWithProperties() {
         File tempFile = null;
         try {
-            InputStream inputStream = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), itemProperties);
-            assertNotNull(inputStream);
-            tempFile = new File(System.getProperty("java.io.tmpdir"), randomUUID() + ".txt");
-            FileUtils.copyInputStreamToFile(inputStream, tempFile);
+            tempFile = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), itemProperties);
+            assertNotNull(tempFile);
+            assertTrue(tempFile.exists());
+            filesToDelete.add(tempFile);
 
             String expectedText = FileUtils.readFileToString(tempArtifact);
             String randomFileText = FileUtils.readFileToString(tempFile);
             assertTrue(expectedText.equals(randomFileText));
         } catch (Exception e) {
             Throwables.propagate(e);
-        } finally {
-            if (tempFile != null && tempFile.exists())
-                FileUtils.deleteQuietly(tempFile);
         }
     }
 
@@ -122,13 +117,10 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         try {
             Map<String, String> illegalPropertyValues = new HashMap<String, String>(itemProperties);
             illegalPropertyValues.put("key1", "HelloWorld");
-            InputStream inputStream = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), illegalPropertyValues);
+            File inputStream = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), illegalPropertyValues);
             assertNull(inputStream);
         } catch (Exception e) {
             Throwables.propagate(e);
-        } finally {
-            if (tempFile != null && tempFile.exists())
-                FileUtils.deleteQuietly(tempFile);
         }
     }
 
@@ -145,7 +137,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     @Test
     public void testRetrieveNonExistentArtifact() {
         try {
-            InputStream inputStream = api().retrieveArtifact(repoKey, randomPath() + ".txt", null);
+            File inputStream = api().retrieveArtifact(repoKey, randomPath() + ".txt", null);
             assertNull(inputStream);
         } catch (Exception e) {
             Throwables.propagate(e);
@@ -154,8 +146,14 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @AfterClass
     public void testFinalize() {
+        for (File file : filesToDelete) {
+            if (file != null && file.exists()) {
+                FileUtils.deleteQuietly(file.getParentFile());
+            }
+        }
         assertTrue(tempArtifact.delete());
         assertTrue(api().deleteArtifact(repoKey, itemPath.split("/")[0]));
+        assertTrue(api().deleteArtifact(repoKey, itemPathWithProperties.split("/")[0]));
     }
 
     private ArtifactApi api() {

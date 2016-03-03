@@ -23,6 +23,7 @@ dependencies {
     compile ('org.apache.jclouds.driver:jclouds-okhttp:1.9.2') 
     compile ('com.google.auto.service:auto-service:1.0-rc2') 
     compile ('com.google.auto.value:auto-value:1.1')
+	compile ('commons-io:commons-io:2.4')
 
 	testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests')
     testCompile ('org.testng:testng:6.8.21') 
@@ -31,7 +32,6 @@ dependencies {
     testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
     testCompile ('ch.qos.logback:logback-core:1.1.2') 
     testCompile ('ch.qos.logback:logback-classic:1.1.2')
-    testCompile ('commons-io:commons-io:2.4')
 }
 
 ext.compatibilityVersion = '1.7'

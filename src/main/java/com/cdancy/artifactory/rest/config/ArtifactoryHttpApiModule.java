@@ -16,12 +16,13 @@
  */
 package com.cdancy.artifactory.rest.config;
 
+import com.google.inject.Scopes;
+import org.jclouds.http.HttpCommandExecutorService;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.http.config.ConfiguresHttpCommandExecutorService;
-import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 
@@ -45,6 +46,6 @@ public class ArtifactoryHttpApiModule extends HttpApiModule<ArtifactoryApi> {
    @Override
    protected void configure() {
       super.configure();
-      install(new OkHttpCommandExecutorServiceModule());
+      bind(HttpCommandExecutorService.class).to(ArtifactoryOkHttpCommandExecutorService.class).in(Scopes.SINGLETON);
    }
 }
