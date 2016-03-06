@@ -15,30 +15,29 @@
  * limitations under the License.
  */
 
-package com.cdancy.artifactory.rest;
+package com.cdancy.artifactory.rest.domain.docker;
 
-import java.io.Closeable;
+import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import com.cdancy.artifactory.rest.features.*;
-import org.jclouds.rest.annotations.Delegate;
+@AutoValue
+public abstract class Promote {
 
-public interface ArtifactoryApi extends Closeable {
+   public abstract String targetRepo();
 
-   @Delegate
-   ArtifactApi artifactApi();
+   public abstract String dockerRepository();
 
-   @Delegate
-   DockerApi dockerApi();
+   @Nullable
+   public abstract String tag();
 
-   @Delegate
-   RepositoryApi respositoryApi();
+   public abstract boolean copy();
 
-   @Delegate
-   SearchApi searchApi();
+   Promote() {
+   }
 
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   @SerializedNames({ "targetRepo", "dockerRepository", "tag", "copy" })
+   public static Promote create(String targetRepo, String dockerRepository, String tag, boolean copy) {
+      return new AutoValue_Promote(targetRepo, dockerRepository, tag, copy);
+   }
 }
