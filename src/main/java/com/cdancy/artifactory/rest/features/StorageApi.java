@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.binders.BindListToPath;
 import com.cdancy.artifactory.rest.binders.BindPropertiesToPath;
+import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.rest.annotations.*;
 
@@ -36,30 +37,35 @@ import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
 import java.util.List;
 import java.util.Map;
 
-@Path("/api/storage")
+@Path("/api")
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(ArtifactoryAuthentication.class)
 public interface StorageApi {
 
    @Named("storage:set-item-properties")
-   @Path("/{repoKey}/{itemPath}")
+   @Path("/storage/{repoKey}/{itemPath}")
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @PUT
    boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
                              @BinderParam(BindPropertiesToPath.class) Map<String, String> properties);
 
    @Named("storage:get-item-properties")
-   @Path("/{repoKey}/{itemPath}")
+   @Path("/storage/{repoKey}/{itemPath}")
    @QueryParams(keys = { "properties" })
    @SelectJson({"properties"})
    @GET
    Map<String, List<String>> getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 
    @Named("storage:delete-item-properties")
-   @Path("/{repoKey}/{itemPath}")
+   @Path("/storage/{repoKey}/{itemPath}")
    @Fallback(FalseOnNotFoundOr404.class)
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @DELETE
    boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
                                 @BinderParam(BindListToPath.class) List<String> properties);
+
+   @Named("storage:info")
+   @Path("/storageinfo")
+   @GET
+   StorageInfo storageInfo();
 }

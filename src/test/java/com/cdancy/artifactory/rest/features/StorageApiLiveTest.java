@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -37,48 +38,48 @@ import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 @Test(groups = "live", testName = "StorageApiLiveTest")
 public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
-   private File tempArtifact;
-   private String repoKey = "libs-snapshot-local";
-   private String itemPath;
-   private Artifact artifact;
+    private File tempArtifact;
+    private String repoKey = "libs-snapshot-local";
+    private String itemPath;
+    private Artifact artifact;
 
-   @BeforeClass
-   public void testInitialize() {
-      tempArtifact = randomFile();
-      itemPath = randomPath();
-      artifact = api.artifactApi().deployArtifact(repoKey, itemPath + "/" + tempArtifact.getName(),
+    @BeforeClass
+    public void testInitialize() {
+        tempArtifact = randomFile();
+        itemPath = randomPath();
+        artifact = api.artifactApi().deployArtifact(repoKey, itemPath + "/" + tempArtifact.getName(),
             Payloads.newPayload(tempArtifact), null);
-      assertNotNull(artifact);
-      assertTrue(artifact.repo().equals(repoKey));
-   }
+        assertNotNull(artifact);
+        assertTrue(artifact.repo().equals(repoKey));
+    }
 
-   @Test
-   public void testSetItemProperties() {
-       Map<String, String> props = new HashMap<String, String>();
-       props.put("hello", "world");
-       props.put("bear", "fish");
-       boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-       assertTrue(itemSet);
-   }
+    @Test
+    public void testSetItemProperties() {
+        Map<String, String> props = new HashMap<String, String>();
+        props.put("hello", "world");
+        props.put("bear", "fish");
+        boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+        assertTrue(itemSet);
+    }
 
-   @Test(dependsOnMethods = "testSetItemProperties")
-   public void testGetItemProperties() {
-       Map<String, List<String>> itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
-       assertNotNull(itemProperties);
-       assertTrue(itemProperties.size() > 0);
-       assertTrue(itemProperties.containsKey("hello"));
-       assertTrue(itemProperties.get("hello").contains("world"));
-       assertTrue(itemProperties.containsKey("bear"));
-       assertTrue(itemProperties.get("bear").contains("fish"));
-   }
+    @Test(dependsOnMethods = "testSetItemProperties")
+    public void testGetItemProperties() {
+        Map<String, List<String>> itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
+        assertNotNull(itemProperties);
+        assertTrue(itemProperties.size() > 0);
+        assertTrue(itemProperties.containsKey("hello"));
+        assertTrue(itemProperties.get("hello").contains("world"));
+        assertTrue(itemProperties.containsKey("bear"));
+        assertTrue(itemProperties.get("bear").contains("fish"));
+    }
 
-   @Test(dependsOnMethods = "testGetItemProperties")
-   public void testDeleteItemProperties() {
-       List<String> props = new ArrayList<String>();
-       props.add("hello");
-       boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-       assertTrue(itemDelete);
-   }
+    @Test(dependsOnMethods = "testGetItemProperties")
+    public void testDeleteItemProperties() {
+        List<String> props = new ArrayList<String>();
+        props.add("hello");
+        boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+        assertTrue(itemDelete);
+    }
 
     @Test(dependsOnMethods = "testDeleteItemProperties")
     public void testGetItemPropertiesAfterDelete() {
@@ -88,20 +89,27 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
         assertFalse(itemProperties.containsKey("hello"));
     }
 
-   @Test(dependsOnMethods = "testGetItemPropertiesAfterDelete")
-   public void testDeleteNonExistentItemProperties() {
-       List<String> props = new ArrayList<String>();
-       props.add("hello");
-       props.add("world");
-       boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-       assertTrue(itemDelete);
-   }
+    @Test(dependsOnMethods = "testGetItemPropertiesAfterDelete")
+    public void testDeleteNonExistentItemProperties() {
+        List<String> props = new ArrayList<String>();
+        props.add("hello");
+        props.add("world");
+        boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+        assertTrue(itemDelete);
+    }
 
-   @AfterClass
-   public void testFinalize() {
-       assertTrue(tempArtifact.delete());
-       assertTrue(api.artifactApi().deleteArtifact(repoKey, itemPath.split("/")[0]));
-   }
+    @Test
+    public void testGetStorageInfo() {
+        StorageInfo storageInfo = api().storageInfo();
+        assertNotNull(storageInfo);
+        assertTrue(storageInfo.repositoriesSummaryList().size() > 0);
+    }
+
+    @AfterClass
+    public void testFinalize() {
+        assertTrue(tempArtifact.delete());
+        assertTrue(api.artifactApi().deleteArtifact(repoKey, itemPath.split("/")[0]));
+    }
 
    private StorageApi api() {
       return api.storageApi();

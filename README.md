@@ -14,6 +14,25 @@ Client's can be built like so:
 
       Version version = client.api().systemApi().version();
 
+## Property based setup
+
+Client's do NOT need supply the endPoint or credentials as part of instantiating
+the ArtifactoryClient object. Instead one can supply them through system properties,
+environment variables, or a combination of the 2. System properties will be searched
+first and if not found we will attempt to query the environment.
+
+Setting the `endpoint` can be done with any of the following (searched in order):
+
+- `artifactory.rest.endpoint`
+- `artifactoryRestEndpoint`
+- `ARTIFACTORY_REST_ENDPOINT`
+
+Setting the `credentials` can be done with any of the following (searched in order):
+
+- `artifactory.rest.credentials`
+- `artifactoryRestCredentials`
+- `ARTIFACTORY_REST_CREDENTIALS`
+
 ## Credentials
 
 artifactory-rest credentials can take 1 of 3 forms:
@@ -22,21 +41,21 @@ artifactory-rest credentials can take 1 of 3 forms:
 - Base64 encoded username and password: __YWRtaW46cGFzc3dvcmQ=__ 
 - Generated API key: __AKCp2TfiyqrqHmfzUzeQhJmQrDyEx1o2S25pcC2hLzCTu65rpVhEoL1G6ppHn4exmHYfCiyT4__ 
 
+## Examples
+
+The [mock](https://github.com/cdancy/artifactory-rest/tree/master/src/test/java/com/cdancy/artifactory/rest/features) and [live](https://github.com/cdancy/artifactory-rest/tree/master/src/test/java/com/cdancy/artifactory/rest/features) tests provide many examples
+that you can use in your own code.
+
 ## Components
 
 - jclouds \- used as the backend for communicating with Artifactory's REST API
-
-
-## Troubleshooting
-
-TODO: explain how to troubleshoot potential issues
     
 ## Testing
 
 Running mock tests can be done like so:
 
-	gradle clean build mockTest 
+	./gradlew clean build mockTest
 	
 Running integration tests can be done like so (also runs mock tests):
 
-	gradle clean build integTest -PtestArtifactoryEndpoint=http://127.0.0.1:8081/artifactory -PtestArtifactoryCredential=admin:password
+	./gradlew clean build integTest -PtestArtifactoryEndpoint=http://127.0.0.1:8081/artifactory -PtestArtifactoryCredential=admin:password

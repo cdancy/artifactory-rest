@@ -25,7 +25,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testAql() {
-      // AQLResult res =
+      // StorageInfo res =
       // api().aql("items.find({\"repo\":{\"$eq\":\"libs-release-local\"}})");
       // assertNotNull(res);
    }

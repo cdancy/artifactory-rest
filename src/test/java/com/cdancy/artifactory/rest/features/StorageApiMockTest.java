@@ -20,6 +20,8 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import com.cdancy.artifactory.rest.domain.storage.RepositorySummary;
+import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
@@ -111,6 +113,25 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          boolean propertyDeleted = api.deleteItemProperties("libs-snapshot-local", "hello/world", props);
          assertFalse(propertyDeleted);
          assertSent(server, "DELETE", "/api/storage/libs-snapshot-local/hello/world?recursive=1&properties=hello,world", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetStorageInfo() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/storage-info.json")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      StorageApi api = jcloudsApi.storageApi();
+      try {
+         StorageInfo storageInfo = api.storageInfo();
+         assertNotNull(storageInfo);
+         assertTrue(storageInfo.binariesSummary().binariesCount().equals("125,726"));
+         assertTrue(storageInfo.fileStoreSummary().storageType().equals("filesystem"));
+         assertTrue(storageInfo.repositoriesSummaryList().size() == 3);
+         assertSent(server, "GET", "/api/storageinfo", MediaType.APPLICATION_JSON);
       } finally {
          jcloudsApi.close();
          server.shutdown();
