@@ -17,9 +17,11 @@
 package com.cdancy.artifactory.rest.features;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,24 +74,33 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test(dependsOnMethods = "testGetItemProperties")
    public void testDeleteItemProperties() {
-       Map<String, String> props = new HashMap<String, String>();
-       props.put("hello", "world");
+       List<String> props = new ArrayList<String>();
+       props.add("hello");
        boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
        assertTrue(itemDelete);
    }
 
-   @Test(dependsOnMethods = "testDeleteItemProperties")
+    @Test(dependsOnMethods = "testDeleteItemProperties")
+    public void testGetItemPropertiesAfterDelete() {
+        Map<String, List<String>> itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
+        assertNotNull(itemProperties);
+        assertTrue(itemProperties.size() > 0);
+        assertFalse(itemProperties.containsKey("hello"));
+    }
+
+   @Test(dependsOnMethods = "testGetItemPropertiesAfterDelete")
    public void testDeleteNonExistentItemProperties() {
-      Map<String, String> props = new HashMap<String, String>();
-      props.put("hello", "world");
-      boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
-      assertTrue(itemDelete);
+       List<String> props = new ArrayList<String>();
+       props.add("hello");
+       props.add("world");
+       boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
+       assertTrue(itemDelete);
    }
 
    @AfterClass
    public void testFinalize() {
-      assertTrue(tempArtifact.delete());
-      assertTrue(api.artifactApi().deleteArtifact(repoKey, itemPath.split("/")[0]));
+       assertTrue(tempArtifact.delete());
+       assertTrue(api.artifactApi().deleteArtifact(repoKey, itemPath.split("/")[0]));
    }
 
    private StorageApi api() {

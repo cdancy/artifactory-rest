@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import com.cdancy.artifactory.rest.binders.BindListToPath;
 import com.cdancy.artifactory.rest.binders.BindPropertiesToPath;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.rest.annotations.*;
@@ -60,5 +61,5 @@ public interface StorageApi {
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @DELETE
    boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                                @BinderParam(BindPropertiesToPath.class) Map<String, String> properties);
+                                @BinderParam(BindListToPath.class) List<String> properties);
 }

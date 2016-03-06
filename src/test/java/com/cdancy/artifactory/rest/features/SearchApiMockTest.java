@@ -19,12 +19,10 @@ package com.cdancy.artifactory.rest.features;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import com.sun.media.jfxmedia.Media;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
-import com.cdancy.artifactory.rest.features.SearchApi;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;

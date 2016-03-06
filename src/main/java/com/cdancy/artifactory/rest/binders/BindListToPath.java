@@ -20,34 +20,27 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import javax.inject.Singleton;
-import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Singleton
-public class BindPropertiesToPath implements Binder {
+public class BindListToPath implements Binder {
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
-        checkArgument(properties instanceof Map, "binder is only valid for Map");
-        Map<String, String> props = (Map<String, String>) properties;
-        checkArgument(props.size() > 0, "properties Map cannot be empty");
+        checkArgument(properties instanceof List, "binder is only valid for List");
+        List<String> props = (List<String>) properties;
+        checkArgument(props.size() > 0, "properties List cannot be empty");
 
-        int size = props.size();
         StringBuilder propertiesProp = new StringBuilder();
-        for (Map.Entry<String, String> prop : props.entrySet()) {
-            size -= 1;
-            String potentialKey = prop.getKey().trim();
-            if (potentialKey.length() > 0) {
-                propertiesProp.append(potentialKey);
-                if (prop.getValue() != null) {
-                    String potentialValue = prop.getValue().trim();
-                    if (potentialValue.length() > 0)
-                        propertiesProp.append("=").append(potentialValue);
+        for (String prop : props) {
+            if (prop != null) {
+                String potentialKey = prop.trim();
+                if (potentialKey.length() > 0) {
+                    propertiesProp.append(potentialKey).append(",");
                 }
-                if (size > 0)
-                    propertiesProp.append("|");
             }
         }
 
@@ -55,6 +48,7 @@ public class BindPropertiesToPath implements Binder {
             throw new IllegalArgumentException("properties did not have any valid key/value pairs");
         }
 
+        propertiesProp.setLength(propertiesProp.length() - 1);
         return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
     }
 }
