@@ -1,7 +1,7 @@
 
-#artifactory-rest 
+# artifactory-rest
 
-artifactory-rest is a java-based client used to interact with Artifactory's REST API.
+java-based client to interact with Artifactory's REST API.
 
 ## Setup
 
