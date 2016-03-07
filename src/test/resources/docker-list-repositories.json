@@ -1,0 +1,7 @@
+{
+  "repositories":[
+    "busybox",
+    "centos",
+    "hello-world"
+  ]
+}

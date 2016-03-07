@@ -17,19 +17,15 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
-import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.docker.Promote;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
-import org.apache.commons.io.FileUtils;
-import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.List;
 
 import static org.testng.Assert.*;
 
@@ -43,7 +39,7 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
     public void testPromote() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
-      String payload = payloadFromResource("/promote.json");
+      String payload = payloadFromResource("/docker-promote.json");
       server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       DockerApi api = jcloudsApi.dockerApi();
@@ -70,6 +66,25 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
             boolean success = api.promote("docker-local", dockerPromote);
             assertFalse(success);
             assertSent(server, "POST", "/api/docker/docker-local/v1/promote", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testListRepositories() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/docker-list-repositories.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        DockerApi api = jcloudsApi.dockerApi();
+        try {
+            List<String> repos = api.repositories("docker-local");
+            assertNotNull(repos);
+            assertTrue(repos.size() == 3);
+            assertTrue(repos.contains("busybox"));
+            assertSent(server, "GET", "/api/docker/docker-local/_catalog", MediaType.APPLICATION_JSON);
         } finally {
             jcloudsApi.close();
             server.shutdown();

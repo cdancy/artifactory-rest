@@ -27,6 +27,7 @@ import org.jclouds.rest.binders.BindToJsonPayload;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/api/docker")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -39,4 +40,10 @@ public interface DockerApi {
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @POST
    boolean promote(@PathParam("repoKey") String repoKey, @BinderParam(BindToJsonPayload.class) Promote promote);
+
+   @Named("docker:list-repositories")
+   @Path("/{repoKey}/_catalog")
+   @SelectJson({"repositories"})
+   @GET
+   List<String> repositories(@PathParam("repoKey") String repoKey);
 }

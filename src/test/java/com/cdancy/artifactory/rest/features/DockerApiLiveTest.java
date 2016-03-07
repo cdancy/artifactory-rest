@@ -21,6 +21,8 @@ import com.cdancy.artifactory.rest.domain.docker.Promote;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.testng.Assert.*;
 
 @Test(groups = "live", testName = "DockerApiLiveTest")
@@ -55,6 +57,13 @@ public class DockerApiLiveTest extends BaseArtifactoryApiLiveTest {
         Promote dockerPromote = Promote.create(dockerRepoPromoted, dockerImage, "0009", false);
         boolean success = api().promote(dockerRepo, dockerPromote);
         assertFalse(success);
+    }
+
+    @Test (dependsOnMethods = "testPromote")
+    public void testListRepositories() {
+        List<String> repos = api().repositories(dockerRepoPromoted);
+        assertNotNull(repos);
+        assertTrue(repos.size() > 0);
     }
 
     private DockerApi api() {
