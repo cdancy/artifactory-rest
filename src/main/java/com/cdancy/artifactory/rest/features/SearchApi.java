@@ -18,18 +18,22 @@
 package com.cdancy.artifactory.rest.features;
 
 import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
-import org.jclouds.rest.annotations.RequestFilters;
+import com.cdancy.artifactory.rest.binders.BindListReposToPath;
+import com.cdancy.artifactory.rest.binders.BindMapToPath;
+import com.cdancy.artifactory.rest.domain.search.BuildArtifact;
+import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
+import org.jclouds.Fallbacks;
+import org.jclouds.rest.annotations.*;
 
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import org.jclouds.rest.binders.BindToJsonPayload;
+
+import java.util.List;
+import java.util.Map;
 
 @Path("/api/search")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -42,4 +46,19 @@ public interface SearchApi {
    @Payload("{aql_query}")
    @POST
    AQLResult aql(@PayloadParam("aql_query") String query);
+
+   @Named("search:build-artifacts")
+   @Path("/buildArtifacts")
+   @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
+   @Produces(MediaType.APPLICATION_JSON)
+   @SelectJson({"results"})
+   @POST
+   List<BuildArtifact> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
+
+   @Named("search:property-search")
+   @Path("/prop")
+   @Produces(MediaType.APPLICATION_JSON)
+   @SelectJson({"results"})
+   @GET
+   List<BuildArtifact> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @BinderParam(BindListReposToPath.class) List<String> repos);
 }

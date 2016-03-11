@@ -81,6 +81,23 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       }
    }
 
+   public void testGetItemWithNoProperties() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      StorageApi api = jcloudsApi.storageApi();
+      try {
+         Map<String, List<String>> itemProperties = api.getItemProperties("libs-snapshot-local", "hello/world");
+         assertNotNull(itemProperties);
+         assertTrue(itemProperties.size() == 0);
+         assertSent(server, "GET", "/api/storage/libs-snapshot-local/hello/world?properties", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
    public void testDeleteItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 

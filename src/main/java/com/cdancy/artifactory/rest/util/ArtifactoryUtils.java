@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
@@ -93,28 +90,6 @@ public class ArtifactoryUtils {
       return pathFromUrl;
    }
 
-   public static void main(String [] args) throws Exception {
-      File fish = getGradleFilesDir();
-      URL url = new URL("https://meshbincam.pega.com/artifactory/builds-prpc-dev-local/com/pega/prpc/assemblies/coreAssembly/HEAD-10642/coreAssembly-HEAD-10642.zip");
-      String endpoint = "https://meshbincam.pega.com/artifactory";
-
-      String bear = getBasePath(url, endpoint);
-      System.out.println("foudn home: " + fish.getAbsolutePath());
-      System.out.println("foudn url: " + bear);
-      String [] stuff = bear.split("/");
-
-      List<String> gavArray = Arrays.asList(Arrays.copyOfRange(stuff, 2, stuff.length));
-      List<String> groupArray = gavArray.subList(0, gavArray.size() - 3);
-      String group = collectionToString(groupArray, ".");
-      String artifact = gavArray.get(groupArray.size());
-      String version = gavArray.get(groupArray.size() + 1);
-      System.out.println(group);
-      System.out.println(artifact);
-      System.out.println(version);
-
-
-   }
-
    public static GAVCoordinates gavFromURL(URL url, URL endpoint) {
       GAVCoordinates gavCoordinates = new GAVCoordinates();
 
@@ -160,6 +135,7 @@ public class ArtifactoryUtils {
    }
 
    public static String collectionToString(Collection<String> collection, String separator) {
+      if (collection == null || collection.size() == 0) return null;
       Joiner joiner = Joiner.on(separator != null ? separator : ",").skipNulls();
       return joiner.join(collection);
    }

@@ -26,9 +26,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import com.cdancy.artifactory.rest.binders.BindListToPath;
-import com.cdancy.artifactory.rest.binders.BindPropertiesToPath;
+import com.cdancy.artifactory.rest.binders.BindListPropertiesToPath;
+import com.cdancy.artifactory.rest.binders.BindMapPropertiesToPath;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
+import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.rest.annotations.*;
 
@@ -44,14 +45,16 @@ public interface StorageApi {
 
    @Named("storage:set-item-properties")
    @Path("/storage/{repoKey}/{itemPath}")
+   @Fallback(FalseOnNotFoundOr404.class)
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @PUT
    boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                             @BinderParam(BindPropertiesToPath.class) Map<String, String> properties);
+                             @BinderParam(BindMapPropertiesToPath.class) Map<String, String> properties);
 
    @Named("storage:get-item-properties")
    @Path("/storage/{repoKey}/{itemPath}")
    @QueryParams(keys = { "properties" })
+   @Fallback(Fallbacks.EmptyMapOnNotFoundOr404.class)
    @SelectJson({"properties"})
    @GET
    Map<String, List<String>> getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
@@ -62,7 +65,7 @@ public interface StorageApi {
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @DELETE
    boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                                @BinderParam(BindListToPath.class) List<String> properties);
+                                @BinderParam(BindListPropertiesToPath.class) List<String> properties);
 
    @Named("storage:info")
    @Path("/storageinfo")
