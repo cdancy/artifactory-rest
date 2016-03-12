@@ -19,7 +19,6 @@ package com.cdancy.artifactory.rest.features;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import com.cdancy.artifactory.rest.domain.search.BuildArtifact;
 import com.cdancy.artifactory.rest.domain.search.Mapping;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.google.common.collect.ImmutableList;
@@ -91,7 +90,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
                  Lists.newArrayList("libs-release-local"),
                  Lists.newArrayList(Mapping.create("(.+)-sources.jar"),
                          Mapping.create("(.+)-javadoc.jar")));
-         List<BuildArtifact> res = api.buildArtifacts(searchBuildArtifacts);
+         List<String> res = api.buildArtifacts(searchBuildArtifacts);
          assertNotNull(res);
          assertTrue(res.size() == 2);
          assertSent(server, "POST", "/api/search/buildArtifacts", MediaType.APPLICATION_JSON);
@@ -114,7 +113,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
                  Lists.newArrayList("libs-release-local"),
                  Lists.newArrayList(Mapping.create("(.+)-sources.jar"),
                          Mapping.create("(.+)-javadoc.jar")));
-         List<BuildArtifact> res = api.buildArtifacts(searchBuildArtifacts);
+         List<String> res = api.buildArtifacts(searchBuildArtifacts);
          assertNotNull(res);
          assertTrue(res.size() == 0);
          assertSent(server, "POST", "/api/search/buildArtifacts", MediaType.APPLICATION_JSON);
@@ -135,7 +134,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
          List<String> repos = ImmutableList.of("libs-release-local", "ext-release-local");
          Map<String, List<String>> props = ImmutableMap.<String, List<String>>of("hello", ImmutableList.of("hello1", "hello2"),
                  "world", ImmutableList.of("world1", "world2"));
-         List<BuildArtifact> res = api.propertySearch(props, repos);
+         List<String> res = api.propertySearch(props, repos);
          assertNotNull(res);
          assertTrue(res.size() == 2);
          assertSent(server, "GET", "/api/search/prop?hello=hello1,hello2&world=world1,world2&repos=libs-release-local,ext-release-local", MediaType.APPLICATION_JSON);
@@ -156,7 +155,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
          List<String> repos = ImmutableList.of("libs-release-local", "ext-release-local");
          Map<String, List<String>> props = ImmutableMap.<String, List<String>>of("hello", ImmutableList.of("hello1", "hello2"),
                  "world", ImmutableList.of("world1", "world2"));
-         List<BuildArtifact> res = api.propertySearch(props, repos);
+         List<String> res = api.propertySearch(props, repos);
          assertNotNull(res);
          assertTrue(res.size() == 0);
          assertSent(server, "GET", "/api/search/prop?hello=hello1,hello2&world=world1,world2&repos=libs-release-local,ext-release-local", MediaType.APPLICATION_JSON);

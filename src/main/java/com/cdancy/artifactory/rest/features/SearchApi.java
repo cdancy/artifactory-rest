@@ -23,8 +23,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.binders.BindListReposToPath;
 import com.cdancy.artifactory.rest.binders.BindMapToPath;
-import com.cdancy.artifactory.rest.domain.search.BuildArtifact;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
+import com.cdancy.artifactory.rest.parsers.ArtifactDownloadURIToList;
+import com.cdancy.artifactory.rest.parsers.ArtifactURIToList;
 import org.jclouds.Fallbacks;
 import org.jclouds.rest.annotations.*;
 
@@ -51,14 +52,14 @@ public interface SearchApi {
    @Path("/buildArtifacts")
    @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
    @Produces(MediaType.APPLICATION_JSON)
-   @SelectJson({"results"})
+   @ResponseParser(ArtifactDownloadURIToList.class)
    @POST
-   List<BuildArtifact> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
+   List<String> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
 
    @Named("search:property-search")
    @Path("/prop")
    @Produces(MediaType.APPLICATION_JSON)
-   @SelectJson({"results"})
+   @ResponseParser(ArtifactURIToList.class)
    @GET
-   List<BuildArtifact> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<String> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @BinderParam(BindListReposToPath.class) List<String> repos);
 }

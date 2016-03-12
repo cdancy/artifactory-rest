@@ -17,7 +17,6 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
-import com.cdancy.artifactory.rest.domain.search.BuildArtifact;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -58,7 +57,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
               null,
               Lists.newArrayList("jcenter-cache"),
               null);
-      List<BuildArtifact> res = api().buildArtifacts(searchBuildArtifacts);
+      List<String> res = api().buildArtifacts(searchBuildArtifacts);
       assertNotNull(res);
       assertTrue(res.size() == 0);
    }
@@ -67,7 +66,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
    public void testPropertySearch() {
       List<String> repos = ImmutableList.of("jcenter-cache");
       Map<String, List<String>> props = ImmutableMap.<String, List<String>>of("ant-lib", ImmutableList.of("true"));
-      List<BuildArtifact> res = api().propertySearch(props, repos);
+      List<String> res = api().propertySearch(props, repos);
       assertNotNull(res);
       assertTrue(res.size() > 0);
    }
@@ -76,7 +75,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
    public void testPropertySearchWithNotFoundProperty() {
       List<String> repos = ImmutableList.of("jcenter-cache");
       Map<String, List<String>> props = ImmutableMap.<String, List<String>>of(randomString(), ImmutableList.of("true"));
-      List<BuildArtifact> res = api().propertySearch(props, repos);
+      List<String> res = api().propertySearch(props, repos);
       assertNotNull(res);
       assertTrue(res.size() == 0);
    }
