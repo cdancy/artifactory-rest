@@ -49,7 +49,7 @@ public interface StorageApi {
    @QueryParams(keys = { "recursive" }, values = { "1" })
    @PUT
    boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                             @BinderParam(BindMapPropertiesToPath.class) Map<String, String> properties);
+                             @BinderParam(BindMapPropertiesToPath.class) Map<String, List<String>> properties);
 
    @Named("storage:get-item-properties")
    @Path("/storage/{repoKey}/{itemPath}")

@@ -35,9 +35,10 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testAql() {
+      List<String> props = Lists.newArrayList("true");
       api.storageApi().setItemProperties("jcenter-cache",
               "ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar",
-              ImmutableMap.of("ant-lib", "true"));
+              ImmutableMap.of("ant-lib", props));
       AQLResult res = api().aql("items.find({\"repo\":{\"$eq\":\"jcenter-cache\"}, \"@ant-lib\":\"true\"})");
       assertNotNull(res);
       assertTrue(res.results().size() > 0);

@@ -21,10 +21,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Singleton;
 
+import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
@@ -35,14 +37,14 @@ public class BindMatrixPropertiesToPath implements Binder {
 
         checkArgument(properties instanceof Map, "binder is only valid for Map");
         StringBuilder configuredEndpoint = new StringBuilder(request.getEndpoint().toString());
-        Map<String, String> matrixProperties = (Map<String, String>) properties;
+        Map<String, List<String>> matrixProperties = (Map<String, List<String>>) properties;
         if (matrixProperties.size() > 0) {
-            for (Map.Entry<String, String> prop : matrixProperties.entrySet()) {
+            for (Map.Entry<String, List<String>> prop : matrixProperties.entrySet()) {
                 String potentialKey = prop.getKey().trim();
                 if (potentialKey.length() > 0) {
                     configuredEndpoint.append(";").append(potentialKey);
                     if (prop.getValue() != null) {
-                        String potentialValue = prop.getValue().trim();
+                        String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
                         if (potentialValue.length() > 0)
                             configuredEndpoint.append("=").append(potentialValue);
                     }

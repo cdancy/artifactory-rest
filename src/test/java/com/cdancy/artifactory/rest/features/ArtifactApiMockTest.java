@@ -19,6 +19,7 @@ package com.cdancy.artifactory.rest.features;
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
+import com.google.common.collect.Lists;
 import com.google.common.net.HttpHeaders;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.testng.Assert.*;
@@ -70,8 +72,8 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
         try {
-            Map<String, String> properties = new HashMap<String, String>();
-            properties.put("hello", "world");
+            Map<String, List<String>> properties = new HashMap<>();
+            properties.put("hello", Lists.newArrayList("world"));
             Artifact artifact = api.deployArtifact("libs-release-local", "my/jar/1.0/jar-1.0.jar",
                     Payloads.newPayload(payload), properties);
 
@@ -130,8 +132,8 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactApi api = jcloudsApi.artifactApi();
         File inputStream = null;
         try {
-            Map<String, String> properties = new HashMap<String, String>();
-            properties.put("hello", "world");
+            Map<String, List<String>> properties = new HashMap<>();
+            properties.put("hello", Lists.newArrayList("world"));
 
             inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
             assertTrue(inputStream.exists());
@@ -158,12 +160,12 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         ArtifactApi api = jcloudsApi.artifactApi();
         try {
-            Map<String, String> properties = new HashMap<String, String>();
-            properties.put("hello", "world");
+            Map<String, List<String>> properties = new HashMap<>();
+            properties.put("hello", Lists.newArrayList("world", "fish", "bear"));
 
             File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
             assertNull(inputStream);
-            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", MediaType.APPLICATION_OCTET_STREAM);
+            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world,fish,bear", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
             jcloudsApi.close();
             server.shutdown();

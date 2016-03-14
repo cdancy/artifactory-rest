@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
+import com.google.common.collect.Lists;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -55,9 +56,9 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test
     public void testSetItemProperties() {
-        Map<String, String> props = new HashMap<String, String>();
-        props.put("hello", "world");
-        props.put("bear", "fish");
+        Map<String, List<String>> props = new HashMap<>();
+        props.put("hello", Lists.newArrayList("world"));
+        props.put("bear", Lists.newArrayList("fish"));
         boolean itemSet = api().setItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
         assertTrue(itemSet);
     }

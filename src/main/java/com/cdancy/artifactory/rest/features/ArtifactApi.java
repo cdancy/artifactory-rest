@@ -35,6 +35,7 @@ import org.jclouds.rest.annotations.*;
 import com.google.common.net.HttpHeaders;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 @Path("/")
@@ -47,7 +48,7 @@ public interface ArtifactApi {
    @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
    @PUT
    Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                           Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
+                           Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
 
    @Named("artifact:retrieve")
    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
@@ -56,7 +57,7 @@ public interface ArtifactApi {
    @Fallback(NullOnNotFoundOr404.class)
    @GET
    File retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                         @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, String> properties);
+                         @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
 
    @Named("artifact:delete")
    @Path("/{repoKey}/{itemPath}")

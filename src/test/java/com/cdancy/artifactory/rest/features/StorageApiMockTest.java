@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 import com.cdancy.artifactory.rest.domain.storage.RepositorySummary;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
+import com.google.common.collect.Lists;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
@@ -49,9 +50,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       StorageApi api = jcloudsApi.storageApi();
       try {
-          Map<String, String> props = new HashMap<String, String>();
-          props.put("hello", "world");
-          props.put("bear", "fish");
+          Map<String, List<String>> props = new HashMap<>();
+          props.put("hello", Lists.newArrayList("world"));
+          props.put("bear", Lists.newArrayList("fish"));
 
           boolean itemSet = api.setItemProperties("libs-snapshot-local", "hello/world", props);
           assertTrue(itemSet);

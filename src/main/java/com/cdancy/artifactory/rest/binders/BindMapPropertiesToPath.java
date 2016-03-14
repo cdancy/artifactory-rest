@@ -16,11 +16,13 @@
  */
 package com.cdancy.artifactory.rest.binders;
 
+import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import javax.inject.Singleton;
 import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -31,18 +33,18 @@ public class BindMapPropertiesToPath implements Binder {
     public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
         checkArgument(properties instanceof Map, "binder is only valid for Map");
-        Map<String, String> props = (Map<String, String>) properties;
+        Map<String, List<String>> props = (Map<String, List<String>>) properties;
         checkArgument(props.size() > 0, "properties Map cannot be empty");
 
         int size = props.size();
         StringBuilder propertiesProp = new StringBuilder();
-        for (Map.Entry<String, String> prop : props.entrySet()) {
+        for (Map.Entry<String, List<String>> prop : props.entrySet()) {
             size -= 1;
             String potentialKey = prop.getKey().trim();
             if (potentialKey.length() > 0) {
                 propertiesProp.append(potentialKey);
                 if (prop.getValue() != null) {
-                    String potentialValue = prop.getValue().trim();
+                    String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
                     if (potentialValue.length() > 0)
                         propertiesProp.append("=").append(potentialValue);
                 }

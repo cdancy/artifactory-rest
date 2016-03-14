@@ -30,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
@@ -43,7 +44,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     private String repoKey = "libs-snapshot-local";
     private String itemPath;
     private String itemPathWithProperties;
-    private Map<String, String> itemProperties = new HashMap<String, String>();
+    private Map<String, List<String>> itemProperties = new HashMap<>();
     private List<File> filesToDelete = new CopyOnWriteArrayList<File>();
 
     @BeforeClass
@@ -51,9 +52,9 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         tempArtifact = randomFile();
         itemPath = randomPath();
         itemPathWithProperties = randomPath();
-        itemProperties.put("key1", "value1");
-        itemProperties.put("key2", "value2");
-        itemProperties.put("key3", "value3");
+        itemProperties.put("key1", Lists.newArrayList("value1"));
+        itemProperties.put("key2", Lists.newArrayList("value2"));
+        itemProperties.put("key3", Lists.newArrayList("value3"));
     }
 
     @Test
@@ -115,8 +116,8 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     public void testRetrieveArtifactWithIllegalPropertyValue() {
         File tempFile = null;
         try {
-            Map<String, String> illegalPropertyValues = new HashMap<String, String>(itemProperties);
-            illegalPropertyValues.put("key1", "HelloWorld");
+            Map<String, List<String>> illegalPropertyValues = new HashMap<>(itemProperties);
+            illegalPropertyValues.put("key1", Lists.newArrayList("HelloWorld"));
             File inputStream = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), illegalPropertyValues);
             assertNull(inputStream);
         } catch (Exception e) {
