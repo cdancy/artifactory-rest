@@ -27,6 +27,7 @@ import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.cdancy.artifactory.rest.parsers.ArtifactDownloadURIToList;
 import com.cdancy.artifactory.rest.parsers.ArtifactURIToList;
 import org.jclouds.Fallbacks;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.*;
 
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
@@ -61,5 +62,5 @@ public interface SearchApi {
    @Produces(MediaType.APPLICATION_JSON)
    @ResponseParser(ArtifactURIToList.class)
    @GET
-   List<String> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<String> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 }
