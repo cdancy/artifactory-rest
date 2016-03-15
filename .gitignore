@@ -1,23 +1,21 @@
-# use glob syntax.
-syntax: glob
-target/
-test-output/
-build/
-bin/
-.gradle/
-.settings/
+# Directories #
+######################
+build
+bin
+out 
+.gradle
+
+# OS generated files #
+######################
+.DS_Store
+
+# IDE generated files #
+######################
+.settings/ 
 .classpath
 .project
-.idea/
-*.iml
-*.eml
+.README* 
+.idea
+*.iml 
 *.ipr
 *.iws
-*.DS_STORE
-TAGS
-.metadata/
-atlassian-ide-plugin.xml
-.DS_Store
-.java-version
-.factorypath
-.apt_generated
