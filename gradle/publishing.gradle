@@ -53,7 +53,7 @@ bintray {
     publish = true
 
     pkg {
-        repo = 'artifactory-rest'
+        repo = 'java-libraries'
         name = 'artifactory-rest'
         desc = 'Java client for working with Artifactory REST API.'
         websiteUrl = "https://github.com/cdancy/${project.name}"
