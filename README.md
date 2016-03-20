@@ -13,6 +13,16 @@ Client's can be built like so:
       .build();
 
       Version version = client.api().systemApi().version();
+      
+## Latest release
+
+Can be found in either jcenter or maven central.
+
+	<dependency>
+	  <groupId>com.cdancy</groupId>
+	  <artifactId>artifactory-rest</artifactId>
+	  <version>0.0.1</version>
+	</dependency>
 
 ## Property based setup
 
@@ -59,3 +69,8 @@ Running mock tests can be done like so:
 Running integration tests can be done like so (also runs mock tests):
 
 	./gradlew clean build integTest -PtestArtifactoryEndpoint=http://127.0.0.1:8081/artifactory -PtestArtifactoryCredential=admin:password
+	
+# Additional Resources
+
+* [Artifactory REST API](https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API)
+
