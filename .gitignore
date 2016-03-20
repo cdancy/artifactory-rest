@@ -4,14 +4,15 @@ build
 bin
 out 
 .gradle
+.settings
+target
 
 # OS generated files #
 ######################
 .DS_Store
 
 # IDE generated files #
-######################
-.settings/ 
+###################### 
 .classpath
 .project
 .README* 
