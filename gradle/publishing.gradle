@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
     }
 }
 
@@ -21,7 +21,7 @@ publishing {
             pom.withXml {
                 def root = asNode()
                 root.appendNode('name', 'Artifactory Rest')
-                root.appendNode('description', "Java client for working with Artifactory's REST API.")
+                root.appendNode('description', 'Java client for working with Artifactory REST API.')
                 root.appendNode('url', 'https://github.com/cdancy/artifactory-rest')
                 root.appendNode('inceptionYear', '2016')
 
@@ -36,34 +36,39 @@ publishing {
                 license.appendNode('distribution', 'repo')
 
                 def developers = root.appendNode('developers')
-                def bmuschko = developers.appendNode('developer')
-                bmuschko.appendNode('id', 'cdancy')
-                bmuschko.appendNode('name', 'Christopher Dancy')
-                bmuschko.appendNode('email', 'christoforever@gmail.com')
+                def cdancy = developers.appendNode('developer')
+                cdancy.appendNode('id', 'cdancy')
+                cdancy.appendNode('name', 'Christopher Dancy')
+                cdancy.appendNode('email', 'christoforever@gmail.com')
             }
         }
     }
 }
 
 bintray {
-    user = resolveProperty('BINTRAY_USER', 'bintrayUser')
-    key = resolveProperty('BINTRAY_KEY', 'bintrayKey')
+
+    user = project.bintrayUsername
+    key = project.bintrayKey
     publications = ['mavenJava']
+    publish = true
 
     pkg {
-        repo = 'gradle-plugins'
-        name = 'com.cdancy:artifactory-rest'
-        desc = "Java client for working with Artifactory's REST API."
+        repo = 'artifactory-rest'
+        name = 'artifactory-rest'
+        desc = 'Java client for working with Artifactory REST API.'
         websiteUrl = "https://github.com/cdancy/${project.name}"
         issueTrackerUrl = "https://github.com/cdancy/${project.name}/issues"
         vcsUrl = "https://github.com/cdancy/${project.name}.git"
         licenses = ['Apache-2.0']
-        labels = ['java', 'java-client', 'artifactory', 'rest']
+        labels = ['java', 'artifactory', 'client', 'rest']
         publicDownloadNumbers = true
+        githubRepo = "cdancy/${project.name}"
+        githubReleaseNotesFile = 'RELEASE_NOTES.md'
 
         version {
-            vcsTag = "v$project.version"
-            attributes = ['artifactory-rest': ["com.cdancy.artifactory-rest:${project.group}:${project.name}"]]
+            released  = new Date()
+            vcsTag = "v${project.version}"
+            attributes = ['artifactory-rest': ["${project.group}:${project.name}:${project.version}"]]
 
             gpg {
                 sign = true
@@ -75,10 +80,6 @@ bintray {
 
 String resolveProperty(String envVarKey, String projectPropKey) {
     String propValue = System.getenv()[envVarKey]
-
-    if(propValue) {
-        return propValue
-    }
-
+    if(propValue) { return propValue }
     hasProperty(projectPropKey) ? getProperty(projectPropKey) : null
 }

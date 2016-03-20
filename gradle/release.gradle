@@ -36,7 +36,8 @@ task pushTag {
 
     doLast {
         logger.quiet "Pushing tag '$createTag.tagName' to remote."
-
+        System.setProperty('org.ajoberstar.grgit.auth.username', project.githubUsername)
+        System.setProperty('org.ajoberstar.grgit.auth.password', project.githubPassword)
         repo.push {
             refsOrSpecs = [createTag.tagName]
         }
@@ -50,5 +51,5 @@ task tag {
 
 task release {
     description = 'Publishes artifacts to Bintray and tags repository with current project version.'
-    dependsOn assemble, bintrayUpload, tag
+    dependsOn assemble, publishGhPages, bintrayUpload, tag
 }

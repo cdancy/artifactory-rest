@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import com.cdancy.artifactory.rest.binders.BindListReposToPath;
 import com.cdancy.artifactory.rest.binders.BindMapToPath;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
+import com.cdancy.artifactory.rest.domain.search.SearchResult;
 import com.cdancy.artifactory.rest.parsers.ArtifactDownloadURIToList;
 import com.cdancy.artifactory.rest.parsers.ArtifactURIToList;
 import org.jclouds.Fallbacks;
@@ -53,14 +54,22 @@ public interface SearchApi {
    @Path("/buildArtifacts")
    @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
    @Produces(MediaType.APPLICATION_JSON)
-   @ResponseParser(ArtifactDownloadURIToList.class)
+   @SelectJson("results")
    @POST
-   List<String> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
+   List<SearchResult> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
 
    @Named("search:property-search")
    @Path("/prop")
    @Produces(MediaType.APPLICATION_JSON)
-   @ResponseParser(ArtifactURIToList.class)
+   @SelectJson("results")
    @GET
-   List<String> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<SearchResult> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+
+   @Named("search:not-downloaded-since")
+   @Path("/usage")
+   @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
+   @Produces(MediaType.APPLICATION_JSON)
+   @SelectJson("results")
+   @GET
+   List<SearchResult> notDownloadedSince(@QueryParam("notUsedSince") long notUsedSince_ISO8601, @Nullable @QueryParam("createdBefore") Long createdBefore_ISO8601, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 }

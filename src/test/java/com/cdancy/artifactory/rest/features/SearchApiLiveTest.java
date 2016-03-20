@@ -18,13 +18,20 @@ package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
+import com.cdancy.artifactory.rest.domain.search.SearchResult;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +65,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
               null,
               Lists.newArrayList("jcenter-cache"),
               null);
-      List<String> res = api().buildArtifacts(searchBuildArtifacts);
+      List<SearchResult> res = api().buildArtifacts(searchBuildArtifacts);
       assertNotNull(res);
       assertTrue(res.size() == 0);
    }
@@ -67,7 +74,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
    public void testPropertySearch() {
       List<String> repos = ImmutableList.of("jcenter-cache");
       Map<String, List<String>> props = ImmutableMap.<String, List<String>>of("ant-lib", ImmutableList.of("true"));
-      List<String> res = api().propertySearch(props, repos);
+      List<SearchResult> res = api().propertySearch(props, repos);
       assertNotNull(res);
       assertTrue(res.size() > 0);
    }
@@ -76,7 +83,7 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
    public void testPropertySearchWithNotFoundProperty() {
       List<String> repos = ImmutableList.of("jcenter-cache");
       Map<String, List<String>> props = ImmutableMap.<String, List<String>>of(randomString(), ImmutableList.of("true"));
-      List<String> res = api().propertySearch(props, repos);
+      List<SearchResult> res = api().propertySearch(props, repos);
       assertNotNull(res);
       assertTrue(res.size() == 0);
    }

@@ -11,12 +11,16 @@ buildscript {
 apply plugin: org.ajoberstar.gradle.git.ghpages.GithubPagesPlugin
 
 githubPages {
-    repoUri = 'git@github.com:cdancy/artifactory-rest.git'
+    repoUri = 'https://github.com/cdancy/artifactory-rest.git'
 
     pages {
         from(javadoc.outputs.files) {
             into 'docs/javadoc'
         }
+    }
+    credentials {
+        username = project.githubUsername
+        password = project.githubPassword
     }
 }
 

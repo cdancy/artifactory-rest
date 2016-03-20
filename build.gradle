@@ -37,6 +37,7 @@ dependencies {
     testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
     testCompile ('ch.qos.logback:logback-core:1.1.2') 
     testCompile ('ch.qos.logback:logback-classic:1.1.2')
+	testCompile ('joda-time:joda-time:2.9.2')
 }
 
 ext.compatibilityVersion = '1.7'

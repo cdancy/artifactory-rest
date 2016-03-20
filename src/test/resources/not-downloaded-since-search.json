@@ -1,0 +1,12 @@
+{
+  "results":[
+    {
+      "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.jar",
+      "lastDownloaded":123456789
+    },
+    {
+      "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver2/lib-ver2.jar",
+      "lastDownloaded":123456789
+    }
+  ]
+}
