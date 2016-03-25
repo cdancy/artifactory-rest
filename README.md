@@ -16,7 +16,7 @@ Client's can be built like so:
       
 ## Latest release
 
-Can be found in either jcenter or maven central.
+Can be found in either jcenter.
 
 	<dependency>
 	  <groupId>com.cdancy</groupId>
