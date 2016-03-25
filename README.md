@@ -24,6 +24,10 @@ Can be found in either jcenter.
 	  <version>0.0.1</version>
 	</dependency>
 
+## Documentation
+
+javadocs can be found via [github pages here](http://cdancy.github.io/artifactory-rest/docs/javadoc/)
+
 ## Property based setup
 
 Client's do NOT need supply the endPoint or credentials as part of instantiating
