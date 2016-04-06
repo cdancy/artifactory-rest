@@ -50,7 +50,7 @@ public interface SearchApi {
    @POST
    AQLResult aql(@PayloadParam("aql_query") String query);
 
-   @Named("search:build-artifacts")
+   @Named("search:error-artifacts")
    @Path("/buildArtifacts")
    @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
    @Produces(MediaType.APPLICATION_JSON)

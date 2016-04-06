@@ -15,33 +15,27 @@
  * limitations under the License.
  */
 
-package com.cdancy.artifactory.rest;
+package com.cdancy.artifactory.rest.domain.error;
 
-import java.io.Closeable;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import org.jclouds.json.SerializedNames;
 
-import com.cdancy.artifactory.rest.features.*;
-import org.jclouds.rest.annotations.Delegate;
+import java.util.List;
 
-public interface ArtifactoryApi extends Closeable {
+@AutoValue
+public abstract class RequestStatus {
 
-   @Delegate
-   ArtifactApi artifactApi();
+   public abstract List<Message> messages();
 
-   @Delegate
-   BuildApi buildApi();
+   public abstract List<Error> errors();
 
-   @Delegate
-   DockerApi dockerApi();
+   RequestStatus() {
+   }
 
-   @Delegate
-   RepositoryApi respositoryApi();
-
-   @Delegate
-   SearchApi searchApi();
-
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   @SerializedNames({ "messages", "errors" })
+   public static RequestStatus create(List<Message> messages, List<Error> errors) {
+      return new AutoValue_RequestStatus(messages != null ? ImmutableList.copyOf(messages) : ImmutableList.<Message>of(),
+              errors != null ? ImmutableList.copyOf(errors) : ImmutableList.<Error>of());
+   }
 }

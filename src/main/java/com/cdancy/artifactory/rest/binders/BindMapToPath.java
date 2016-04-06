@@ -21,6 +21,7 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import javax.inject.Singleton;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,14 @@ public class BindMapToPath implements Binder {
             String potentialKey = prop.getKey().trim();
             if (potentialKey.length() > 0) {
                 String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
-                builder.addQueryParam(potentialKey, potentialValue != null ? potentialValue : "");
+                String encodedValue = "";
+                try {
+                    if (potentialValue != null)
+                        encodedValue = potentialValue.replaceAll(" ", "%20");
+                } catch (Exception e) {
+                    encodedValue =  potentialValue;
+                }
+                builder.addQueryParam(potentialKey, encodedValue);
             }
         }
 

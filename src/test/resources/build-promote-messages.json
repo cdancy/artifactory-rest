@@ -1,0 +1,8 @@
+{
+  "messages":[
+    {
+      "level":"ERROR",
+      "message":"Skipping promotion status update: invalid unparsable timestamp 1459878146383."
+    }
+  ]
+}

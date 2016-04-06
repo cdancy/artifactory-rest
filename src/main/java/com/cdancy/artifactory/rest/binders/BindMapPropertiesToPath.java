@@ -21,6 +21,7 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import javax.inject.Singleton;
+import java.net.URLEncoder;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,16 @@ public class BindMapPropertiesToPath implements Binder {
                 propertiesProp.append(potentialKey);
                 if (prop.getValue() != null) {
                     String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
-                    if (potentialValue.length() > 0)
-                        propertiesProp.append("=").append(potentialValue);
+                    if (potentialValue.length() > 0) {
+                        String encodedValue = "";
+                        try {
+                            if (potentialValue != null)
+                                encodedValue = potentialValue.replaceAll(" ", "%20");
+                        } catch (Exception e) {
+                            encodedValue =  potentialValue;
+                        }
+                        propertiesProp.append("=").append(encodedValue);
+                    }
                 }
                 if (size > 0)
                     propertiesProp.append("|");

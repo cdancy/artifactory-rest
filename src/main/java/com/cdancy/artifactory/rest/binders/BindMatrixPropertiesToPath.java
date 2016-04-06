@@ -17,10 +17,8 @@
 package com.cdancy.artifactory.rest.binders;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
-import java.net.URI;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +43,16 @@ public class BindMatrixPropertiesToPath implements Binder {
                     configuredEndpoint.append(";").append(potentialKey);
                     if (prop.getValue() != null) {
                         String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
-                        if (potentialValue.length() > 0)
-                            configuredEndpoint.append("=").append(potentialValue);
+                        if (potentialValue.length() > 0) {
+                            String encodedValue = "";
+                            try {
+                                if (potentialValue != null)
+                                    encodedValue = potentialValue.replaceAll(" ", "%20");
+                            } catch (Exception e) {
+                                encodedValue =  potentialValue;
+                            }
+                            configuredEndpoint.append("=").append(encodedValue);
+                        }
                     }
                 }
             }

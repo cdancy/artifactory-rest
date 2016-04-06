@@ -18,6 +18,7 @@ package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
+import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.google.common.collect.Lists;
 import com.google.common.net.HttpHeaders;
@@ -183,6 +184,46 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
             File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
             assertNull(inputStream);
             assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", MediaType.APPLICATION_OCTET_STREAM);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCopyArtifact() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/artifact-copy.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            RequestStatus requestStatus = api.copyArtifact("libs-snapshot-local", "hello/world", "ext-snapshot-local/hello/world");
+            assertNotNull(requestStatus);
+            assertTrue(requestStatus.errors().size() == 0);
+            assertTrue(requestStatus.messages().size() == 1);
+            assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("info"));
+            assertSent(server, "POST", "/api/copy/libs-snapshot-local/hello/world?failFast=1&suppressLayouts=0&to=ext-snapshot-local/hello/world", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCopyArtifactWithNonExistentSource() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/artifact-copy-src-not-exist.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(404));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            RequestStatus requestStatus = api.copyArtifact("libs-snapshot-local", "does/not/exist", "ext-snapshot-local/hello/world");
+            assertNotNull(requestStatus);
+            assertTrue(requestStatus.errors().size() == 0);
+            assertTrue(requestStatus.messages().size() == 1);
+            assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("error"));
+            assertSent(server, "POST", "/api/copy/libs-snapshot-local/does/not/exist?failFast=1&suppressLayouts=0&to=ext-snapshot-local/hello/world", MediaType.APPLICATION_JSON);
         } finally {
             jcloudsApi.close();
             server.shutdown();

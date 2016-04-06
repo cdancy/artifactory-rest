@@ -15,33 +15,23 @@
  * limitations under the License.
  */
 
-package com.cdancy.artifactory.rest;
+package com.cdancy.artifactory.rest.domain.error;
 
-import java.io.Closeable;
+import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
-import com.cdancy.artifactory.rest.features.*;
-import org.jclouds.rest.annotations.Delegate;
+@AutoValue
+public abstract class Message {
 
-public interface ArtifactoryApi extends Closeable {
+   public abstract String level();
 
-   @Delegate
-   ArtifactApi artifactApi();
+   public abstract String message();
 
-   @Delegate
-   BuildApi buildApi();
+   Message() {
+   }
 
-   @Delegate
-   DockerApi dockerApi();
-
-   @Delegate
-   RepositoryApi respositoryApi();
-
-   @Delegate
-   SearchApi searchApi();
-
-   @Delegate
-   StorageApi storageApi();
-
-   @Delegate
-   SystemApi systemApi();
+   @SerializedNames({ "level", "message" })
+   public static Message create(String level, String message) {
+      return new AutoValue_Message(level, message);
+   }
 }

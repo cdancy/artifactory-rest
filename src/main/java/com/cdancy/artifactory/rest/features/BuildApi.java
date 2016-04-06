@@ -17,32 +17,26 @@
 
 package com.cdancy.artifactory.rest.features;
 
-import com.cdancy.artifactory.rest.domain.docker.PromoteImage;
+import com.cdancy.artifactory.rest.domain.error.RequestStatus;
+import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
-import org.jclouds.Fallbacks;
+import com.cdancy.artifactory.rest.options.PromoteBuildOptions;
 import org.jclouds.rest.annotations.*;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-@Path("/api/docker")
+@Path("/api")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 @RequestFilters(ArtifactoryAuthentication.class)
-public interface DockerApi {
+public interface BuildApi {
 
-   @Named("docker:promote")
-   @Path("/{repoKey}/v1/promote")
-   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   @Named("build:promote")
+   @Path("/build/promote/{buildName}/{buildNumber}")
+   @Fallback(RequestStatusFromError.class)
    @POST
-   boolean promote(@PathParam("repoKey") String repoKey, @BinderParam(BindToJsonPayload.class) PromoteImage promote);
-
-   @Named("docker:list-repositories")
-   @Path("/{repoKey}/_catalog")
-   @SelectJson({"repositories"})
-   @GET
-   List<String> repositories(@PathParam("repoKey") String repoKey);
+   RequestStatus promote(@PathParam("buildName") String buildName, @PathParam("buildNumber") int buildNumber,
+                         @BinderParam(BindToJsonPayload.class) PromoteBuildOptions promoteBuildOptions);
 }

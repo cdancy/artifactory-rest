@@ -1,0 +1,8 @@
+{
+  "messages":[
+    {
+      "level":"ERROR",
+      "message":"Failed to copy from src=libs-snapshot-local/does/not/exist to target=ext-snapshot-local/hello/world: Could not find item at libs-snapshot-local:does/not/exist"
+    }
+  ]
+}

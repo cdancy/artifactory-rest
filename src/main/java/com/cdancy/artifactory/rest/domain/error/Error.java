@@ -15,29 +15,23 @@
  * limitations under the License.
  */
 
-package com.cdancy.artifactory.rest.domain.docker;
+package com.cdancy.artifactory.rest.domain.error;
 
 import com.google.auto.value.AutoValue;
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
-public abstract class Promote {
+public abstract class Error {
 
-   public abstract String targetRepo();
+   public abstract int status();
 
-   public abstract String dockerRepository();
+   public abstract String message();
 
-   @Nullable
-   public abstract String tag();
-
-   public abstract boolean copy();
-
-   Promote() {
+   Error() {
    }
 
-   @SerializedNames({ "targetRepo", "dockerRepository", "tag", "copy" })
-   public static Promote create(String targetRepo, String dockerRepository, String tag, boolean copy) {
-      return new AutoValue_Promote(targetRepo, dockerRepository, tag, copy);
+   @SerializedNames({ "status", "message" })
+   public static Error create(int level, String message) {
+      return new AutoValue_Error(level, message);
    }
 }

@@ -17,7 +17,7 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
-import com.cdancy.artifactory.rest.domain.docker.Promote;
+import com.cdancy.artifactory.rest.domain.docker.PromoteImage;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -47,14 +47,14 @@ public class DockerApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test
     public void testPromote() {
-        Promote dockerPromote = Promote.create(dockerRepoPromoted, dockerImage, dockerTag, true);
+        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, dockerTag, true);
         boolean success = api().promote(dockerRepo, dockerPromote);
         assertTrue(success);
     }
 
     @Test
     public void testPromoteNonExistentImage() {
-        Promote dockerPromote = Promote.create(dockerRepoPromoted, dockerImage, "0009", false);
+        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, "0009", false);
         boolean success = api().promote(dockerRepo, dockerPromote);
         assertFalse(success);
     }

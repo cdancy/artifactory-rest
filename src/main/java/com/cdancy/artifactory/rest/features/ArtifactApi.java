@@ -23,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
+import com.cdancy.artifactory.rest.domain.error.RequestStatus;
+import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
 
 import com.cdancy.artifactory.rest.functions.HttpResponseToFile;
@@ -64,4 +66,12 @@ public interface ArtifactApi {
    @Fallback(FalseOnNotFoundOr404.class)
    @DELETE
    boolean deleteArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+
+   @Named("artifact:copy")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Path("/api/copy/{repoKey}/{itemPath}")
+   @QueryParams(keys = { "failFast", "suppressLayouts" }, values = { "1", "0" })
+   @Fallback(RequestStatusFromError.class)
+   @POST
+   RequestStatus copyArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath, @QueryParam("to") String targetPath);
 }

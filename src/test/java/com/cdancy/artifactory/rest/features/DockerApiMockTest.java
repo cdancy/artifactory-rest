@@ -17,7 +17,7 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
-import com.cdancy.artifactory.rest.domain.docker.Promote;
+import com.cdancy.artifactory.rest.domain.docker.PromoteImage;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -44,7 +44,7 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       DockerApi api = jcloudsApi.dockerApi();
       try {
-          Promote dockerPromote = Promote.create("docker-promoted", "library/artifactory", "latest", false);
+          PromoteImage dockerPromote = PromoteImage.create("docker-promoted", "library/artifactory", "latest", false);
           boolean success = api.promote("docker-local", dockerPromote);
           assertTrue(success);
           assertSent(server, "POST", "/api/docker/docker-local/v1/promote", MediaType.APPLICATION_JSON);
@@ -62,7 +62,7 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
         ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
         DockerApi api = jcloudsApi.dockerApi();
         try {
-            Promote dockerPromote = Promote.create("docker-promoted", "library/artifactory", "latest", false);
+            PromoteImage dockerPromote = PromoteImage.create("docker-promoted", "library/artifactory", "latest", false);
             boolean success = api.promote("docker-local", dockerPromote);
             assertFalse(success);
             assertSent(server, "POST", "/api/docker/docker-local/v1/promote", MediaType.APPLICATION_JSON);

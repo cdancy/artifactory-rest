@@ -29,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
+import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
@@ -42,6 +43,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     private File tempArtifact;
     private String repoKey = "libs-snapshot-local";
+    private String repoReleaseKey = "ext-snapshot-local";
     private String itemPath;
     private String itemPathWithProperties;
     private Map<String, List<String>> itemProperties = new HashMap<>();
@@ -82,9 +84,28 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         }
     }
 
-    @Test(dependsOnMethods = "testRetrieveArtifact")
+    @Test (dependsOnMethods = "testRetrieveArtifact")
+    public void testCopyArtifact() {
+        RequestStatus requestStatus = api().copyArtifact(repoKey, itemPath, repoReleaseKey + "/" + itemPath);
+        assertNotNull(requestStatus);
+        assertTrue(requestStatus.errors().size() == 0);
+        assertTrue(requestStatus.messages().size() == 1);
+        assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("info"));
+    }
+
+    @Test (dependsOnMethods = "testCopyArtifact")
+    public void testCopyNonExistentArtifact() {
+        RequestStatus requestStatus = api().copyArtifact(repoKey, randomPath(), repoReleaseKey + "/" + randomPath());
+        assertNotNull(requestStatus);
+        assertTrue(requestStatus.errors().size() == 0);
+        assertTrue(requestStatus.messages().size() == 1);
+        assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("error"));
+    }
+
+    @Test(dependsOnMethods = "testCopyNonExistentArtifact")
     public void testDeleteArtifact() {
-      assertTrue(api().deleteArtifact(repoKey, itemPath));
+        assertTrue(api().deleteArtifact(repoKey, itemPath));
+        assertTrue(api().deleteArtifact(repoReleaseKey, itemPath));
     }
 
     @Test
@@ -153,6 +174,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
             }
         }
         assertTrue(tempArtifact.delete());
+        assertTrue(api().deleteArtifact(repoReleaseKey, itemPath.split("/")[0]));
         assertTrue(api().deleteArtifact(repoKey, itemPath.split("/")[0]));
         assertTrue(api().deleteArtifact(repoKey, itemPathWithProperties.split("/")[0]));
     }

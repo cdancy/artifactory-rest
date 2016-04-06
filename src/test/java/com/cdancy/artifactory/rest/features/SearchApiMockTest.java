@@ -85,7 +85,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       SearchApi api = jcloudsApi.searchApi();
       try {
-         SearchBuildArtifacts searchBuildArtifacts = SearchBuildArtifacts.create("build-name",
+         SearchBuildArtifacts searchBuildArtifacts = SearchBuildArtifacts.create("error-name",
                  "15",
                  "Released",
                  Lists.newArrayList("libs-release-local"),
@@ -108,7 +108,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
       SearchApi api = jcloudsApi.searchApi();
       try {
-         SearchBuildArtifacts searchBuildArtifacts = SearchBuildArtifacts.create("build-name",
+         SearchBuildArtifacts searchBuildArtifacts = SearchBuildArtifacts.create("error-name",
                  "15",
                  "Released",
                  Lists.newArrayList("libs-release-local"),
