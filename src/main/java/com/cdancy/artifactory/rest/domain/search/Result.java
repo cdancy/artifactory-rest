@@ -17,10 +17,13 @@
 
 package com.cdancy.artifactory.rest.domain.search;
 
+import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
+
+import java.util.List;
 
 @AutoValue
 public abstract class Result {
@@ -30,6 +33,8 @@ public abstract class Result {
     public abstract String path();
 
     public abstract String name();
+
+    public abstract List<KeyValue> properties();
 
     @Nullable
     public abstract String type();
@@ -55,10 +60,10 @@ public abstract class Result {
     Result() {
     }
 
-    @SerializedNames({ "repo", "path", "name", "type", "size", "created", "created_by", "modified", "modified_by",
+    @SerializedNames({ "repo", "path", "name", "properties", "type", "size", "created", "created_by", "modified", "modified_by",
          "updated" })
-    public static Result create(String repo, String path, String name, String type, String size, String created,
+    public static Result create(String repo, String path, String name, List<KeyValue> properties, String type, String size, String created,
          String created_by, String modified, String modified_by, String updated) {
-      return new AutoValue_Result(repo, path, name, type, size, created, created_by, modified, modified_by, updated);
+      return new AutoValue_Result(repo, path, name, properties != null ? ImmutableList.copyOf(properties) : ImmutableList.<KeyValue>of(), type, size, created, created_by, modified, modified_by, updated);
     }
 }

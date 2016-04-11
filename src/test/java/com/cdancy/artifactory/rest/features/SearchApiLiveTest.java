@@ -17,6 +17,7 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
+import com.cdancy.artifactory.rest.domain.search.KeyValue;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.cdancy.artifactory.rest.domain.search.SearchResult;
 import com.google.common.collect.ImmutableList;
@@ -46,9 +47,17 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
       api.storageApi().setItemProperties("jcenter-cache",
               "ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar",
               ImmutableMap.of("ant-lib", props));
-      AQLResult res = api().aql("items.find({\"repo\":{\"$eq\":\"jcenter-cache\"}, \"@ant-lib\":\"true\"})");
+      AQLResult res = api().aql("items.find({\"repo\":{\"$eq\":\"jcenter-cache\"}, \"@ant-lib\":\"true\"}).include(\"@ant-lib\")");
       assertNotNull(res);
       assertTrue(res.results().size() > 0);
+      assertTrue(res.results().get(0).properties().size() > 0);
+      boolean found = false;
+      for (KeyValue keyValue : res.results().get(0).properties()) {
+         if (keyValue.key().equalsIgnoreCase("ant-lib") && keyValue.value().equals("true")) {
+            found = true;
+         }
+      }
+      assertTrue(found);
    }
 
    @Test
