@@ -80,6 +80,22 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
    }
 
    @Test (dependsOnMethods = "testAql")
+   public void testGavcSearch() {
+      List<String> repos = ImmutableList.of("jcenter-cache");
+      List<SearchResult> res = api().gavcSearch("ant-contrib", "ant-contrib", "1.0b3", null, repos);
+      assertNotNull(res);
+      assertTrue(res.size() > 0);
+   }
+
+   @Test
+   public void testGavcSearchNoResults() {
+      List<String> repos = ImmutableList.of("jcenter-cache");
+      List<SearchResult> res = api().gavcSearch("ant-contrib-hello", "ant-contrib-world", "999", null, repos);
+      assertNotNull(res);
+      assertTrue(res.size() == 0);
+   }
+
+   @Test (dependsOnMethods = "testAql")
    public void testPropertySearch() {
       List<String> repos = ImmutableList.of("jcenter-cache");
       Map<String, List<String>> props = ImmutableMap.<String, List<String>>of("ant-lib", ImmutableList.of("true"));

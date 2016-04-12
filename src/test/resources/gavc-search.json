@@ -1,0 +1,10 @@
+{
+  "results":[
+    {
+      "uri":"http://localhost:8081/artifactory/api/storage/jcenter-cache/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar"
+    },
+    {
+      "uri":"http://localhost:8081/artifactory/api/storage/jcenter-cache/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.pom"
+    }
+  ]
+}

@@ -58,12 +58,27 @@ public interface SearchApi {
    @POST
    List<SearchResult> buildArtifacts(@BinderParam(BindToJsonPayload.class) SearchBuildArtifacts searchBuildArtifacts);
 
+
+   @Named("search:gavc-search")
+   @Path("/gavc")
+   @Fallback(Fallbacks.EmptyListOnNotFoundOr404.class)
+   @Produces(MediaType.APPLICATION_JSON)
+   @SelectJson("results")
+   @GET
+   List<SearchResult> gavcSearch(@Nullable @QueryParam("g") String groupId,
+                                 @Nullable @QueryParam("a") String artifactId,
+                                 @Nullable @QueryParam("v") String version,
+                                 @Nullable @QueryParam("c") String classifier,
+                                 @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+
+
    @Named("search:property-search")
    @Path("/prop")
    @Produces(MediaType.APPLICATION_JSON)
    @SelectJson("results")
    @GET
-   List<SearchResult> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<SearchResult> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties,
+                                     @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 
    @Named("search:not-downloaded-since")
    @Path("/usage")
@@ -71,5 +86,7 @@ public interface SearchApi {
    @Produces(MediaType.APPLICATION_JSON)
    @SelectJson("results")
    @GET
-   List<SearchResult> notDownloadedSince(@QueryParam("notUsedSince") long notUsedSince_ISO8601, @Nullable @QueryParam("createdBefore") Long createdBefore_ISO8601, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<SearchResult> notDownloadedSince(@QueryParam("notUsedSince") long notUsedSince_ISO8601,
+                                         @Nullable @QueryParam("createdBefore") Long createdBefore_ISO8601,
+                                         @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 }

@@ -124,6 +124,44 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       }
    }
 
+   public void testGavcSearch() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/gavc-search.json")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      SearchApi api = jcloudsApi.searchApi();
+      try {
+
+         List<String> repos = ImmutableList.of("jcenter-cache");
+         List<SearchResult> res = api.gavcSearch("ant-contrib", "ant-contrib", "1.0b3", null, repos);
+         assertNotNull(res);
+         assertTrue(res.size() > 0);
+         assertSent(server, "GET", "/api/search/gavc?g=ant-contrib&a=ant-contrib&v=1.0b3&repos=jcenter-cache", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGavcSearchNoResults() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/gavc-search-empty.json")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      SearchApi api = jcloudsApi.searchApi();
+      try {
+
+         List<String> repos = ImmutableList.of("jcenter-cache");
+         List<SearchResult> res = api.gavcSearch("hello", "world", "999", null, repos);
+         assertNotNull(res);
+         assertTrue(res.size() == 0);
+         assertSent(server, "GET", "/api/search/gavc?g=hello&a=world&v=999&repos=jcenter-cache", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
    public void testPropertySearch() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
