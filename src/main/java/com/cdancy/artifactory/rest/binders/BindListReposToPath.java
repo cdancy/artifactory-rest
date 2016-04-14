@@ -16,38 +16,40 @@
  */
 package com.cdancy.artifactory.rest.binders;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
+import java.util.List;
+
+import javax.inject.Singleton;
+
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
-import javax.inject.Singleton;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkArgument;
-
 @Singleton
 public class BindListReposToPath implements Binder {
-    @Override
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object repositories) {
+   @SuppressWarnings("unchecked")
+   @Override
+   public <R extends HttpRequest> R bindToRequest(final R request, final Object repositories) {
 
-        checkArgument(repositories instanceof List, "binder is only valid for List");
-        List<String> repos = (List<String>) repositories;
-        checkArgument(repos.size() > 0, "repositories List cannot be empty");
+      checkArgument(repositories instanceof List, "binder is only valid for List");
+      List<String> repos = (List<String>) repositories;
+      checkArgument(repos.size() > 0, "repositories List cannot be empty");
 
-        StringBuilder propertiesProp = new StringBuilder();
-        for (String prop : repos) {
-            if (prop != null) {
-                String potentialKey = prop.trim();
-                if (potentialKey.length() > 0) {
-                    propertiesProp.append(potentialKey).append(",");
-                }
+      StringBuilder propertiesProp = new StringBuilder();
+      for (String prop : repos) {
+         if (prop != null) {
+            String potentialKey = prop.trim();
+            if (potentialKey.length() > 0) {
+               propertiesProp.append(potentialKey).append(",");
             }
-        }
+         }
+      }
 
-        if (propertiesProp.length() == 0) {
-            throw new IllegalArgumentException("repositories did not have any valid Strings");
-        }
+      if (propertiesProp.length() == 0) {
+         throw new IllegalArgumentException("repositories did not have any valid Strings");
+      }
 
-        propertiesProp.setLength(propertiesProp.length() - 1);
-        return (R) request.toBuilder().addQueryParam("repos", propertiesProp.toString()).build();
-    }
+      propertiesProp.setLength(propertiesProp.length() - 1);
+      return (R) request.toBuilder().addQueryParam("repos", propertiesProp.toString()).build();
+   }
 }

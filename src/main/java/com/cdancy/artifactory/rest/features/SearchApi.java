@@ -17,26 +17,34 @@
 
 package com.cdancy.artifactory.rest.features;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Named;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Payload;
+import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.SelectJson;
+import org.jclouds.rest.binders.BindToJsonPayload;
 
 import com.cdancy.artifactory.rest.binders.BindListReposToPath;
 import com.cdancy.artifactory.rest.binders.BindMapToPath;
+import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.cdancy.artifactory.rest.domain.search.SearchResult;
-import com.cdancy.artifactory.rest.parsers.ArtifactDownloadURIToList;
-import com.cdancy.artifactory.rest.parsers.ArtifactURIToList;
-import org.jclouds.Fallbacks;
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.rest.annotations.*;
-
-import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
-import org.jclouds.rest.binders.BindToJsonPayload;
-
-import java.util.List;
-import java.util.Map;
 
 @Path("/api/search")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -63,7 +71,8 @@ public interface SearchApi {
    @Produces(MediaType.APPLICATION_JSON)
    @SelectJson("results")
    @GET
-   List<SearchResult> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<SearchResult> propertySearch(@BinderParam(BindMapToPath.class) Map<String, List<String>> properties,
+         @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 
    @Named("search:not-downloaded-since")
    @Path("/usage")
@@ -71,5 +80,7 @@ public interface SearchApi {
    @Produces(MediaType.APPLICATION_JSON)
    @SelectJson("results")
    @GET
-   List<SearchResult> notDownloadedSince(@QueryParam("notUsedSince") long notUsedSince_ISO8601, @Nullable @QueryParam("createdBefore") Long createdBefore_ISO8601, @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+   List<SearchResult> notDownloadedSince(@QueryParam("notUsedSince") long notUsedSince_ISO8601,
+         @Nullable @QueryParam("createdBefore") Long createdBefore_ISO8601,
+         @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 }

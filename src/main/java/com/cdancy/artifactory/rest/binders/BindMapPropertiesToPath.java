@@ -16,56 +16,57 @@
  */
 package com.cdancy.artifactory.rest.binders;
 
-import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.Binder;
+import static com.google.common.base.Preconditions.checkArgument;
 
-import javax.inject.Singleton;
-import java.net.URLEncoder;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import javax.inject.Singleton;
+
+import org.jclouds.http.HttpRequest;
+import org.jclouds.rest.Binder;
+
+import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
 
 @Singleton
 public class BindMapPropertiesToPath implements Binder {
-    @Override
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
+   @SuppressWarnings("unchecked")
+   @Override
+   public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
-        checkArgument(properties instanceof Map, "binder is only valid for Map");
-        Map<String, List<String>> props = (Map<String, List<String>>) properties;
-        checkArgument(props.size() > 0, "properties Map cannot be empty");
+      checkArgument(properties instanceof Map, "binder is only valid for Map");
+      Map<String, List<String>> props = (Map<String, List<String>>) properties;
+      checkArgument(props.size() > 0, "properties Map cannot be empty");
 
-        int size = props.size();
-        StringBuilder propertiesProp = new StringBuilder();
-        for (Map.Entry<String, List<String>> prop : props.entrySet()) {
-            size -= 1;
-            String potentialKey = prop.getKey().trim();
-            if (potentialKey.length() > 0) {
-                propertiesProp.append(potentialKey);
-                if (prop.getValue() != null) {
-                    String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
-                    if (potentialValue.length() > 0) {
-                        String encodedValue = "";
-                        try {
-                            if (potentialValue != null)
-                                encodedValue = potentialValue.replaceAll(" ", "%20");
-                        } catch (Exception e) {
-                            encodedValue =  potentialValue;
-                        }
-                        propertiesProp.append("=").append(encodedValue);
-                    }
-                }
-                if (size > 0)
-                    propertiesProp.append("|");
+      int size = props.size();
+      StringBuilder propertiesProp = new StringBuilder();
+      for (Map.Entry<String, List<String>> prop : props.entrySet()) {
+         size -= 1;
+         String potentialKey = prop.getKey().trim();
+         if (potentialKey.length() > 0) {
+            propertiesProp.append(potentialKey);
+            if (prop.getValue() != null) {
+               String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
+               if (potentialValue.length() > 0) {
+                  String encodedValue = "";
+                  try {
+                     if (potentialValue != null)
+                        encodedValue = potentialValue.replaceAll(" ", "%20");
+                  } catch (Exception e) {
+                     encodedValue = potentialValue;
+                  }
+                  propertiesProp.append("=").append(encodedValue);
+               }
             }
-        }
+            if (size > 0)
+               propertiesProp.append("|");
+         }
+      }
 
-        if (propertiesProp.length() == 0) {
-            throw new IllegalArgumentException("properties did not have any valid key/value pairs");
-        }
+      if (propertiesProp.length() == 0) {
+         throw new IllegalArgumentException("properties did not have any valid key/value pairs");
+      }
 
-        return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
-    }
+      return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
+   }
 }
