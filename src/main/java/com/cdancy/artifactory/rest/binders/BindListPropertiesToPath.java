@@ -16,39 +16,40 @@
  */
 package com.cdancy.artifactory.rest.binders;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
+import java.util.List;
+
+import javax.inject.Singleton;
+
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
-import javax.inject.Singleton;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkArgument;
-
 @Singleton
 public class BindListPropertiesToPath implements Binder {
-    @Override
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
+   @SuppressWarnings("unchecked")
+   @Override
+   public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
-        checkArgument(properties instanceof List, "binder is only valid for List");
-        List<String> props = (List<String>) properties;
-        checkArgument(props.size() > 0, "properties List cannot be empty");
+      checkArgument(properties instanceof List, "binder is only valid for List");
+      List<String> props = (List<String>) properties;
+      checkArgument(props.size() > 0, "properties List cannot be empty");
 
-        StringBuilder propertiesProp = new StringBuilder();
-        for (String prop : props) {
-            if (prop != null) {
-                String potentialKey = prop.trim();
-                if (potentialKey.length() > 0) {
-                    propertiesProp.append(potentialKey).append(",");
-                }
+      StringBuilder propertiesProp = new StringBuilder();
+      for (String prop : props) {
+         if (prop != null) {
+            String potentialKey = prop.trim();
+            if (potentialKey.length() > 0) {
+               propertiesProp.append(potentialKey).append(",");
             }
-        }
+         }
+      }
 
-        if (propertiesProp.length() == 0) {
-            throw new IllegalArgumentException("properties did not have any valid Strings");
-        }
+      if (propertiesProp.length() == 0) {
+         throw new IllegalArgumentException("properties did not have any valid Strings");
+      }
 
-        propertiesProp.setLength(propertiesProp.length() - 1);
-        return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
-    }
+      propertiesProp.setLength(propertiesProp.length() - 1);
+      return (R) request.toBuilder().addQueryParam("properties", propertiesProp.toString()).build();
+   }
 }

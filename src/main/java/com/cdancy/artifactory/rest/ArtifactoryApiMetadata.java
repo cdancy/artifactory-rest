@@ -28,8 +28,6 @@ import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
-import javax.inject.Singleton;
-
 @AutoService(ApiMetadata.class)
 public class ArtifactoryApiMetadata extends BaseHttpApiMetadata<ArtifactoryApi> {
 

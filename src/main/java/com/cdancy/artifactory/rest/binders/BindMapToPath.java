@@ -16,42 +16,45 @@
  */
 package com.cdancy.artifactory.rest.binders;
 
-import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.Binder;
+import static com.google.common.base.Preconditions.checkArgument;
 
-import javax.inject.Singleton;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import javax.inject.Singleton;
+
+import org.jclouds.http.HttpRequest;
+import org.jclouds.http.HttpRequest.Builder;
+import org.jclouds.rest.Binder;
+
+import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
 
 @Singleton
 public class BindMapToPath implements Binder {
-    @Override
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
+   @SuppressWarnings("unchecked")
+   @Override
+   public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
-        checkArgument(properties instanceof Map, "binder is only valid for Map");
-        Map<String, List<String>> props = (Map<String, List<String>>) properties;
-        checkArgument(props.size() > 0, "properties Map cannot be empty");
+      checkArgument(properties instanceof Map, "binder is only valid for Map");
+      Map<String, List<String>> props = (Map<String, List<String>>) properties;
+      checkArgument(props.size() > 0, "properties Map cannot be empty");
 
-        HttpRequest.Builder builder = request.toBuilder();
-        for (Map.Entry<String, List<String>> prop : props.entrySet()) {
-            String potentialKey = prop.getKey().trim();
-            if (potentialKey.length() > 0) {
-                String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
-                String encodedValue = "";
-                try {
-                    if (potentialValue != null)
-                        encodedValue = potentialValue.replaceAll(" ", "%20");
-                } catch (Exception e) {
-                    encodedValue =  potentialValue;
-                }
-                builder.addQueryParam(potentialKey, encodedValue);
+      Builder<?> builder = request.toBuilder();
+      for (Map.Entry<String, List<String>> prop : props.entrySet()) {
+         String potentialKey = prop.getKey().trim();
+         if (potentialKey.length() > 0) {
+            String potentialValue = ArtifactoryUtils.collectionToString(prop.getValue(), ",");
+            String encodedValue = "";
+            try {
+               if (potentialValue != null)
+                  encodedValue = potentialValue.replaceAll(" ", "%20");
+            } catch (Exception e) {
+               encodedValue = potentialValue;
             }
-        }
+            builder.addQueryParam(potentialKey, encodedValue);
+         }
+      }
 
-        return (R) builder.build();
-    }
+      return (R) builder.build();
+   }
 }
