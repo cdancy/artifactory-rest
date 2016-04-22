@@ -55,4 +55,20 @@ public class SystemApiMockTest extends BaseArtifactoryMockTest {
          server.shutdown();
       }
    }
+
+   public void testGetSystem() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/system.txt")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      SystemApi api = jcloudsApi.systemApi();
+      try {
+         String system = api.system();
+         assertNotNull(system);
+         assertSent(server, "GET", "/api/system", MediaType.TEXT_PLAIN);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
 }

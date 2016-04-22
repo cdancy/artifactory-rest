@@ -24,13 +24,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.domain.system.Version;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import org.jclouds.rest.annotations.RequestFilters;
 
 @Path("/api/system")
-@Consumes(MediaType.APPLICATION_JSON)
+@RequestFilters(ArtifactoryAuthentication.class)
 public interface SystemApi {
 
    @Named("system:version")
    @Path("/version")
+   @Consumes(MediaType.APPLICATION_JSON)
    @GET
    Version version();
+
+   @Named("system:system")
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   String system();
 }

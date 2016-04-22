@@ -37,6 +37,12 @@ public class SystemApiLiveTest extends BaseArtifactoryApiLiveTest {
       assertTrue(version.version().matches(versionRegex));
    }
 
+   @Test
+   public void testGetSystem() {
+      String version = api().system();
+      assertNotNull(version);
+   }
+
    private SystemApi api() {
       return api.systemApi();
    }
