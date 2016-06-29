@@ -1,5 +1,6 @@
-### Version 0.0.4 (TBA)
+### Version 0.0.4 (6/28/2016)
 * ADDED: `SystemApi` gained endpoint `system`
+* ADDED: `SearchApi` gained endpoint `latestVersionWithLayout`
 
 ### Version 0.0.3 (April 11, 2016)
 * ADDED: `com.cdancy.artifactory.rest.domain.search.Result` will now return properties should they be requested.

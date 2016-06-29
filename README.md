@@ -21,7 +21,7 @@ Can be found in either jcenter.
 	<dependency>
 	  <groupId>com.cdancy</groupId>
 	  <artifactId>artifactory-rest</artifactId>
-	  <version>0.0.3</version>
+	  <version>0.0.4</version>
 	</dependency>
 
 ## Documentation
