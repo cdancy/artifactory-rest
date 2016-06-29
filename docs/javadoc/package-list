@@ -4,6 +4,7 @@ com.cdancy.artifactory.rest.config
 com.cdancy.artifactory.rest.domain.artifact
 com.cdancy.artifactory.rest.domain.docker
 com.cdancy.artifactory.rest.domain.error
+com.cdancy.artifactory.rest.domain.repository
 com.cdancy.artifactory.rest.domain.search
 com.cdancy.artifactory.rest.domain.storage
 com.cdancy.artifactory.rest.domain.system
