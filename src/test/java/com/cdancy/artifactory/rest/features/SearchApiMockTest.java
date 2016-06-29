@@ -16,6 +16,7 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -236,6 +237,42 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
          assertNotNull(res);
          assertTrue(res.size() == 0);
          assertSent(server, "GET", "/api/search/usage?notUsedSince=12345&repos=libs-release-local,ext-release-local", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testLatestVersionWithLayout() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody("1.0b3").setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      SearchApi api = jcloudsApi.searchApi();
+      try {
+
+         List<String> repos = ImmutableList.of("jcenter-cache");
+         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "1.0*", repos);
+         assertNotNull(res);
+         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=1.0%2A&repos=jcenter-cache", MediaType.TEXT_PLAIN);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testLatestVersionWithLayoutNotFound() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody("1.0b3").setResponseCode(404));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      SearchApi api = jcloudsApi.searchApi();
+      try {
+
+         List<String> repos = ImmutableList.of("jcenter-cache");
+         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "9.0*", repos);
+         assertNull(res);
+         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=9.0%2A&repos=jcenter-cache", MediaType.TEXT_PLAIN);
       } finally {
          jcloudsApi.close();
          server.shutdown();

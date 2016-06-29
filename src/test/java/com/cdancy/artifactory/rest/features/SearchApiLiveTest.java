@@ -113,6 +113,20 @@ public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
       assertTrue(res.size() == 0);
    }
 
+   @Test
+   public void testLatestVersionWithLayout() {
+      List<String> repos = ImmutableList.of("jcenter-cache");
+      String res = api().latestVersionWithLayout("ant-contrib", "ant-contrib", "1.0*", repos);
+      assertNotNull(res);
+   }
+
+   @Test
+   public void testLatestVersionWithLayoutNotFound() {
+      List<String> repos = ImmutableList.of("jcenter-cache");
+      String res = api().latestVersionWithLayout("ant-contrib", "ant-contrib", "9.0*", repos);
+      assertNull(res);
+   }
+
    private SearchApi api() {
       return api.searchApi();
    }

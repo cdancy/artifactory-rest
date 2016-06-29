@@ -79,6 +79,16 @@ public interface SearchApi {
                                  @Nullable @QueryParam("c") String classifier,
                                  @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 
+   @Named("search:latest-version-with-layout")
+   @Path("/latestVersion")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   String latestVersionWithLayout(@Nullable @QueryParam("g") String groupId,
+                                 @Nullable @QueryParam("a") String artifactId,
+                                 @Nullable @QueryParam("v") String version,
+                                 @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
+
 
    @Named("search:property-search")
    @Path("/prop")
