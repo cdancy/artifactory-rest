@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import com.google.common.collect.Lists;
 import org.jclouds.io.Payloads;
@@ -64,6 +65,13 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testSetItemProperties")
+    public void testListFiles() {
+        FileList ref = api().fileList(repoKey, itemPath, 1, 1, 1, 1);
+        assertNotNull(ref);
+        assertTrue(ref.files().size() > 0);
+    }
+
+    @Test(dependsOnMethods = "testListFiles")
     public void testGetItemProperties() {
         Map<String, List<String>> itemProperties = api().getItemProperties(repoKey, artifact.path().replaceFirst("/", ""));
         assertNotNull(itemProperties);

@@ -18,6 +18,7 @@
 package com.cdancy.artifactory.rest.domain.artifact;
 
 import org.jclouds.json.SerializedNames;
+import org.jclouds.javax.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
@@ -26,32 +27,49 @@ public abstract class Artifact {
 
    public abstract String uri();
 
+   @Nullable
    public abstract String downloadUri();
 
+   @Nullable
    public abstract String repo();
 
+   @Nullable
    public abstract String path();
 
+   @Nullable
    public abstract String created();
 
+   @Nullable
    public abstract String createdBy();
 
    public abstract String size();
 
+   @Nullable
+   public abstract String lastModified();
+
+   @Nullable
+   public abstract String folder();
+
+   @Nullable
    public abstract String mimeType();
 
+   @Nullable
    public abstract CheckSum checksums();
 
+   @Nullable
    public abstract CheckSum originalChecksums();
 
    Artifact() {
    }
 
-   @SerializedNames({ "uri", "downloadUri", "repo", "path", "created", "createdBy", "size", "mimeType", "checksums",
-         "originalChecksums" })
-   public static Artifact create(String uri, String downloadUri, String repo, String path, String created,
-         String createdBy, String size, String mimeType, CheckSum checksums, CheckSum originalChecksums) {
-      return new AutoValue_Artifact(uri, downloadUri, repo, path, created, createdBy, size, mimeType, checksums,
-            originalChecksums);
+   @SerializedNames({ "uri", "downloadUri", "repo", "path", "created", "createdBy",
+           "size", "lastModified", "folder", "mimeType", "checksums", "originalChecksums" })
+   public static Artifact create(String uri, String downloadUri, String repo,
+                                 String path, String created, String createdBy,
+                                 String size, String lastModified, String folder,
+                                 String mimeType, CheckSum checksums, CheckSum originalChecksums) {
+      return new AutoValue_Artifact(uri, downloadUri, repo, path,
+              created, createdBy, size, lastModified,
+              folder, mimeType, checksums, originalChecksums);
    }
 }

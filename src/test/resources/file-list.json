@@ -1,0 +1,32 @@
+{
+  "uri":"http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme",
+  "created":"fdsa",
+  "files":[
+    {
+      "uri":"/archived",
+      "size":"-1",
+      "lastModified":"fdsa",
+      "folder":"true"
+    },
+    {
+      "uri":"/doc.txt",
+      "size":"253207",
+      "lastModified":"fdsa",
+      "folder":"false",
+      "sha1":"fdsa",
+      "mdTimestamps":{
+        "properties":"fdsa"
+      }
+    },
+    {
+      "uri":"/archived/doc1.txt",
+      "size":"253100",
+      "lastModified":"fdsa",
+      "folder":"false",
+      "sha1":"fdsa",
+      "mdTimestamps":{
+        "properties":"fdsa"
+      }
+    }
+  ]
+}

@@ -20,6 +20,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.RepositorySummary;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import com.google.common.collect.Lists;
@@ -150,6 +151,23 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          assertTrue(storageInfo.fileStoreSummary().storageType().equals("filesystem"));
          assertTrue(storageInfo.repositoriesSummaryList().size() == 3);
          assertSent(server, "GET", "/api/storageinfo", MediaType.APPLICATION_JSON);
+      } finally {
+         jcloudsApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testFileList() throws Exception {
+      MockWebServer server = mockArtifactoryJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/file-list.json")).setResponseCode(200));
+      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+      StorageApi api = jcloudsApi.storageApi();
+      try {
+         FileList ref = api.fileList("libs-release-local", "org/acme", 1, 1, 1, 1);
+         assertNotNull(ref);
+         assertTrue(ref.files().size() == 3);
+         assertSent(server, "GET", "/api/storage/libs-release-local/org/acme?list=true&deep=1&depth=1&listFolders=1&includeRootPath=1", MediaType.APPLICATION_JSON);
       } finally {
          jcloudsApi.close();
          server.shutdown();

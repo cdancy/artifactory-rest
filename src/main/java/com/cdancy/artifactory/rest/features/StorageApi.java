@@ -24,11 +24,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.binders.BindListPropertiesToPath;
 import com.cdancy.artifactory.rest.binders.BindMapPropertiesToPath;
+import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.rest.annotations.*;
@@ -71,4 +74,15 @@ public interface StorageApi {
    @Path("/storageinfo")
    @GET
    StorageInfo storageInfo();
+
+   @Named("storage:file-list")
+   @Path("/storage/{repoKey}/{itemPath}")
+   @QueryParams(keys = { "list" }, values = { "true" })
+   @GET
+   FileList fileList(@PathParam("repoKey") String repoKey,
+                     @PathParam("itemPath") String itemPath,
+                     @Nullable @QueryParam("deep") Integer deep,
+                     @Nullable @QueryParam("depth") Integer depth,
+                     @Nullable @QueryParam("listFolders") Integer listFolders,
+                     @Nullable @QueryParam("includeRootPath") Integer includeRootPath);
 }
