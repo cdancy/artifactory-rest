@@ -1,3 +1,6 @@
+### Version 0.0.5 (8/22/2016)
+* ADDED: `StorageApi' gained endpoint 'listFiles'
+
 ### Version 0.0.4 (6/28/2016)
 * ADDED: `SystemApi` gained endpoint `system`
 * ADDED: `SearchApi` gained endpoint `latestVersionWithLayout`
