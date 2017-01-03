@@ -1,3 +1,14 @@
+shadowJar {
+     mergeServiceFiles()
+     relocate 'com.google', 'com.cdancy.artifactory.rest.shaded.google'
+     relocate 'com.squareup', 'com.cdancy.artifactory.rest.shaded.squareup'
+     relocate 'autovalue', 'com.cdancy.artifactory.rest.shaded.autovalue'
+     relocate 'javax', 'com.cdancy.artifactory.rest.shaded.javax'
+     relocate 'net', 'com.cdancy.artifactory.rest.shaded.net'
+     relocate 'okio', 'com.cdancy.artifactory.rest.shaded.okio'
+     relocate 'org', 'com.cdancy.artifactory.rest.shaded.org'
+}
+
 task sourcesJar(type: Jar) {
     classifier 'sources'
     from sourceSets.main.allSource
@@ -6,9 +17,4 @@ task sourcesJar(type: Jar) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier 'javadoc'
     from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
 }

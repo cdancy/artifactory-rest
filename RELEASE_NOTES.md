@@ -1,3 +1,6 @@
+### Version 0.0.6 (1/3/2017)
+* ADDED: will now generate `all` artifact
+
 ### Version 0.0.5 (8/22/2016)
 * ADDED: `StorageApi' gained endpoint 'listFiles'
 

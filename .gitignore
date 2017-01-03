@@ -13,10 +13,12 @@ target
 
 # IDE generated files #
 ###################### 
+.settings/
 .classpath
 .project
 .README* 
-.idea
+.idea 
 *.iml 
 *.ipr
 *.iws
+/.nb-gradle/
