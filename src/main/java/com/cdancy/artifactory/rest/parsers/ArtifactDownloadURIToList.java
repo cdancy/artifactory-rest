@@ -1,8 +1,8 @@
 package com.cdancy.artifactory.rest.parsers;
 
-import autovalue.shaded.com.google.common.common.collect.Lists;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.jclouds.http.HttpResponse;

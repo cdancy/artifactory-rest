@@ -4,7 +4,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
 }
 
@@ -12,6 +13,8 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'com.github.johnrengelman.shadow'
+
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/publishing.gradle"
@@ -27,17 +30,17 @@ dependencies {
     compile ('org.apache.jclouds:jclouds-core:1.9.2') 
     compile ('org.apache.jclouds.driver:jclouds-okhttp:1.9.2') 
     compile ('com.google.auto.service:auto-service:1.0-rc2') 
-    compile ('com.google.auto.value:auto-value:1.1')
-	compile ('commons-io:commons-io:2.4')
+    compile ('com.google.auto.value:auto-value:1.2')
+    compile ('commons-io:commons-io:2.4')
 
-	testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests')
+    testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests')
     testCompile ('org.testng:testng:6.8.21') 
     testCompile ('org.assertj:assertj-core:1.7.0') 
     testCompile ('com.squareup.okhttp:mockwebserver:2.2.0') 
     testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
     testCompile ('ch.qos.logback:logback-core:1.1.2') 
     testCompile ('ch.qos.logback:logback-classic:1.1.2')
-	testCompile ('joda-time:joda-time:2.9.2')
+    testCompile ('joda-time:joda-time:2.9.2')
 }
 
 ext.compatibilityVersion = '1.7'
@@ -56,54 +59,30 @@ jar {
 }
 
 tasks.withType(JavaCompile) {
-	options.compilerArgs += ["-Xlint:-options"]
+    options.compilerArgs += ["-Xlint:-options"]
 }
 
 task mockTest(type: Test) {
     useTestNG() 
-	include "**/*ApiMockTest.class"
-	testLogging {
-		showStandardStreams = true
-		events 'started', 'passed', 'failed'
-	}
+    include "**/*ApiMockTest.class"
+    testLogging {
+            showStandardStreams = true
+            events 'started', 'passed', 'failed'
+    }
 }
 
 task integTest(type: Test, dependsOn: ['mockTest']) {
     useTestNG() 
-	include "**/*ApiLiveTest.class"
-	testLogging {
-		showStandardStreams = true
-		events 'started', 'passed', 'failed'
-	}    
+    include "**/*ApiLiveTest.class"
+    testLogging {
+        showStandardStreams = true
+        events 'started', 'passed', 'failed'
+    }    
     systemProperties = ["test.artifactory.endpoint" : "${testArtifactoryEndpoint}",
-    					"test.artifactory.credential" : "${testArtifactoryCredential}",
-						"test.artifactory.docker.repo" : "${testArtifactoryDockerRepo}",
-						"test.artifactory.docker.repo.promoted" : "${testArtifactoryDockerPromotedRepo}",
-						"test.artifactory.docker.image" : "${testArtifactoryDockerImage}",
-						"test.artifactory.docker.tag" : "${testArtifactoryDockerTag}"]
+                        "test.artifactory.credential" : "${testArtifactoryCredential}",
+                        "test.artifactory.docker.repo" : "${testArtifactoryDockerRepo}",
+                        "test.artifactory.docker.repo.promoted" : "${testArtifactoryDockerPromotedRepo}",
+                        "test.artifactory.docker.image" : "${testArtifactoryDockerImage}",
+                        "test.artifactory.docker.tag" : "${testArtifactoryDockerTag}"]
 }
 
-artifactory {
-	contextUrl = artifactoryURL
-	publish {
-		repository {
-			repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
-			username = artifactoryUser
-			password = artifactoryPassword
-			mavenCompatible = true
-		}
-		defaults {
-			publications ('artifactoryJava')
-		}
-	}
-}
-
-publishing {
-	publications {
-		artifactoryJava(MavenPublication) {
-			from components.java
-			artifact sourcesJar
-			artifact javadocJar
-		}
-	}
-}

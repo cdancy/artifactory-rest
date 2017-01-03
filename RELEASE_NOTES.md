@@ -1,3 +1,6 @@
+### Version 0.0.8 (1/3/2017) 
+* ADDED: do not relocate 'org' package for `all` jar
+
 ### Version 0.0.5 (8/22/2016)
 * ADDED: `StorageApi' gained endpoint 'listFiles'
 

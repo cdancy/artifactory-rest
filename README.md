@@ -16,12 +16,13 @@ Client's can be built like so:
       
 ## Latest release
 
-Can be found in either jcenter.
+Can be sourced from jcenter like so:
 
 	<dependency>
 	  <groupId>com.cdancy</groupId>
 	  <artifactId>artifactory-rest</artifactId>
-	  <version>0.0.5</version>
+	  <version>0.0.8</version>
+	  <classifier>sources|javadoc|all</classifier> (Optional)
 	</dependency>
 
 ## Documentation
