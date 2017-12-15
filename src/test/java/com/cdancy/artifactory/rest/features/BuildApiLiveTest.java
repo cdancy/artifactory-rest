@@ -21,7 +21,6 @@ import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import com.cdancy.artifactory.rest.options.PromoteBuildOptions;
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FileUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -31,7 +30,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.testng.Assert.*;
 

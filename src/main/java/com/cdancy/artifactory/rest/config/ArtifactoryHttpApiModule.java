@@ -16,13 +16,10 @@
  */
 package com.cdancy.artifactory.rest.config;
 
-import com.google.inject.Scopes;
-import org.jclouds.http.HttpCommandExecutorService;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
-import org.jclouds.http.config.ConfiguresHttpCommandExecutorService;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 
@@ -33,7 +30,6 @@ import com.cdancy.artifactory.rest.handlers.ArtifactoryErrorHandler;
  * Configures the Artifactory connection.
  */
 @ConfiguresHttpApi
-@ConfiguresHttpCommandExecutorService
 public class ArtifactoryHttpApiModule extends HttpApiModule<ArtifactoryApi> {
 
    @Override
@@ -41,11 +37,5 @@ public class ArtifactoryHttpApiModule extends HttpApiModule<ArtifactoryApi> {
       bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(ArtifactoryErrorHandler.class);
       bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(ArtifactoryErrorHandler.class);
       bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(ArtifactoryErrorHandler.class);
-   }
-
-   @Override
-   protected void configure() {
-      super.configure();
-      bind(HttpCommandExecutorService.class).to(ArtifactoryOkHttpCommandExecutorService.class).in(Scopes.SINGLETON);
    }
 }

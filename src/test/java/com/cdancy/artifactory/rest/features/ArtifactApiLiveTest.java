@@ -68,23 +68,6 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     }
 
     @Test (dependsOnMethods = "testDeployArtifact")
-    public void testRetrieveArtifact() {
-        File tempFile = null;
-        try {
-            tempFile = api().retrieveArtifact(repoKey, itemPath + "/" + tempArtifact.getName(), null);
-            assertNotNull(tempFile);
-            assertTrue(tempFile.exists());
-            filesToDelete.add(tempFile);
-
-            String expectedText = FileUtils.readFileToString(tempArtifact);
-            String randomFileText = FileUtils.readFileToString(tempFile);
-            assertTrue(expectedText.equals(randomFileText));
-        } catch (Exception e) {
-            Throwables.propagate(e);
-        }
-    }
-
-    @Test (dependsOnMethods = "testRetrieveArtifact")
     public void testCopyArtifact() {
         RequestStatus requestStatus = api().copyArtifact(repoKey, itemPath, repoReleaseKey + "/" + itemPath);
         assertNotNull(requestStatus);
@@ -116,36 +99,6 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         assertTrue(artifact.repo().equals(repoKey));
     }
 
-    @Test(dependsOnMethods = "testDeployArtifactWithProperties")
-    public void testRetrieveArtifactWithProperties() {
-        File tempFile = null;
-        try {
-            tempFile = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), itemProperties);
-            assertNotNull(tempFile);
-            assertTrue(tempFile.exists());
-            filesToDelete.add(tempFile);
-
-            String expectedText = FileUtils.readFileToString(tempArtifact);
-            String randomFileText = FileUtils.readFileToString(tempFile);
-            assertTrue(expectedText.equals(randomFileText));
-        } catch (Exception e) {
-            Throwables.propagate(e);
-        }
-    }
-
-    @Test (dependsOnMethods = "testRetrieveArtifactWithProperties")
-    public void testRetrieveArtifactWithIllegalPropertyValue() {
-        File tempFile = null;
-        try {
-            Map<String, List<String>> illegalPropertyValues = new HashMap<>(itemProperties);
-            illegalPropertyValues.put("key1", Lists.newArrayList("HelloWorld"));
-            File inputStream = api().retrieveArtifact(repoKey, itemPathWithProperties + "/" + tempArtifact.getName(), illegalPropertyValues);
-            assertNull(inputStream);
-        } catch (Exception e) {
-            Throwables.propagate(e);
-        }
-    }
-
     @Test(dependsOnMethods = "testRetrieveArtifactWithIllegalPropertyValue")
     public void testDeleteArtifactWithProperties() {
         assertTrue(api().deleteArtifact(repoKey, itemPathWithProperties));
@@ -154,16 +107,6 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     @Test
     public void testDeleteNonExistentArtifact() {
       assertFalse(api().deleteArtifact(repoKey, randomPath()));
-    }
-
-    @Test
-    public void testRetrieveNonExistentArtifact() {
-        try {
-            File inputStream = api().retrieveArtifact(repoKey, randomPath() + ".txt", null);
-            assertNull(inputStream);
-        } catch (Exception e) {
-            Throwables.propagate(e);
-        }
     }
 
     @AfterClass

@@ -10,6 +10,7 @@ shadowJar {
     relocate 'javax.inject', "${group}.shaded.javax.inject"
     relocate 'javax.annotation', "${group}.shaded.javax.annotation"
     relocate 'javax.ws.rs', "${group}.shaded.javax.ws.rs"
+    relocate 'org.apache', "${group}.shaded.org.apache"
 }
 
 task sourcesJar(type: Jar) {

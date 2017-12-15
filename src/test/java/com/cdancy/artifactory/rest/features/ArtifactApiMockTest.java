@@ -21,17 +21,14 @@ import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
 import com.google.common.collect.Lists;
-import com.google.common.net.HttpHeaders;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,109 +78,6 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
             assertNotNull(artifact);
             assertTrue(artifact.repo().equals("libs-release-local"));
             assertSent(server, "PUT", "/libs-release-local/my/jar/1.0/jar-1.0.jar;hello=world", MediaType.APPLICATION_JSON);
-        } finally {
-            jcloudsApi.close();
-            server.shutdown();
-        }
-    }
-
-    public void testRetrieveArtifact() throws Exception {
-        MockWebServer server = mockArtifactoryJavaWebServer();
-
-        String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().
-                setBody(payload).
-                setHeader("X-Artifactory-Filename", "jar-1.0.txt").
-                setHeader("X-Checksum-Md5", randomString()).
-                setResponseCode(200));
-
-        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
-        ArtifactApi api = jcloudsApi.artifactApi();
-        File inputStream = null;
-        try {
-            inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
-            assertNotNull(inputStream);
-            assertTrue(inputStream.exists());
-
-            String content = FileUtils.readFileToString(inputStream);
-
-            assertTrue(content.toString().equals(payload));
-            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", MediaType.APPLICATION_OCTET_STREAM);
-        } finally {
-            if (inputStream != null && inputStream.exists()) {
-                FileUtils.deleteQuietly(inputStream.getParentFile());
-            }
-
-            jcloudsApi.close();
-            server.shutdown();
-        }
-    }
-
-    public void testRetrieveArtifactWithProperties() throws Exception {
-        MockWebServer server = mockArtifactoryJavaWebServer();
-
-        String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().
-                setBody(payload).
-                setHeader("X-Artifactory-Filename", "jar-1.0.txt").
-                setHeader("X-Checksum-Md5", randomString()).
-                setResponseCode(200));
-
-        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
-        ArtifactApi api = jcloudsApi.artifactApi();
-        File inputStream = null;
-        try {
-            Map<String, List<String>> properties = new HashMap<>();
-            properties.put("hello", Lists.newArrayList("world"));
-
-            inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
-            assertTrue(inputStream.exists());
-
-            String content = FileUtils.readFileToString(inputStream);
-
-            assertTrue(content.toString().equals(payload));
-            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world", MediaType.APPLICATION_OCTET_STREAM);
-        } finally {
-            if (inputStream != null && inputStream.exists()) {
-                FileUtils.deleteQuietly(inputStream.getParentFile());
-            }
-
-            jcloudsApi.close();
-            server.shutdown();
-        }
-    }
-
-    public void testRetrieveArtifactWithIllegalPropertyValue() throws Exception {
-        MockWebServer server = mockArtifactoryJavaWebServer();
-
-        String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().setBody(payload).setResponseCode(404));
-        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
-        ArtifactApi api = jcloudsApi.artifactApi();
-        try {
-            Map<String, List<String>> properties = new HashMap<>();
-            properties.put("hello", Lists.newArrayList("world", "fish", "bear"));
-
-            File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", properties);
-            assertNull(inputStream);
-            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt;hello=world,fish,bear", MediaType.APPLICATION_OCTET_STREAM);
-        } finally {
-            jcloudsApi.close();
-            server.shutdown();
-        }
-    }
-
-    public void testRetrieveNonExistentArtifact() throws Exception {
-        MockWebServer server = mockArtifactoryJavaWebServer();
-
-        String payload = payloadFromResource("/retrieve-artifact.txt");
-        server.enqueue(new MockResponse().setBody(payload).setResponseCode(404));
-        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
-        ArtifactApi api = jcloudsApi.artifactApi();
-        try {
-            File inputStream = api.retrieveArtifact("libs-release-local", "my/jar/1.0/jar-1.0.txt", null);
-            assertNull(inputStream);
-            assertSent(server, "GET", "/libs-release-local/my/jar/1.0/jar-1.0.txt", MediaType.APPLICATION_OCTET_STREAM);
         } finally {
             jcloudsApi.close();
             server.shutdown();

@@ -27,16 +27,13 @@ import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
 
-import com.cdancy.artifactory.rest.functions.HttpResponseToFile;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.io.Payload;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.*;
 
 import com.google.common.net.HttpHeaders;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -52,18 +49,10 @@ public interface ArtifactApi {
    Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
                            Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
 
-   @Named("artifact:retrieve")
-   @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-   @Path("/{repoKey}/{itemPath}")
-   @ResponseParser(HttpResponseToFile.class)
-   @Fallback(NullOnNotFoundOr404.class)
-   @GET
-   File retrieveArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                         @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
-
    @Named("artifact:delete")
    @Path("/{repoKey}/{itemPath}")
    @Fallback(FalseOnNotFoundOr404.class)
+   @Consumes(MediaType.WILDCARD)
    @DELETE
    boolean deleteArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 

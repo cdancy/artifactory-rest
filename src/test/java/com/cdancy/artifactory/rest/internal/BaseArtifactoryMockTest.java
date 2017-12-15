@@ -17,10 +17,8 @@
 
 package com.cdancy.artifactory.rest.internal;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
-import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +26,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
@@ -65,7 +62,7 @@ public class BaseArtifactoryMockTest {
 
    public static MockWebServer mockArtifactoryJavaWebServer() throws IOException {
       MockWebServer server = new MockWebServer();
-      server.play();
+      server.start();
       return server;
    }
 
