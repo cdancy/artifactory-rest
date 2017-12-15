@@ -13,35 +13,12 @@ apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from components.java
+        mavenJava (MavenPublication) {
+            from components.java             
             artifact sourcesJar
-            artifact javadocJar
+            artifact docsJar
+            artifact testsJar
             artifact shadowJar
-
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('name', 'Artifactory Rest')
-                root.appendNode('description', 'Java client for working with Artifactory REST API.')
-                root.appendNode('url', 'https://github.com/cdancy/artifactory-rest')
-                root.appendNode('inceptionYear', '2016')
-
-                def scm = root.appendNode('scm')
-                scm.appendNode('url', 'https://github.com/cdancy/artifactory-rest')
-                scm.appendNode('connection', 'scm:https://cdancy@github.com/cdancy/artifactory-rest.git')
-                scm.appendNode('developerConnection', 'scm:git://github.com/cdancy/artifactory-rest.git')
-
-                def license = root.appendNode('licenses').appendNode('license')
-                license.appendNode('name', 'The Apache Software License, Version 2.0')
-                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-                license.appendNode('distribution', 'repo')
-
-                def developers = root.appendNode('developers')
-                def cdancy = developers.appendNode('developer')
-                cdancy.appendNode('id', 'cdancy')
-                cdancy.appendNode('name', 'Christopher Dancy')
-                cdancy.appendNode('email', 'christoforever@gmail.com')
-            }
         }
     }
 }

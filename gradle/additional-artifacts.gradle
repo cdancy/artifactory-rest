@@ -1,9 +1,15 @@
 shadowJar {
+    classifier = 'all'
     mergeServiceFiles()
-    relocate 'com.google', 'com.cdancy.artifactory.rest.shaded.google'
-    relocate 'com.squareup', 'com.cdancy.artifactory.rest.shaded.squareup'
-    relocate 'autovalue', 'com.cdancy.artifactory.rest.shaded.autovalue'
-    relocate 'okio', 'com.cdancy.artifactory.rest.shaded.okio'
+    relocate 'org.aopalliance', "${group}.shaded.org.aopalliance"
+    relocate 'org.objectweb', "${group}.shaded.org.objectweb"
+    relocate 'com.google', "${group}.shaded.com.google"
+    relocate 'net.sf', "${group}.shaded.net.sf"
+    relocate 'javax.inject', "${group}.shaded.javax.inject"
+    relocate 'org.jclouds', "${group}.shaded.org.jclouds"
+    relocate 'javax.inject', "${group}.shaded.javax.inject"
+    relocate 'javax.annotation', "${group}.shaded.javax.annotation"
+    relocate 'javax.ws.rs', "${group}.shaded.javax.ws.rs"
 }
 
 task sourcesJar(type: Jar) {
@@ -11,7 +17,12 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier 'javadoc'
+task docsJar(type: Jar, dependsOn: javadoc) {
+    classifier 'docs'
     from javadoc.destinationDir
+}
+
+task testsJar(type: Jar) {
+    classifier = 'tests'
+    from sourceSets.test.output
 }
