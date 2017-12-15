@@ -19,8 +19,8 @@ githubPages {
         }
     }
     credentials {
-        username = project.githubUsername
-        password = project.githubPassword
+        username = project.releaseUsername
+        password = project.releasePassword
     }
 }
 
