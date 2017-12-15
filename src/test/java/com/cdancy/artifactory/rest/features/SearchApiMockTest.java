@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
-import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
+import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 

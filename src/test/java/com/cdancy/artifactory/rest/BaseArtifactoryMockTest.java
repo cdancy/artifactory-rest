@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.cdancy.artifactory.rest.internal;
+package com.cdancy.artifactory.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;

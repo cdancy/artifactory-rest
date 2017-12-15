@@ -18,7 +18,7 @@ package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
-import com.cdancy.artifactory.rest.internal.BaseArtifactoryMockTest;
+import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;
 import com.cdancy.artifactory.rest.options.PromoteBuildOptions;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
