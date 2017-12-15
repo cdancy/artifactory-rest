@@ -1,4 +1,9 @@
 
+[![Build Status](https://travis-ci.org/cdancy/artifactory-rest.svg?branch=master)](https://travis-ci.org/cdancy/artifactory-rest)
+[![codecov](https://codecov.io/gh/cdancy/artifactory-rest/branch/master/graph/badge.svg)](https://codecov.io/gh/cdancy/artifactory-rest)
+[![Download](https://api.bintray.com/packages/cdancy/java-libraries/artifactory-rest/images/download.svg) ](https://bintray.com/cdancy/java-libraries/artifactory-rest/_latestVersion)
+[![Stack Overflow](https://img.shields.io/badge/stack%20overflow-artifactory&#8211;rest-4183C4.svg)](https://stackoverflow.com/questions/tagged/artifactory+rest)
+
 # artifactory-rest
 
 java-based client to interact with Artifactory's REST API.
