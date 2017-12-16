@@ -17,7 +17,6 @@
 package com.cdancy.artifactory.rest.features;
 
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -25,14 +24,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FileUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -47,7 +43,6 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
     private String itemPath;
     private String itemPathWithProperties;
     private Map<String, List<String>> itemProperties = new HashMap<>();
-    private List<File> filesToDelete = new CopyOnWriteArrayList<File>();
 
     @BeforeClass
     public void testInitialize() {
@@ -99,7 +94,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         assertTrue(artifact.repo().equals(repoKey));
     }
 
-    @Test(dependsOnMethods = "testRetrieveArtifactWithIllegalPropertyValue")
+    @Test(dependsOnMethods = "testDeployArtifactWithProperties")
     public void testDeleteArtifactWithProperties() {
         assertTrue(api().deleteArtifact(repoKey, itemPathWithProperties));
     }
@@ -111,11 +106,6 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @AfterClass
     public void testFinalize() {
-        for (File file : filesToDelete) {
-            if (file != null && file.exists()) {
-                FileUtils.deleteQuietly(file.getParentFile());
-            }
-        }
         assertTrue(tempArtifact.delete());
         assertTrue(api().deleteArtifact(repoReleaseKey, itemPath.split("/")[0]));
         assertTrue(api().deleteArtifact(repoKey, itemPath.split("/")[0]));

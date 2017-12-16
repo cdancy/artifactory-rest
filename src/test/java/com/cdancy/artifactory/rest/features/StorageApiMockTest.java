@@ -21,7 +21,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import com.cdancy.artifactory.rest.domain.storage.FileList;
-import com.cdancy.artifactory.rest.domain.storage.RepositorySummary;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import com.google.common.collect.Lists;
 import org.testng.annotations.Test;

@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.system.Version;
-import com.cdancy.artifactory.rest.features.SystemApi;
 
 @Test(groups = "live", testName = "SystemApiLiveTest")
 public class SystemApiLiveTest extends BaseArtifactoryApiLiveTest {

@@ -23,12 +23,10 @@ import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;
 import com.google.common.collect.Lists;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
-import org.apache.commons.io.FileUtils;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

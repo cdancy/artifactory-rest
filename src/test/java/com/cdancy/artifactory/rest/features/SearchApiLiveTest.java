@@ -23,16 +23,10 @@ import com.cdancy.artifactory.rest.domain.search.SearchResult;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 

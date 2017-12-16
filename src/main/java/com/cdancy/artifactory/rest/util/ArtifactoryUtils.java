@@ -16,16 +16,13 @@
  */
 package com.cdancy.artifactory.rest.util;
 
-import java.util.*;
-
 import com.google.common.base.Joiner;
+import java.util.Collection;
 
 public class ArtifactoryUtils {
 
-   public static final String LOCATION_HEADER = "Artifactory-Rest-File-Location";
-
    public static String collectionToString(Collection<String> collection, String separator) {
-      if (collection == null || collection.size() == 0) return null;
+      if (collection == null || collection.isEmpty()) return null;
       Joiner joiner = Joiner.on(separator != null ? separator : ",").skipNulls();
       return joiner.join(collection);
    }

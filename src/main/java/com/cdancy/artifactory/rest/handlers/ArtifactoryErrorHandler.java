@@ -41,6 +41,7 @@ public class ArtifactoryErrorHandler implements HttpErrorHandler {
    @Resource
    protected Logger logger = Logger.NULL;
 
+   @Override
    public void handleError(HttpCommand command, HttpResponse response) {
 
       // it is important to always read fully and close streams

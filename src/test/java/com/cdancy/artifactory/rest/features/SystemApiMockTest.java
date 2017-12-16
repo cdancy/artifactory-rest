@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.system.Version;
-import com.cdancy.artifactory.rest.features.SystemApi;
 import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
