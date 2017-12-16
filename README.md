@@ -26,8 +26,8 @@ Can be sourced from jcenter like so:
 	<dependency>
 	  <groupId>com.cdancy</groupId>
 	  <artifactId>artifactory-rest</artifactId>
-	  <version>0.0.8</version>
-	  <classifier>sources|javadoc|all</classifier> (Optional)
+	  <version>X.Y.Z</version>
+	  <classifier>sources|docs|tests|all</classifier> (Optional)
 	</dependency>
 
 ## Documentation
