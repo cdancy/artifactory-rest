@@ -1,3 +1,11 @@
+### Version 0.0.9 (12/15/2017) 
+* ADDED: bump gradle to `4.4`
+* ADDED: bump jclouds to `2.0.2`
+* ADDED: can now build on `travis-ci`
+* REFACTOR: requires jdk1.8 to build
+* REFACTOR: removed use of okhttp
+* REFACTOR: code cleanup and general refactorings all around
+
 ### Version 0.0.8 (1/3/2017) 
 * ADDED: do not relocate 'org' package for `all` jar
 
