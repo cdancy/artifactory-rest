@@ -1,3 +1,7 @@
+### Version 0.0.10 (12/20/2017)
+* REFACTOR: bump jclouds to `2.0.3`
+* BUG: fix broken `all` jar packaging
+
 ### Version 0.0.9 (12/15/2017) 
 * ADDED: bump gradle to `4.4`
 * ADDED: bump jclouds to `2.0.2`
