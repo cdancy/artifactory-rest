@@ -60,6 +60,31 @@ public class BuildApiMockTest extends BaseArtifactoryMockTest {
         }
     }
 
+    public void testPromoteBuildLargeBuildNumber() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/build-promote.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        BuildApi api = jcloudsApi.buildApi();
+        try {
+            String name = "MyBuildPlan";
+            long buildNumber = 1516010677327l;
+
+            String sourceRepo = "dev-repo";
+            String targetRepo = "release-repo";
+            PromoteBuildOptions options = PromoteBuildOptions.create("promote", "error promoted", "BuildUser", null, false, sourceRepo, targetRepo, true, true, false, null, null, true);
+            RequestStatus promoteStatus = api.promote(name, buildNumber, options);
+            assertNotNull(promoteStatus);
+            assertTrue(promoteStatus.errors().size() == 0);
+            assertTrue(promoteStatus.messages().size() == 0);
+            assertSent(server, "POST", "/api/build/promote/MyBuildPlan/1516010677327", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testPromoteBuildNonExistent() throws Exception {
         MockWebServer server = mockArtifactoryJavaWebServer();
 
