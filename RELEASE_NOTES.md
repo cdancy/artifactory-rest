@@ -1,4 +1,5 @@
 ### Version 0.0.11 (TBA)
+* REFACTOR: `BuildApi.promote` now takes a `long` instead of an `int` for the buildNumber - [PR 1](https://github.com/cdancy/artifactory-rest/pull/1)
 
 ### Version 0.0.10 (12/20/2017)
 * REFACTOR: bump jclouds to `2.0.3`
