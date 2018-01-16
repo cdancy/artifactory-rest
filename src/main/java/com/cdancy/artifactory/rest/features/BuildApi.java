@@ -37,6 +37,6 @@ public interface BuildApi {
    @Path("/build/promote/{buildName}/{buildNumber}")
    @Fallback(RequestStatusFromError.class)
    @POST
-   RequestStatus promote(@PathParam("buildName") String buildName, @PathParam("buildNumber") int buildNumber,
+   RequestStatus promote(@PathParam("buildName") String buildName, @PathParam("buildNumber") long buildNumber,
                          @BinderParam(BindToJsonPayload.class) PromoteBuildOptions promoteBuildOptions);
 }
