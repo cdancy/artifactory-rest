@@ -31,8 +31,11 @@ public class ArtifactoryClient {
 
         configureParameters();
 
-        this.artifactoryApi = ContextBuilder.newBuilder(new ArtifactoryApiMetadata.Builder().build()).endpoint(endPoint())
-                .credentials("N/A", credentials()).buildApi(ArtifactoryApi.class);
+        this.artifactoryApi = ContextBuilder
+                .newBuilder(new ArtifactoryApiMetadata.Builder().build())
+                .endpoint(endPoint())
+                .credentials("N/A", credentials())
+                .buildApi(ArtifactoryApi.class);
     }
 
     private void configureParameters() {
@@ -79,17 +82,14 @@ public class ArtifactoryClient {
         return artifactoryApi;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
+
         private String endPoint;
         private String credentials;
-
-        public Builder() {
-        }
-
-        public Builder(final String endPoint, final String credentials) {
-            this.endPoint = endPoint;
-            this.credentials = credentials;
-        }
 
         public Builder endPoint(String endPoint) {
             this.endPoint = endPoint;

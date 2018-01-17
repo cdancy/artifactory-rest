@@ -12,7 +12,7 @@ java-based client to interact with Artifactory's REST API.
 
 Client's can be built like so:
 
-      ArtifactoryClient client = new ArtifactoryClient.Builder()
+      ArtifactoryClient client = ArtifactoryClient.builder()
       .endPoint("http://127.0.0.1:8081/artifactory")
       .credentials("admin:password")
       .build();

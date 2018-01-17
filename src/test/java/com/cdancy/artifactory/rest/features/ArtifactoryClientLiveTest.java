@@ -29,7 +29,7 @@ public class ArtifactoryClientLiveTest extends BaseArtifactoryApiLiveTest {
 
    @Test
    public void testCreateClient() {
-      ArtifactoryClient client = new ArtifactoryClient.Builder().endPoint(this.endpoint).credentials(this.credential)
+      final ArtifactoryClient client = ArtifactoryClient.builder().endPoint(this.endpoint).credentials(this.credential)
             .build();
 
       Version version = client.api().systemApi().version();
