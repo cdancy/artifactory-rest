@@ -1,4 +1,4 @@
-### Version 0.0.11 (TBA)
+### Version 0.0.11 (01/16/2018)
 * REFACTOR: `BuildApi.promote` now takes a `long` instead of an `int` for the buildNumber - [PR 1](https://github.com/cdancy/artifactory-rest/pull/1)
 * REFACTOR: Refactor client builder implementation - [Commit 6c7cd5](https://github.com/cdancy/artifactory-rest/commit/6c7cd51bd99fc8e0cd4e452bc9f0b1afb1fe97a3)
 
