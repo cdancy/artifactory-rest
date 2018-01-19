@@ -89,8 +89,9 @@ task integTest(type: Test, dependsOn: ['mockTest']) {
         }
     }
 
+    // property 'test.artifactory.endpoint' needs to be
+    // hard-coded in for jclouds test framework
     systemProperties = ["test.artifactory.endpoint" : "${testArtifactoryRestEndpoint}",
-                        "test.artifactory.credential" : "${testArtifactoryRestCredential}",
                         "test.artifactory.docker.repo" : "${testArtifactoryRestDockerRepo}",
                         "test.artifactory.docker.repo.promoted" : "${testArtifactoryRestDockerPromotedRepo}",
                         "test.artifactory.docker.image" : "${testArtifactoryRestDockerImage}",
