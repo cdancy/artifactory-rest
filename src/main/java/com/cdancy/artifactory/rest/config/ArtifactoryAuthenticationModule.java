@@ -26,15 +26,14 @@ import java.util.Objects;
  */
 public class ArtifactoryAuthenticationModule extends AbstractModule {
 
-    private final ArtifactoryAuthentication creds;
+    private final ArtifactoryAuthentication authentication;
 
-    public ArtifactoryAuthenticationModule(final ArtifactoryAuthentication creds) {
-        Objects.requireNonNull(creds);
-        this.creds = creds;
+    public ArtifactoryAuthenticationModule(final ArtifactoryAuthentication authentication) {
+        this.authentication = Objects.requireNonNull(authentication);
     }
 
     @Override
     protected void configure() {
-        bind(ArtifactoryAuthentication.class).toProvider(new ArtifactoryAuthenticationProvider(creds));
+        bind(ArtifactoryAuthentication.class).toProvider(new ArtifactoryAuthenticationProvider(authentication));
     }
 }

@@ -31,39 +31,43 @@ import com.google.inject.Module;
 @AutoService(ApiMetadata.class)
 public class ArtifactoryApiMetadata extends BaseHttpApiMetadata<ArtifactoryApi> {
 
-   public static final String API_VERSION = "4.5.1";
-   public static final String BUILD_VERSION = "40117";
+    public static final String API_VERSION = "4.5.1";
+    public static final String BUILD_VERSION = "40117";
 
-   @Override
-   public Builder toBuilder() {
-      return new Builder().fromApiMetadata(this);
-   }
+    @Override
+    public Builder toBuilder() {
+        return new Builder().fromApiMetadata(this);
+    }
 
-   public ArtifactoryApiMetadata() {
-      this(new Builder());
-   }
+    public ArtifactoryApiMetadata() {
+        this(new Builder());
+    }
 
-   protected ArtifactoryApiMetadata(Builder builder) {
-      super(builder);
-   }
+    protected ArtifactoryApiMetadata(Builder builder) {
+        super(builder);
+    }
 
-   public static Properties defaultProperties() {
-      Properties properties = BaseHttpApiMetadata.defaultProperties();
-      return properties;
-   }
+    public static Properties defaultProperties() {
+        final Properties properties = BaseHttpApiMetadata.defaultProperties();
+        return properties;
+    }
 
-   public static class Builder extends BaseHttpApiMetadata.Builder<ArtifactoryApi, Builder> {
+    public static class Builder extends BaseHttpApiMetadata.Builder<ArtifactoryApi, Builder> {
 
-      protected Builder() {
-         super(ArtifactoryApi.class);
-         id("artifactory").name("Artifactory REST API").identityName("N/A")
-               .credentialName("Basic auth or JFrog service key").defaultIdentity("N/A")
-               .defaultCredential("admin:password")
-               .documentation(URI.create("https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API"))
-               .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:8081/artifactory")
-               .defaultProperties(ArtifactoryApiMetadata.defaultProperties())
-               .defaultModules(ImmutableSet.<Class<? extends Module>> of(ArtifactoryHttpApiModule.class));
-      }
+    protected Builder() {
+        super(ArtifactoryApi.class);
+        id("artifactory").name("Artifactory REST API")
+                .identityName("Optional Username")
+                .credentialName("Optional Password")
+                .defaultIdentity("")
+                .defaultCredential("")
+                .documentation(URI.create("https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API"))
+                .version(API_VERSION)
+                .buildVersion(BUILD_VERSION)
+                .defaultEndpoint("http://127.0.0.1:8081/artifactory")
+                .defaultProperties(ArtifactoryApiMetadata.defaultProperties())
+                .defaultModules(ImmutableSet.<Class<? extends Module>> of(ArtifactoryHttpApiModule.class));
+    }
 
       @Override
       public ArtifactoryApiMetadata build() {

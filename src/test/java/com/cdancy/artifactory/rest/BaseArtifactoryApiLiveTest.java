@@ -16,6 +16,7 @@
  */
 package com.cdancy.artifactory.rest;
 
+import com.cdancy.artifactory.rest.config.ArtifactoryAuthenticationModule;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,70 +28,72 @@ import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.testng.annotations.Test;
 
-import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 @Test(groups = "live")
 public class BaseArtifactoryApiLiveTest extends BaseApiLiveTest<ArtifactoryApi> {
+    protected final ArtifactoryAuthentication artifactoryAuthentication;
 
-   public BaseArtifactoryApiLiveTest() {
-      provider = "artifactory";
-   }
+    public BaseArtifactoryApiLiveTest() {
+        provider = "artifactory";
+        this.artifactoryAuthentication = TestUtilities.inferTestAuthentication();
+    }
 
-   @Override
-   protected Iterable<Module> setupModules() {
-      return ImmutableSet.<Module> of(getLoggingModule());
-   }
+    @Override
+    protected Iterable<Module> setupModules() {
+        final ArtifactoryAuthenticationModule credsModule = new ArtifactoryAuthenticationModule(this.artifactoryAuthentication);
+        return ImmutableSet.<Module> of(getLoggingModule(), credsModule);
+    }
 
-   @Override
-   protected Properties setupProperties() {
-      Properties overrides = super.setupProperties();
-      overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
-      return overrides;
-   }
+    @Override
+    protected Properties setupProperties() {
+        Properties overrides = super.setupProperties();
+        overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
+        return overrides;
+    }
 
-   public String randomUUID() {
-      return UUID.randomUUID().toString().replaceAll("-", "");
-   }
+    public String randomUUID() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
-   public String randomPath() {
-      return UUID.randomUUID().toString().replaceAll("-", "/");
-   }
+    public String randomPath() {
+        return UUID.randomUUID().toString().replaceAll("-", "/");
+    }
 
-   public String randomString() {
-      char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-      StringBuilder sb = new StringBuilder();
-      Random random = new Random();
-      for (int i = 0; i < 10; i++) {
-         char c = chars[random.nextInt(chars.length)];
-         sb.append(c);
-      }
-      return sb.toString();
-   }
+    public String randomString() {
+        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+           char c = chars[random.nextInt(chars.length)];
+           sb.append(c);
+        }
+        return sb.toString();
+    }
 
-   public File randomFile() {
-      File randomFile = null;
-      PrintWriter writer = null;
-      try {
-         randomFile = new File(System.getProperty("java.io.tmpdir"), randomUUID() + ".txt");
-         if (!randomFile.createNewFile()) {
-            throw new RuntimeException("Could not create temporary file at " + randomFile.getAbsolutePath());
-         }
+    public File randomFile() {
+        File randomFile = null;
+        PrintWriter writer = null;
+        try {
+            randomFile = new File(System.getProperty("java.io.tmpdir"), randomUUID() + ".txt");
+            if (!randomFile.createNewFile()) {
+                throw new RuntimeException("Could not create temporary file at " + randomFile.getAbsolutePath());
+            }
 
-         writer = new PrintWriter(randomFile, "UTF-8");
-         writer.println("Hello, World!");
-         writer.close();
-      } catch (IOException e) {
-         if (randomFile != null) {
-            randomFile.delete();
-         }
-         Throwables.propagate(e);
-      } finally {
-         if (writer != null)
+            writer = new PrintWriter(randomFile, "UTF-8");
+            writer.println("Hello, World!");
             writer.close();
-      }
-      return randomFile;
-   }
+        } catch (IOException e) {
+            if (randomFile != null) {
+               randomFile.delete();
+            }
+            Throwables.propagate(e);
+        } finally {
+            if (writer != null)
+                writer.close();
+        }
+        return randomFile;
+    }
 }

@@ -32,10 +32,10 @@ import com.cdancy.artifactory.rest.handlers.ArtifactoryErrorHandler;
 @ConfiguresHttpApi
 public class ArtifactoryHttpApiModule extends HttpApiModule<ArtifactoryApi> {
 
-   @Override
-   protected void bindErrorHandlers() {
-      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(ArtifactoryErrorHandler.class);
-      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(ArtifactoryErrorHandler.class);
-      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(ArtifactoryErrorHandler.class);
-   }
+    @Override
+    protected void bindErrorHandlers() {
+        bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(ArtifactoryErrorHandler.class);
+        bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(ArtifactoryErrorHandler.class);
+        bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(ArtifactoryErrorHandler.class);
+    }
 }

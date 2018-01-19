@@ -17,6 +17,7 @@
 
 package com.cdancy.artifactory.rest;
 
+import com.cdancy.artifactory.rest.config.ArtifactoryAuthenticationModule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
 
@@ -30,9 +31,9 @@ import javax.ws.rs.core.HttpHeaders;
 import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
 
-import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonParser;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
@@ -42,47 +43,54 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
  */
 public class BaseArtifactoryMockTest {
 
-   protected String provider;
-   private final JsonParser parser = new JsonParser();
+    protected String provider;
 
-   public BaseArtifactoryMockTest() {
-      provider = "artifactory";
-   }
+    public BaseArtifactoryMockTest() {
+        provider = "artifactory";
+    }
 
-   public ArtifactoryApi api(URL url) {
-      return ContextBuilder.newBuilder(provider).endpoint(url.toString()).overrides(setupProperties())
-            .buildApi(ArtifactoryApi.class);
-   }
+    public ArtifactoryApi api(URL url) {
+        final ArtifactoryAuthentication creds = ArtifactoryAuthentication
+                .builder()
+                .credentials("hello:world")
+                .build();
+        final ArtifactoryAuthenticationModule credsModule = new ArtifactoryAuthenticationModule(creds);
+        return ContextBuilder.newBuilder(provider)
+                .endpoint(url.toString())
+                .overrides(setupProperties())
+                .modules(Lists.newArrayList(credsModule))
+                .buildApi(ArtifactoryApi.class);
+    }
 
-   protected Properties setupProperties() {
-      Properties properties = new Properties();
-      properties.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
-      return properties;
-   }
+    protected Properties setupProperties() {
+        Properties properties = new Properties();
+        properties.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
+        return properties;
+    }
 
-   public static MockWebServer mockArtifactoryJavaWebServer() throws IOException {
-      MockWebServer server = new MockWebServer();
-      server.start();
-      return server;
-   }
+    public static MockWebServer mockArtifactoryJavaWebServer() throws IOException {
+        MockWebServer server = new MockWebServer();
+        server.start();
+        return server;
+    }
 
-   public String randomString() {
-      return UUID.randomUUID().toString().replaceAll("-", "");
-   }
+    public String randomString() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
-   public String payloadFromResource(String resource) {
-      try {
-         return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
-      } catch (IOException e) {
-         throw Throwables.propagate(e);
-      }
-   }
+    public String payloadFromResource(String resource) {
+        try {
+            return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
+        }
+    }
 
-   protected RecordedRequest assertSent(MockWebServer server, String method, String path, String mediaType) throws InterruptedException {
-      RecordedRequest request = server.takeRequest();
-      assertThat(request.getMethod()).isEqualTo(method);
-      assertThat(request.getPath()).isEqualTo(path);
-      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(mediaType);
-      return request;
-   }
+    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String mediaType) throws InterruptedException {
+        RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod()).isEqualTo(method);
+        assertThat(request.getPath()).isEqualTo(path);
+        assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(mediaType);
+        return request;
+    }
 }
