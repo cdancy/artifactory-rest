@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
-import com.cdancy.artifactory.rest.util.ArtifactoryUtils;
+import com.cdancy.artifactory.rest.ArtifactoryUtils;
 
 @Singleton
 public class BindMapPropertiesToPath implements Binder {
