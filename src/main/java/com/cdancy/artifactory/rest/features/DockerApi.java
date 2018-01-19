@@ -18,7 +18,7 @@
 package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.domain.docker.PromoteImage;
-import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 import org.jclouds.Fallbacks;
 import org.jclouds.rest.annotations.*;
 import org.jclouds.rest.binders.BindToJsonPayload;
@@ -31,7 +31,7 @@ import java.util.List;
 @Path("/api/docker")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@RequestFilters(ArtifactoryAuthentication.class)
+@RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface DockerApi {
 
    @Named("docker:promote")

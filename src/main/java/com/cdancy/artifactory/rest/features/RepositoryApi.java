@@ -28,11 +28,11 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 
-import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 
 @Path("/api/repositories")
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestFilters(ArtifactoryAuthentication.class)
+@RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface RepositoryApi {
 
    @Named("repository:create")

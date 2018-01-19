@@ -25,7 +25,7 @@ import com.cdancy.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
-import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.io.Payload;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 @Path("/")
-@RequestFilters(ArtifactoryAuthentication.class)
+@RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface ArtifactApi {
 
    @Named("artifact:deploy")

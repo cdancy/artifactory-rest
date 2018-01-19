@@ -19,7 +19,7 @@ package com.cdancy.artifactory.rest.features;
 
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
-import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 import com.cdancy.artifactory.rest.options.PromoteBuildOptions;
 import org.jclouds.rest.annotations.*;
 import org.jclouds.rest.binders.BindToJsonPayload;
@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/api")
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestFilters(ArtifactoryAuthentication.class)
+@RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface BuildApi {
 
    @Named("build:promote")

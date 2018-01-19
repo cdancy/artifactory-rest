@@ -39,13 +39,11 @@ import com.google.common.net.HttpHeaders;
  * ArtifactoryRESTAPI-Authentication
  */
 @Singleton
-public class ArtifactoryAuthentication implements HttpRequestFilter {
+public class ArtifactoryAuthenticationFilter implements HttpRequestFilter {
    private final Supplier<Credentials> creds;
 
-   private final String REGEX = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-
    @Inject
-   ArtifactoryAuthentication(@Provider Supplier<Credentials> creds) {
+   ArtifactoryAuthenticationFilter(@Provider Supplier<Credentials> creds) {
       this.creds = creds;
    }
 
@@ -75,15 +73,11 @@ public class ArtifactoryAuthentication implements HttpRequestFilter {
          isbase64 = true;
       }
 
-      boolean useBasicAuth = isbase64 ? true : isBase64Encoded(foundCredential);
+      boolean useBasicAuth = true;
       if (useBasicAuth) {
          return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, "Basic " + foundCredential).build();
       } else {
          return request.toBuilder().addHeader("X-JFrog-Art-Api", foundCredential).build();
       }
-   }
-
-   private boolean isBase64Encoded(String possiblyEncodedString) {
-      return possiblyEncodedString.matches(REGEX) ? true : false;
    }
 }

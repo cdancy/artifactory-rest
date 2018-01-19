@@ -44,11 +44,11 @@ import com.cdancy.artifactory.rest.binders.BindMapToPath;
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.cdancy.artifactory.rest.domain.search.SearchResult;
-import com.cdancy.artifactory.rest.filters.ArtifactoryAuthentication;
+import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 
 @Path("/api/search")
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestFilters(ArtifactoryAuthentication.class)
+@RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface SearchApi {
 
    @Named("search:aql")
