@@ -16,68 +16,38 @@
  */
 package com.cdancy.artifactory.rest.filters;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.io.BaseEncoding.base64;
+import com.cdancy.artifactory.rest.ArtifactoryAuthentication;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.domain.Credentials;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-import org.jclouds.location.Provider;
-import org.jclouds.rest.AuthorizationException;
 
-import com.google.common.base.Supplier;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Documentation surrounding Artifactory REST authentication can be found here:
- * 
- * https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#
- * ArtifactoryRESTAPI-Authentication
- */
 @Singleton
 public class ArtifactoryAuthenticationFilter implements HttpRequestFilter {
-   private final Supplier<Credentials> creds;
+    private final ArtifactoryAuthentication authentication;
 
-   @Inject
-   ArtifactoryAuthenticationFilter(@Provider Supplier<Credentials> creds) {
-      this.creds = creds;
-   }
+    @Inject
+    ArtifactoryAuthenticationFilter(final ArtifactoryAuthentication authentication) {
+        this.authentication = authentication;
+    }
 
-   @Override
-   public HttpRequest filter(HttpRequest request) throws HttpException {
-      Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
-      if (currentCreds.credential == null) {
-         throw new AuthorizationException("Credentials credential can not be null");
-      }
-
-      /*
-       * client can pass in credential string in 1 of 3 ways:
-       * 
-       * 1.) As colon delimited username and password: admin:password
-       * 
-       * 2.) As base64 encoded value of colon delimited username and password:
-       * YWRtaW46cGFzc3dvcmQ=
-       * 
-       * 3.) As JFrog api key which can be obtained from Artifactory portal:
-       * 
-       * AKCp2TfiyqrqHmfzUzeQhJmQrDyEx1o2S25pcC2hLzCTu65rpVhEoL1G6ppHn4exmHYfCiyT4
-       */
-      String foundCredential = currentCreds.credential;
-      boolean isbase64 = false;
-      if (foundCredential.contains(":")) {
-         foundCredential = base64().encode(foundCredential.getBytes());
-         isbase64 = true;
-      }
-
-      boolean useBasicAuth = true;
-      if (useBasicAuth) {
-         return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, "Basic " + foundCredential).build();
-      } else {
-         return request.toBuilder().addHeader("X-JFrog-Art-Api", foundCredential).build();
-      }
-   }
+    @Override
+    public HttpRequest filter(HttpRequest request) throws HttpException {
+        switch(authentication.authType()) {
+            case Anonymous: 
+                return request.toBuilder().build();
+            case Basic:
+                final String basicValue = authentication.authType() + " " + authentication.authValue();
+                return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, basicValue).build();
+            case Bearer:
+                return request.toBuilder().addHeader("X-JFrog-Art-Api", authentication.authValue()).build();
+            default:
+                return request.toBuilder().build();
+        }
+    }
 }
