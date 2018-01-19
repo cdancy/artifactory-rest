@@ -48,7 +48,7 @@ javadocs can be found via [github pages here](http://cdancy.github.io/artifactor
 When using `Basic` (e.g. username and password) authentication:
 
     ArtifactoryClient client = ArtifactoryClient.builder()
-    .endPoint("http://127.0.0.1:7990") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:7990
+    .endPoint("http://127.0.0.1:8080/artifactory") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:8080/artifactory
     .credentials("admin:password") // Optional and can be sourced from system/env and can be Base64 encoded.
     .build();
 
@@ -57,7 +57,7 @@ When using `Basic` (e.g. username and password) authentication:
 When using `Bearer` (e.g. jfrog token) authentication:
 
     ArtifactoryClient client = ArtifactoryClient.builder()
-    .endPoint("http://127.0.0.1:7990") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:7990
+    .endPoint("http://127.0.0.1:8080/artifactory") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:8080/artifactory
     .token("123456789abcdef") // Optional and can be sourced from system/env.
     .build();
 
@@ -66,7 +66,7 @@ When using `Bearer` (e.g. jfrog token) authentication:
 When using `Anonymous` authentication or sourcing from system/environment (as described below):
 
     ArtifactoryClient client = ArtifactoryClient.builder()
-    .endPoint("http://127.0.0.1:7990") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:7990
+    .endPoint("http://127.0.0.1:8080/artifactory") // Optional and can be sourced from system/env. Falls back to http://127.0.0.1:8080/artifactory
     .build();
 
     Version version = client.api().systemApi().version();
@@ -81,8 +81,8 @@ than anonymous access is assumed.
 
 Setting the `endpoint` can be done like so (searched in order):
 
-    `System.setProperty("artifactory.rest.endpoint", "http://my-artifactory-instance:12345")`
-    `export ARTIFACTORY_REST_ENDPOINT=http://my-artifactory-instance:12345`
+    `System.setProperty("artifactory.rest.endpoint", "http://my-artifactory-instance:12345/artifactory")`
+    `export ARTIFACTORY_REST_ENDPOINT=http://my-artifactory-instance:12345/artifactory`
 
 Setting the `credentials`, which represents `Basic` authentication and is optionally Base64 encoded, can be done like so (searched in order):
 
