@@ -11,8 +11,8 @@ java client, based on jclouds, to interact with Artifactory's REST API.
 
 ## On jclouds, apis and endpoints
 Being built on top of `jclouds` means things are broken up into [Apis](https://github.com/cdancy/artifactory-rest/tree/master/src/main/java/com/cdancy/artifactory/rest/features). 
-`Apis` are just Interfaces that are analagous to a resource provided by the server-side program (e.g. /api/branches, /api/pullrequest, /api/commits, etc..). 
-The methods within these Interfaces are analagous to an endpoint provided by these resources (e.g. GET /api/branches/my-branch, GET /api/pullrequest/123, DELETE /api/commits/456, etc..). 
+`Apis` are just Interfaces that are analagous to a resource provided by the server-side program (e.g. /api/repositories, /api/search, /api/storage, etc..). 
+The methods within these Interfaces are analagous to an endpoint provided by these resources (e.g. GET /api/repositories/my-repo, POST /api/search/aql, DELETE /api/storage/my-repo/my-item, etc..). 
 The user only needs to be concerned with which `Api` they need and then calling its various methods. These methods, much like any java library, return domain objects 
 (e.g. POJO's) modeled after the json returned by `artifactory`. 
 
