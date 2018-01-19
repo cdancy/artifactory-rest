@@ -31,7 +31,7 @@ public class ArtifactoryConstants {
     public static final String TOKEN_SYSTEM_PROPERTY = "artifactory.rest.token";
     public static final String TOKEN_ENVIRONMENT_VARIABLE = TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
-    public static final String DEFAULT_ENDPOINT = "http://127.0.0.1:7990";
+    public static final String DEFAULT_ENDPOINT = "http://127.0.0.1:8080/artifactory";
 
     public static final String JCLOUDS_PROPERTY_ID = "jclouds.";
     public static final String ARTIFACTORY_REST_PROPERTY_ID = "artifactory.rest." + JCLOUDS_PROPERTY_ID;
