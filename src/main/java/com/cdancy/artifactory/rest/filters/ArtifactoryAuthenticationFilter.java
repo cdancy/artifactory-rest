@@ -39,13 +39,12 @@ public class ArtifactoryAuthenticationFilter implements HttpRequestFilter {
     @Override
     public HttpRequest filter(HttpRequest request) throws HttpException {
         switch(authentication.authType()) {
-            case Anonymous: 
-                return request.toBuilder().build();
             case Basic:
                 final String basicValue = authentication.authType() + " " + authentication.authValue();
                 return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, basicValue).build();
             case Bearer:
                 return request.toBuilder().addHeader("X-JFrog-Art-Api", authentication.authValue()).build();
+            case Anonymous:
             default:
                 return request.toBuilder().build();
         }

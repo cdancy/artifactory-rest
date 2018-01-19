@@ -37,7 +37,7 @@ import com.google.gson.JsonParser;
 
 public final class ArtifactoryFallbacks {
 
-    private static final JsonParser parser = new JsonParser();
+    private static final JsonParser PARSER = new JsonParser();
 
     public static final class RequestStatusFromError implements Fallback<Object> {
         public Object createOrPropagate(Throwable t) throws Exception {
@@ -58,7 +58,7 @@ public final class ArtifactoryFallbacks {
         JsonReader reader = new JsonReader(new StringReader(message));
         reader.setLenient(true);
 
-        JsonElement possibleMessages = parser.parse(reader).getAsJsonObject().get("messages");
+        JsonElement possibleMessages = PARSER.parse(reader).getAsJsonObject().get("messages");
         if (possibleMessages != null) {
             JsonArray jsonArray = possibleMessages.getAsJsonArray();
             Iterator<JsonElement> iter = jsonArray.iterator();
@@ -70,7 +70,7 @@ public final class ArtifactoryFallbacks {
             }
         }
 
-        JsonElement possibleErrors = parser.parse(message).getAsJsonObject().get("errors");
+        JsonElement possibleErrors = PARSER.parse(message).getAsJsonObject().get("errors");
         if (possibleErrors != null) {
             JsonArray jsonArray = possibleErrors.getAsJsonArray();
             Iterator<JsonElement> iter = jsonArray.iterator();
