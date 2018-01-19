@@ -74,12 +74,26 @@ task integTest(type: Test, dependsOn: ['mockTest']) {
     testLogging {
         showStandardStreams = true
         events 'started', 'passed', 'failed'
-    }    
-    systemProperties = ["test.artifactory.endpoint" : "${testArtifactoryEndpoint}",
-                        "test.artifactory.credential" : "${testArtifactoryCredential}",
-                        "test.artifactory.docker.repo" : "${testArtifactoryDockerRepo}",
-                        "test.artifactory.docker.repo.promoted" : "${testArtifactoryDockerPromotedRepo}",
-                        "test.artifactory.docker.image" : "${testArtifactoryDockerImage}",
-                        "test.artifactory.docker.tag" : "${testArtifactoryDockerTag}"]
+    }
+
+    def authentication = [:]
+    def possibleAuth = project.findProperty('testArtifactoryRestCredentials')
+    if (possibleAuth) {
+        authentication['test.artifactory.rest.credentials'] = possibleAuth
+    } else {
+        possibleAuth = project.findProperty('testArtifactoryRestToken')
+        if (possibleAuth) {
+            authentication['test.artifactory.rest.token'] = possibleAuth
+        } else {
+            logger.quiet 'No authentication parameters found. Assuming anonymous...'
+        }
+    }
+
+    systemProperties = ["test.artifactory.endpoint" : "${testArtifactoryRestEndpoint}",
+                        "test.artifactory.credential" : "${testArtifactoryRestCredential}",
+                        "test.artifactory.docker.repo" : "${testArtifactoryRestDockerRepo}",
+                        "test.artifactory.docker.repo.promoted" : "${testArtifactoryRestDockerPromotedRepo}",
+                        "test.artifactory.docker.image" : "${testArtifactoryRestDockerImage}",
+                        "test.artifactory.docker.tag" : "${testArtifactoryRestDockerTag}"] << authentication
 }
 
