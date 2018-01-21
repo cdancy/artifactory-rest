@@ -1,4 +1,5 @@
 com.cdancy.artifactory.rest
+com.cdancy.artifactory.rest.auth
 com.cdancy.artifactory.rest.binders
 com.cdancy.artifactory.rest.config
 com.cdancy.artifactory.rest.domain.artifact
@@ -13,4 +14,3 @@ com.cdancy.artifactory.rest.features
 com.cdancy.artifactory.rest.filters
 com.cdancy.artifactory.rest.handlers
 com.cdancy.artifactory.rest.options
-com.cdancy.artifactory.rest.util
