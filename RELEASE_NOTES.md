@@ -1,3 +1,5 @@
+### Version 1.0.0 (TBA)
+
 ### Version 0.9.0 (01/21/2018)
 * REFACTOR: complete refactor of BitbucketClient and how the builder works.
 * ADDED: exposed `jclouds` overrides to the BitbucketClient via the builder, setting system properties or environment variables.
