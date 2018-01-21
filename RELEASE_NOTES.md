@@ -1,4 +1,9 @@
-### Version 0.0.12 (TBA)
+### Version 0.9.0 (TBA)
+* REFACTOR: complete refactor of BitbucketClient and how the builder works.
+* ADDED: exposed `jclouds` overrides to the BitbucketClient via the builder, setting system properties or environment variables.
+* REFACTOR: complete re-write of how authentication works.
+* ADDED: lots of documentation cleanups, fixes, and additions to make things easier to understand.
+* BREAKING: couple of constructors were removed in an effort to simplify things but all apis and endpoints remain the same. This is the last release in preparation for the initial `1.0.0` rollout.
 
 ### Version 0.0.11 (01/16/2018)
 * REFACTOR: `BuildApi.promote` now takes a `long` instead of an `int` for the buildNumber - [PR 1](https://github.com/cdancy/artifactory-rest/pull/1)
