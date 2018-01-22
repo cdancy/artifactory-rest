@@ -1,8 +1,8 @@
 ### Version 1.0.0 (TBA)
 
 ### Version 0.9.0 (01/21/2018)
-* REFACTOR: complete refactor of BitbucketClient and how the builder works.
-* ADDED: exposed `jclouds` overrides to the BitbucketClient via the builder, setting system properties or environment variables.
+* REFACTOR: complete refactor of ArtifactoryClient and how the builder works.
+* ADDED: exposed `jclouds` overrides to the ArtifactoryClient via the builder, setting system properties or environment variables.
 * REFACTOR: complete re-write of how authentication works.
 * ADDED: lots of documentation cleanups, fixes, and additions to make things easier to understand.
 * BREAKING: couple of constructors were removed in an effort to simplify things but all apis and endpoints remain the same. This is the last release in preparation for the initial `1.0.0` rollout.
