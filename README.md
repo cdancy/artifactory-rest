@@ -9,6 +9,11 @@
 
 java client, based on jclouds, to interact with Artifactory's REST API. 
 
+## Motivation
+Shortly after writing the [etcd-rest](https://github.com/cdancy/etcd-rest) library I had a use-case for automating various functions against Artifactory. This included, but was not limited to: querying for groups of artifacts, deleting groups of artifacts, adding properties to groups of artifacts, etc. Furthermore I needed to do this in DevOps/CICD fashion: meaning I wanted to be able to configure it (endpoint, credentials, token, http properties, etc) and build the client by inferring these values from `System Proprties`, `Environment Variables`, or a combination of the 2. I started looking at the [artifactory-java-client](https://github.com/JFrogDev/artifactory-client-java) and could immediately tell it was not going to suffice. This is not a shot at them but more an admission that they simply designed things in a different way than what I required. Nevertheless I continued forward and thought maybe I could write some sort of wrapper to do what I needed. After playing for a bit, and getting my first initial PR together, I had the painful feeling that getting a change in, whilst writing tests, was just too much work. It's for this reason I noted the above `etcd-rest` library as it is built on top of `jclouds`, has an easy to use and understand client interface, has a built in model for writing mock and integration tests, makes adding new code amount to little more than wiring up a new interface method with a handful of annotations, and could do everything I wanted.
+
+It's with this in mind that I created the `artifactory-rest` library and its sister project the [gradle-artifactory-rest-plugin](https://github.com/cdancy/gradle-artifactory-rest-plugin). These are both DevOps/CICD focused, are easy to use, easy to contribute back to.
+
 ## On jclouds, apis and endpoints
 Being built on top of `jclouds` means things are broken up into [Apis](https://github.com/cdancy/artifactory-rest/tree/master/src/main/java/com/cdancy/artifactory/rest/features). 
 `Apis` are just Interfaces that are analagous to a resource provided by the server-side program (e.g. /api/repositories, /api/search, /api/storage, etc..). 
