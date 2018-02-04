@@ -16,10 +16,6 @@
  */
 package com.cdancy.artifactory.rest.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
 import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import com.google.common.collect.Lists;

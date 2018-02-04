@@ -27,8 +27,6 @@ import javax.ws.rs.core.MediaType;
 
 import java.util.List;
 
-import static org.testng.Assert.*;
-
 /**
  * Mock tests for the {@link DockerApi}
  * class.

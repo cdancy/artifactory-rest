@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.*;
-
 /**
  * Mock tests for the {@link com.cdancy.artifactory.rest.features.ArtifactApi}
  * class.

@@ -16,10 +16,6 @@
  */
 package com.cdancy.artifactory.rest.features;
 
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
 import com.cdancy.artifactory.rest.domain.search.Mapping;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;
 import com.cdancy.artifactory.rest.domain.search.SearchResult;

@@ -26,8 +26,6 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
 
-import static org.testng.Assert.*;
-
 /**
  * Mock tests for the {@link BuildApi}
  * class.

@@ -34,7 +34,6 @@ import org.jclouds.ContextBuilder;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonParser;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
@@ -92,5 +91,21 @@ public class BaseArtifactoryMockTest {
         assertThat(request.getPath()).isEqualTo(path);
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(mediaType);
         return request;
+    }
+
+    public void assertTrue(boolean value) {
+        assertThat(value).isTrue();
+    }
+
+    public void assertFalse(boolean value) {
+        assertThat(value).isFalse();
+    }
+
+    public void assertNotNull(Object obj) {
+        assertThat(obj).isNotNull();
+    }
+
+    public void assertNull(Object obj) {
+        assertThat(obj).isNull();
     }
 }
