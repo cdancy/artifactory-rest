@@ -1,4 +1,6 @@
-### Version 1.0.0 (TBA)
+### Version 0.9.1 (TBA)
+* ADDED: Bump gradle to `4.5` - [Commit 95a05](https://github.com/cdancy/artifactory-rest/commit/95a0535883dcefb5a6cc3a547b38b97c9783c658)
+* REFACTOR: Change `AutoValue` dependency to `compileOnly` as it's not required at runtime - [Commit 49493](https://github.com/cdancy/artifactory-rest/commit/49493e41ea913e7a79de26fb9f9bd7b441fd1df3)
 
 ### Version 0.9.0 (01/21/2018)
 * REFACTOR: complete refactor of ArtifactoryClient and how the builder works.
