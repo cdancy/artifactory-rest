@@ -30,8 +30,6 @@ import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.*;
-
 @Test(groups = "live", testName = "SearchApiLiveTest")
 public class SearchApiLiveTest extends BaseArtifactoryApiLiveTest {
 

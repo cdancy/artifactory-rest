@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.testng.Assert.*;
-
 @Test(groups = "live", testName = "DockerApiLiveTest")
 public class DockerApiLiveTest extends BaseArtifactoryApiLiveTest {
 

@@ -23,7 +23,6 @@ import static com.cdancy.artifactory.rest.ArtifactoryConstants.ENDPOINT_SYSTEM_P
 import static com.cdancy.artifactory.rest.ArtifactoryConstants.TOKEN_ENVIRONMENT_VARIABLE;
 import static com.cdancy.artifactory.rest.ArtifactoryConstants.TOKEN_SYSTEM_PROPERTY;
 
-import static org.testng.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;

@@ -16,10 +16,6 @@
  */
 package com.cdancy.artifactory.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -31,6 +31,7 @@ import org.testng.annotations.Test;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Test(groups = "live")
 public class BaseArtifactoryApiLiveTest extends BaseApiLiveTest<ArtifactoryApi> {
@@ -89,11 +90,27 @@ public class BaseArtifactoryApiLiveTest extends BaseApiLiveTest<ArtifactoryApi> 
             if (randomFile != null) {
                randomFile.delete();
             }
-            Throwables.propagate(e);
+            throw Throwables.propagate(e);
         } finally {
             if (writer != null)
                 writer.close();
         }
         return randomFile;
+    }
+    
+    public void assertTrue(boolean value) {
+        assertThat(value).isTrue();
+    }
+
+    public void assertFalse(boolean value) {
+        assertThat(value).isFalse();
+    }
+
+    public void assertNotNull(Object obj) {
+        assertThat(obj).isNotNull();
+    }
+
+    public void assertNull(Object obj) {
+        assertThat(obj).isNull();
     }
 }
