@@ -16,6 +16,9 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import org.testng.annotations.Test;
 
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;

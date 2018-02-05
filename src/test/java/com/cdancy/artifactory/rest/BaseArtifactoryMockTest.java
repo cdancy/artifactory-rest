@@ -92,20 +92,4 @@ public class BaseArtifactoryMockTest {
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(mediaType);
         return request;
     }
-
-    public void assertTrue(boolean value) {
-        assertThat(value).isTrue();
-    }
-
-    public void assertFalse(boolean value) {
-        assertThat(value).isFalse();
-    }
-
-    public void assertNotNull(Object obj) {
-        assertThat(obj).isNotNull();
-    }
-
-    public void assertNull(Object obj) {
-        assertThat(obj).isNull();
-    }
 }

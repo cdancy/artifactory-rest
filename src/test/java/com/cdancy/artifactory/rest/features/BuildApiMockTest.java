@@ -16,6 +16,9 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import com.cdancy.artifactory.rest.ArtifactoryApi;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;

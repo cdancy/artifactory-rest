@@ -16,6 +16,10 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import com.cdancy.artifactory.rest.domain.search.AQLResult;
 import com.cdancy.artifactory.rest.domain.search.KeyValue;
 import com.cdancy.artifactory.rest.domain.search.SearchBuildArtifacts;

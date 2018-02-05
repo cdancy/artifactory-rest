@@ -17,6 +17,8 @@
 
 package com.cdancy.artifactory.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -84,6 +86,42 @@ public class TestUtilities extends ArtifactoryUtils {
 
         // 3.) If neither #1 or #2 find anything "Anonymous" access is assumed.
         return inferAuth.build();
+    }
+
+    /**
+     * Migration from testng to assertj method to test for true.
+     * 
+     * @param value boolean that hopefully represents true.
+     */
+    public static void assertTrue(boolean value) {
+        assertThat(value).isTrue();
+    }
+
+    /**
+     * Migration from testng to assertj method to test for false.
+     * 
+     * @param value boolean that hopefully represents false.
+     */
+    public static void assertFalse(boolean value) {
+        assertThat(value).isFalse();
+    }
+
+    /**
+     * Migration from testng to assertj method to test for non-null.
+     * 
+     * @param value object which is hopefully non-null.
+     */
+    public static void assertNotNull(Object value) {
+        assertThat(value).isNotNull();
+    }
+
+    /**
+     * Migration from testng to assertj method to test for null.
+     * 
+     * @param value object which is hopefully null.
+     */
+    public static void assertNull(Object value) {
+        assertThat(value).isNull();
     }
 
     private TestUtilities() {

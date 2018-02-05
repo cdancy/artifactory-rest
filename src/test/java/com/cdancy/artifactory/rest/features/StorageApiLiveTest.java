@@ -16,6 +16,10 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;

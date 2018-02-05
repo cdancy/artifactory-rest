@@ -16,6 +16,10 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import com.cdancy.artifactory.rest.BaseArtifactoryApiLiveTest;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;

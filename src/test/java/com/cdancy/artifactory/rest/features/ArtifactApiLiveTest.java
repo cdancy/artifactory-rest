@@ -16,6 +16,10 @@
  */
 package com.cdancy.artifactory.rest.features;
 
+import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +101,7 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test
     public void testDeleteNonExistentArtifact() {
-      assertFalse(api().deleteArtifact(repoKey, randomPath()));
+        assertFalse(api().deleteArtifact(repoKey, randomPath()));
     }
 
     @AfterClass
