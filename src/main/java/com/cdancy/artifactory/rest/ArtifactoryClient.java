@@ -24,7 +24,7 @@ import java.util.Properties;
 import org.jclouds.ContextBuilder;
 import org.jclouds.javax.annotation.Nullable;
 
-public final class ArtifactoryClient {
+public final class ArtifactoryClient implements AutoCloseable {
 
     private final String endPoint;
     private final ArtifactoryAuthentication credentials;
@@ -41,7 +41,7 @@ public final class ArtifactoryClient {
 
     /**
      * Create an ArtifactoryClient. If any of the passed in variables are null we
-     * will query System Properties and Environment Variables, in order, to 
+     * will query System Properties and Environment Variables, in order, to
      * search for values that may be set in a devops/CI fashion. The only
      * difference is the `overrides` which gets merged, but takes precedence,
      * with those System Properties and Environment Variables found.
@@ -75,7 +75,7 @@ public final class ArtifactoryClient {
     /**
      * Query System Properties and Environment Variables for overrides and merge
      * the potentially passed in overrides with those.
-     * 
+     *
      * @param possibleOverrides Optional passed in overrides.
      * @return Properties object.
      */
@@ -111,9 +111,16 @@ public final class ArtifactoryClient {
     public ArtifactoryApi api() {
         return this.artifactoryApi;
     }
-    
+
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public void close() throws Exception {
+        if(this.api() != null) {
+            this.api().close();
+        }
     }
 
     public static class Builder {
@@ -124,7 +131,7 @@ public final class ArtifactoryClient {
 
         /**
          * Define the base endpoint to connect to.
-         * 
+         *
          * @param endPoint Artifactory base endpoint.
          * @return this Builder.
          */
@@ -136,7 +143,7 @@ public final class ArtifactoryClient {
         /**
          * Optional credentials to use for authentication. Must take the form of
          * `username:password` or its base64 encoded version.
-         * 
+         *
          * @param optionallyBase64EncodedCredentials authentication credentials.
          * @return this Builder.
          */
@@ -147,7 +154,7 @@ public final class ArtifactoryClient {
         }
 
         /**
-         * Optional token to use for authentication. 
+         * Optional token to use for authentication.
          *
          * @param token authentication token.
          * @return this Builder.
@@ -161,7 +168,7 @@ public final class ArtifactoryClient {
         /**
          * Optional jclouds Properties to override. What can be overridden can
          * be found here:
-         * 
+         *
          * <p>https://github.com/jclouds/jclouds/blob/master/core/src/main/java/org/jclouds/Constants.java
          *
          * @param overrides optional jclouds Properties to override.
@@ -174,7 +181,7 @@ public final class ArtifactoryClient {
 
         /**
          * Build an instance of ArtifactoryClient.
-         * 
+         *
          * @return ArtifactoryClient
          */
         public ArtifactoryClient build() {
@@ -185,6 +192,6 @@ public final class ArtifactoryClient {
                     : null;
 
             return new ArtifactoryClient(endPoint, authentication, overrides);
-        } 
+        }
     }
 }
