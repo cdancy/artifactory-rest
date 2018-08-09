@@ -20,11 +20,15 @@ package com.cdancy.artifactory.rest;
 import com.cdancy.artifactory.rest.auth.AuthenticationType;
 import com.cdancy.artifactory.rest.config.ArtifactoryAuthenticationModule;
 import com.google.common.collect.Lists;
+
 import java.util.Properties;
+import java.io.Closeable;
+import java.io.IOException;
+
 import org.jclouds.ContextBuilder;
 import org.jclouds.javax.annotation.Nullable;
 
-public final class ArtifactoryClient implements AutoCloseable {
+public final class ArtifactoryClient implements Closeable {
 
     private final String endPoint;
     private final ArtifactoryAuthentication credentials;
@@ -117,7 +121,7 @@ public final class ArtifactoryClient implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         if(this.api() != null) {
             this.api().close();
         }

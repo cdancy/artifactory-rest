@@ -1,4 +1,7 @@
-### Version 0.9.2 (TBA)
+### Version 0.9.3 (TBA)
+
+### Version 0.9.2 (08/09/2018)
+* REFACTOR: ArtifactoryClient will now implement Closeable in favor of AutoCloseable.
 
 ### Version 0.9.1 (08/08/2018)
 * ADDED: Bump gradle to `4.5` - [Commit 95a05](https://github.com/cdancy/artifactory-rest/commit/95a0535883dcefb5a6cc3a547b38b97c9783c658)
