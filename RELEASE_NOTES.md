@@ -1,4 +1,7 @@
-### Version 0.9.4 (TBA)
+### Version 0.9.5 (TBA)
+
+### Version 0.9.4 (08/20/2018)
+* BUG: `DockerApi.promote` needs to consume text lest the invocation fail.
 
 ### Version 0.9.3 (08/20/2018)
 * REFACTOR: `DockerApi` endpoint `promote` changed default version to `v2`.
