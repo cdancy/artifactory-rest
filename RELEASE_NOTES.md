@@ -1,4 +1,9 @@
 ### Version 0.9.3 (TBA)
+* REFACTOR: `DockerApi` endpoint `promote` changed default version to `v2`.
+* ADDED: Bump `jclouds` to `2.1.1`.
+* ADDED: Bump `AutoValue` to `1.6.2`
+* ADDED: Bump `gradle-bintray-plugin` to `1.8.4`
+* ADDED: Bump `gradle` to `4.9`
 
 ### Version 0.9.2 (08/09/2018)
 * REFACTOR: ArtifactoryClient will now implement Closeable in favor of AutoCloseable.
