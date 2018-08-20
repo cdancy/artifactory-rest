@@ -35,7 +35,7 @@ import java.util.List;
 public interface DockerApi {
 
    @Named("docker:promote")
-   @Path("/{repoKey}/v1/promote")
+   @Path("/{repoKey}/v2/promote")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @POST
    boolean promote(@PathParam("repoKey") String repoKey, @BinderParam(BindToJsonPayload.class) PromoteImage promote);
