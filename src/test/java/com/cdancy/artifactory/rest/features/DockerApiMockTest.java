@@ -49,7 +49,7 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
           PromoteImage dockerPromote = PromoteImage.create("docker-promoted", "library/artifactory", "latest", false);
           boolean success = api.promote("docker-local", dockerPromote);
           assertTrue(success);
-          assertSent(server, "POST", "/api/docker/docker-local/v2/promote", MediaType.APPLICATION_JSON);
+          assertSent(server, "POST", "/api/docker/docker-local/v2/promote", MediaType.TEXT_PLAIN);
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -67,7 +67,7 @@ public class DockerApiMockTest extends BaseArtifactoryMockTest {
             PromoteImage dockerPromote = PromoteImage.create("docker-promoted", "library/artifactory", "latest", false);
             boolean success = api.promote("docker-local", dockerPromote);
             assertFalse(success);
-            assertSent(server, "POST", "/api/docker/docker-local/v2/promote", MediaType.APPLICATION_JSON);
+            assertSent(server, "POST", "/api/docker/docker-local/v2/promote", MediaType.TEXT_PLAIN);
         } finally {
             jcloudsApi.close();
             server.shutdown();

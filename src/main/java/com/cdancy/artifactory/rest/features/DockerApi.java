@@ -29,18 +29,18 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/api/docker")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 @RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface DockerApi {
 
    @Named("docker:promote")
+   @Consumes(MediaType.TEXT_PLAIN)
    @Path("/{repoKey}/v2/promote")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @POST
    boolean promote(@PathParam("repoKey") String repoKey, @BinderParam(BindToJsonPayload.class) PromoteImage promote);
 
    @Named("docker:list-repositories")
+   @Consumes(MediaType.APPLICATION_JSON)
    @Path("/{repoKey}/_catalog")
    @SelectJson({"repositories"})
    @GET
