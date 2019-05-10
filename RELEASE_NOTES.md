@@ -1,3 +1,5 @@
+### Version 0.9.6 (TBA)
+
 ### Version 0.9.5 (05/10/2019)
 * ADDED: `SearchApi.latestVersionWithLayout` gained optional property 'remote` - [PR 2](https://github.com/cdancy/artifactory-rest/pull/2)
 
