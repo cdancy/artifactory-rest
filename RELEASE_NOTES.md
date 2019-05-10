@@ -1,4 +1,5 @@
-### Version 0.9.5 (TBA)
+### Version 0.9.5 (05/10/2019)
+* ADDED: `SearchApi.latestVersionWithLayout` gained optional property 'remote` - [PR 2](https://github.com/cdancy/artifactory-rest/pull/2)
 
 ### Version 0.9.4 (08/20/2018)
 * BUG: `DockerApi.promote` needs to consume text lest the invocation fail.
