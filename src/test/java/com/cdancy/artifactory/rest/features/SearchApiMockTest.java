@@ -274,7 +274,7 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
          String remote = "1";
          String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "9.0*", remote, repos);
          assertNull(res);
-         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=9.0%2A&remote=1repos=jcenter-cache", MediaType.TEXT_PLAIN);
+         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=9.0%2A&remote=1&repos=jcenter-cache", MediaType.TEXT_PLAIN);
       } finally {
          jcloudsApi.close();
          server.shutdown();
