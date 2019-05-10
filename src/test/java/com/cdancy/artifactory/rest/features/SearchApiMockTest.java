@@ -252,9 +252,10 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       try {
 
          List<String> repos = ImmutableList.of("jcenter-cache");
-         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "1.0*", repos);
+         String remote = "1";
+         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "1.0*", remote, repos);
          assertNotNull(res);
-         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=1.0%2A&repos=jcenter-cache", MediaType.TEXT_PLAIN);
+         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=1.0%2A&remote=1&repos=jcenter-cache", MediaType.TEXT_PLAIN);
       } finally {
          jcloudsApi.close();
          server.shutdown();
@@ -270,9 +271,10 @@ public class SearchApiMockTest extends BaseArtifactoryMockTest {
       try {
 
          List<String> repos = ImmutableList.of("jcenter-cache");
-         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "9.0*", repos);
+         String remote = "1";
+         String res = api.latestVersionWithLayout("ant-contrib", "ant-contrib", "9.0*", remote, repos);
          assertNull(res);
-         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=9.0%2A&repos=jcenter-cache", MediaType.TEXT_PLAIN);
+         assertSent(server, "GET", "/api/search/latestVersion?g=ant-contrib&a=ant-contrib&v=9.0%2A&remote=1&repos=jcenter-cache", MediaType.TEXT_PLAIN);
       } finally {
          jcloudsApi.close();
          server.shutdown();

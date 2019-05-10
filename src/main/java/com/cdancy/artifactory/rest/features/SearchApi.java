@@ -87,6 +87,7 @@ public interface SearchApi {
    String latestVersionWithLayout(@Nullable @QueryParam("g") String groupId,
                                  @Nullable @QueryParam("a") String artifactId,
                                  @Nullable @QueryParam("v") String version,
+                                 @Nullable @QueryParam("remote") String remote,
                                  @Nullable @BinderParam(BindListReposToPath.class) List<String> repos);
 
 
