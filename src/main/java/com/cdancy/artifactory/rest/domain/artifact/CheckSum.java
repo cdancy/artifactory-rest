@@ -25,17 +25,20 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class CheckSum {
 
-   @Nullable
-   public abstract String md5();
+    @Nullable
+    public abstract String md5();
 
-   @Nullable
-   public abstract String sha1();
+    @Nullable
+    public abstract String sha1();
 
-   CheckSum() {
-   }
+    @Nullable
+    public abstract String sha256();
 
-   @SerializedNames({ "md5", "sha1" })
-   public static CheckSum create(String md5, String sha1) {
-      return new AutoValue_CheckSum(md5, sha1);
-   }
+    CheckSum() {
+    }
+
+    @SerializedNames({ "md5", "sha1", "sha256" })
+    public static CheckSum create(String md5, String sha1, String sha256) {
+    return new AutoValue_CheckSum(md5, sha1, sha256);
+    }
 }

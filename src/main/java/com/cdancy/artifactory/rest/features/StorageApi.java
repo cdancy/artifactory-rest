@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.cdancy.artifactory.rest.binders.BindListPropertiesToPath;
 import com.cdancy.artifactory.rest.binders.BindMapPropertiesToPath;
+import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import org.jclouds.javax.annotation.Nullable;
@@ -46,43 +47,53 @@ import java.util.Map;
 @RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface StorageApi {
 
-   @Named("storage:set-item-properties")
-   @Path("/storage/{repoKey}/{itemPath}")
-   @Fallback(FalseOnNotFoundOr404.class)
-   @QueryParams(keys = { "recursive" }, values = { "1" })
-   @PUT
-   boolean setItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                             @BinderParam(BindMapPropertiesToPath.class) Map<String, List<String>> properties);
+    @Named("storage:set-item-properties")
+    @Path("/storage/{repoKey}/{itemPath}")
+    @Fallback(FalseOnNotFoundOr404.class)
+    @QueryParams(keys = { "recursive" }, values = { "1" })
+    @PUT
+    boolean setItemProperties(@PathParam("repoKey") String repoKey,
+                              @PathParam("itemPath") String itemPath,
+                              @BinderParam(BindMapPropertiesToPath.class) Map<String, List<String>> properties);
 
-   @Named("storage:get-item-properties")
-   @Path("/storage/{repoKey}/{itemPath}")
-   @QueryParams(keys = { "properties" })
-   @Fallback(Fallbacks.EmptyMapOnNotFoundOr404.class)
-   @SelectJson({"properties"})
-   @GET
-   Map<String, List<String>> getItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+    @Named("storage:get-item-properties")
+    @Path("/storage/{repoKey}/{itemPath}")
+    @QueryParams(keys = { "properties" })
+    @Fallback(Fallbacks.EmptyMapOnNotFoundOr404.class)
+    @SelectJson({"properties"})
+    @GET
+    Map<String, List<String>> getItemProperties(@PathParam("repoKey") String repoKey,
+                                                @PathParam("itemPath") String itemPath);
 
-   @Named("storage:delete-item-properties")
-   @Path("/storage/{repoKey}/{itemPath}")
-   @Fallback(FalseOnNotFoundOr404.class)
-   @QueryParams(keys = { "recursive" }, values = { "1" })
-   @DELETE
-   boolean deleteItemProperties(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                                @BinderParam(BindListPropertiesToPath.class) List<String> properties);
+    @Named("storage:delete-item-properties")
+    @Path("/storage/{repoKey}/{itemPath}")
+    @Fallback(FalseOnNotFoundOr404.class)
+    @QueryParams(keys = { "recursive" }, values = { "1" })
+    @DELETE
+    boolean deleteItemProperties(@PathParam("repoKey") String repoKey,
+                                 @PathParam("itemPath") String itemPath,
+                                 @BinderParam(BindListPropertiesToPath.class) List<String> properties);
 
-   @Named("storage:info")
-   @Path("/storageinfo")
-   @GET
-   StorageInfo storageInfo();
+    @Named("storage:info")
+    @Path("/storageinfo")
+    @GET
+    StorageInfo storageInfo();
 
-   @Named("storage:file-list")
-   @Path("/storage/{repoKey}/{itemPath}")
-   @QueryParams(keys = { "list" }, values = { "true" })
-   @GET
-   FileList fileList(@PathParam("repoKey") String repoKey,
+    @Named("storage:file-list")
+    @Path("/storage/{repoKey}/{itemPath}")
+    @QueryParams(keys = { "list" }, values = { "true" })
+    @GET
+    FileList fileList(@PathParam("repoKey") String repoKey,
                      @PathParam("itemPath") String itemPath,
                      @Nullable @QueryParam("deep") Integer deep,
                      @Nullable @QueryParam("depth") Integer depth,
                      @Nullable @QueryParam("listFolders") Integer listFolders,
                      @Nullable @QueryParam("includeRootPath") Integer includeRootPath);
+
+    @Named("storage:file-info")
+    @Path("/storage/{repoKey}/{itemPath}")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @GET
+    Artifact fileInfo(@PathParam("repoKey") String repoKey,
+                      @PathParam("itemPath") String itemPath);
 }

@@ -18,9 +18,11 @@ package com.cdancy.artifactory.rest.features;
 
 import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
 import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNull;
 import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
 
 import java.io.File;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +86,7 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test(dependsOnMethods = "testGetItemProperties")
     public void testDeleteItemProperties() {
-        List<String> props = new ArrayList<String>();
+        List<String> props = new ArrayList<>();
         props.add("hello");
         boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
         assertTrue(itemDelete);
@@ -100,11 +102,27 @@ public class StorageApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test(dependsOnMethods = "testGetItemPropertiesAfterDelete")
     public void testDeleteNonExistentItemProperties() {
-        List<String> props = new ArrayList<String>();
+        List<String> props = new ArrayList<>();
         props.add("hello");
         props.add("world");
         boolean itemDelete = api().deleteItemProperties(repoKey, artifact.path().replaceFirst("/", ""), props);
         assertTrue(itemDelete);
+    }
+
+    @Test(dependsOnMethods = "testDeleteNonExistentItemProperties")
+    public void testGetFileInfo() throws Exception {
+        Artifact fileInfo = api().fileInfo(repoKey, artifact.path().replaceFirst("/", ""));
+        assertNotNull(fileInfo);
+
+        MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+        String md5Checksum = getFileChecksum(md5Digest, tempArtifact);
+        assertTrue(md5Checksum.equals(fileInfo.checksums().md5()));
+    }
+
+    @Test
+    public void testGetFileInfoNotFound() {
+        Artifact fileInfo = api().fileInfo(repoKey, artifact.path().replaceFirst("/", "whatever"));
+        assertNull(fileInfo);
     }
 
     @Test

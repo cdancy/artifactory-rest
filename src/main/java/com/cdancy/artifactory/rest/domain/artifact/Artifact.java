@@ -25,51 +25,57 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class Artifact {
 
-   public abstract String uri();
+    public abstract String uri();
 
-   @Nullable
-   public abstract String downloadUri();
+    @Nullable
+    public abstract String downloadUri();
 
-   @Nullable
-   public abstract String repo();
+    @Nullable
+    public abstract String repo();
 
-   @Nullable
-   public abstract String path();
+    @Nullable
+    public abstract String path();
 
-   @Nullable
-   public abstract String created();
+    @Nullable
+    public abstract String remoteUrl();
 
-   @Nullable
-   public abstract String createdBy();
+    @Nullable
+    public abstract String created();
 
-   public abstract String size();
+    @Nullable
+    public abstract String createdBy();
 
-   @Nullable
-   public abstract String lastModified();
+    public abstract String size();
 
-   @Nullable
-   public abstract String folder();
+    @Nullable
+    public abstract String lastModified();
 
-   @Nullable
-   public abstract String mimeType();
+    @Nullable
+    public abstract String modifiedBy();
 
-   @Nullable
-   public abstract CheckSum checksums();
+    @Nullable
+    public abstract String folder();
 
-   @Nullable
-   public abstract CheckSum originalChecksums();
+    @Nullable
+    public abstract String mimeType();
 
-   Artifact() {
-   }
+    @Nullable
+    public abstract CheckSum checksums();
 
-   @SerializedNames({ "uri", "downloadUri", "repo", "path", "created", "createdBy",
-           "size", "lastModified", "folder", "mimeType", "checksums", "originalChecksums" })
-   public static Artifact create(String uri, String downloadUri, String repo,
-                                 String path, String created, String createdBy,
-                                 String size, String lastModified, String folder,
+    @Nullable
+    public abstract CheckSum originalChecksums();
+
+    Artifact() {
+    }
+
+    @SerializedNames({ "uri", "downloadUri", "repo", "path", "remoteUrl", "created", "createdBy",
+           "size", "lastModified", "modifiedBy", "folder", "mimeType", "checksums", "originalChecksums" })
+    public static Artifact create(String uri, String downloadUri, String repo,
+                                 String path, String remoteUrl, String created, String createdBy,
+                                 String size, String lastModified, String modifiedBy, String folder,
                                  String mimeType, CheckSum checksums, CheckSum originalChecksums) {
-      return new AutoValue_Artifact(uri, downloadUri, repo, path,
-              created, createdBy, size, lastModified,
+      return new AutoValue_Artifact(uri, downloadUri, repo, path, remoteUrl,
+              created, createdBy, size, lastModified, modifiedBy,
               folder, mimeType, checksums, originalChecksums);
-   }
+    }
 }

@@ -18,8 +18,10 @@ package com.cdancy.artifactory.rest.features;
 
 import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
 import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNull;
 import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
 
+import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.storage.FileList;
 import com.cdancy.artifactory.rest.domain.storage.StorageInfo;
 import com.google.common.collect.Lists;
@@ -43,7 +45,7 @@ import java.util.Map;
 @Test(groups = "unit", testName = "StorageApiMockTest")
 public class StorageApiMockTest extends BaseArtifactoryMockTest {
 
-   public void testSetItemProperties() throws Exception {
+    public void testSetItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setResponseCode(200));
@@ -61,9 +63,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testGetItemProperties() throws Exception {
+    public void testGetItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setBody(payloadFromResource("/item-properties.json")).setResponseCode(200));
@@ -80,9 +82,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testGetItemWithNoProperties() throws Exception {
+    public void testGetItemWithNoProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setResponseCode(404));
@@ -97,9 +99,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testDeleteItemProperties() throws Exception {
+    public void testDeleteItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setResponseCode(204));
@@ -116,9 +118,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testDeleteNonExistentItemProperties() throws Exception {
+    public void testDeleteNonExistentItemProperties() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setResponseCode(404));
@@ -135,9 +137,9 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testGetStorageInfo() throws Exception {
+    public void testGetStorageInfo() throws Exception {
       MockWebServer server = mockArtifactoryJavaWebServer();
 
       server.enqueue(new MockResponse().setBody(payloadFromResource("/storage-info.json")).setResponseCode(200));
@@ -154,22 +156,58 @@ public class StorageApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
-   }
+    }
 
-   public void testFileList() throws Exception {
-      MockWebServer server = mockArtifactoryJavaWebServer();
+    public void testFileList() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
 
-      server.enqueue(new MockResponse().setBody(payloadFromResource("/file-list.json")).setResponseCode(200));
-      ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
-      StorageApi api = jcloudsApi.storageApi();
-      try {
+        server.enqueue(new MockResponse().setBody(payloadFromResource("/file-list.json")).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        StorageApi api = jcloudsApi.storageApi();
+        try {
          FileList ref = api.fileList("libs-release-local", "org/acme", 1, 1, 1, 1);
          assertNotNull(ref);
          assertTrue(ref.files().size() == 3);
          assertSent(server, "GET", "/api/storage/libs-release-local/org/acme?list=true&deep=1&depth=1&listFolders=1&includeRootPath=1", MediaType.APPLICATION_JSON);
-      } finally {
+        } finally {
          jcloudsApi.close();
          server.shutdown();
-      }
-   }
+        }
+    }
+
+    public void testGetFileInfo() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        server.enqueue(new MockResponse().setBody(payloadFromResource("/file-info.json")).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        StorageApi api = jcloudsApi.storageApi();
+        try {
+            Artifact artifact = api.fileInfo("libs-release-local", "org/acme/lib/ver/lib-ver.pom");
+            assertNotNull(artifact);
+            assertNotNull(artifact.checksums());
+            assertTrue(artifact.checksums().md5().equals("string"));
+            assertTrue("/org/acme/lib/ver/lib-ver.pom".equals(artifact.path()));
+            assertTrue("userX".equals(artifact.modifiedBy()));
+            assertSent(server, "GET", "/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetFileInfoNotFound() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        StorageApi api = jcloudsApi.storageApi();
+        try {
+            Artifact artifact = api.fileInfo("libs-release-local", "org/acme/lib/ver/lib-ver.pom");
+            assertNull(artifact);
+            assertSent(server, "GET", "/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
 }
