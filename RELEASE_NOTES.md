@@ -1,7 +1,7 @@
 ### Version 0.9.7 (TBA)
 
 ### Version 0.9.6 (08/15/19)
-* ADDED: `StorageApi.fileInfo` - [Commit 95a05](https://github.com/cdancy/artifactory-rest/commit/95a0535883dcefb5a6cc3a547b38b97c9783c658)
+* ADDED: `StorageApi.fileInfo` - [Commit aad27](https://github.com/cdancy/artifactory-rest/commit/aad276dbae41048456ac21121307f2cf1ff8d8b5)
 
 ### Version 0.9.5 (05/10/2019)
 * ADDED: `SearchApi.latestVersionWithLayout` gained optional property 'remote` - [PR 2](https://github.com/cdancy/artifactory-rest/pull/2)
