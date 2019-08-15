@@ -1,3 +1,5 @@
+### Version 0.9.7 (TBA)
+
 ### Version 0.9.6 (08/15/19)
 * ADDED: `StorageApi.fileInfo` - [Commit 95a05](https://github.com/cdancy/artifactory-rest/commit/95a0535883dcefb5a6cc3a547b38b97c9783c658)
 
