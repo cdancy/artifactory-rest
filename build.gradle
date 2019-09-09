@@ -27,6 +27,10 @@ repositories {
 dependencies {
     ext.jcloudsVersion = '2.1.2'
     ext.autoValueVersion = '1.6.2'
+    ext.guiceVersion = '4.2.2'
+
+    compile ("com.google.inject:guice:${guiceVersion}")
+    compile ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
 
     compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
     compile ('com.google.auto.service:auto-service:1.0-rc3')
@@ -73,7 +77,7 @@ task mockTest(type: Test) {
 
 task integTest(type: Test, dependsOn: ['mockTest']) {
     useTestNG()
-    include "**/**LiveTest.class"
+    include "**/StorageApiLiveTest.class"
     testLogging {
         showStandardStreams = true
         events 'started', 'passed', 'failed'
