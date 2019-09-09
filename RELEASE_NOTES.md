@@ -1,4 +1,5 @@
-### Version 0.9.7 (TBA)
+### Version 0.9.7 (9/9/19)
+* ADDED: Bump `jclouds` to `4.2.2`
 
 ### Version 0.9.6 (08/15/19)
 * ADDED: `StorageApi.fileInfo` - [Commit aad27](https://github.com/cdancy/artifactory-rest/commit/aad276dbae41048456ac21121307f2cf1ff8d8b5)
