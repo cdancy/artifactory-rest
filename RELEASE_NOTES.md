@@ -1,3 +1,5 @@
+### Version 0.9.9 (TBA)
+
 ### Version 0.9.8 (3/5/20)
 * ADDED: Expose `targeTag` for `PromoteImage` - [PR 4](https://github.com/cdancy/artifactory-rest/pull/4)
 
