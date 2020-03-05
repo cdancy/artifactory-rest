@@ -1,6 +1,7 @@
 {
   "targetRepo":"docker-promoted",
   "dockerRepository":"library/artifactory",
-  "tag":"latest",
+  "tag":"1.0.0",
+  "targetTag":"latest",
   "copy":false
 }
