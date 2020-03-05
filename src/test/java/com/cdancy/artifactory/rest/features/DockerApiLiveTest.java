@@ -49,14 +49,14 @@ public class DockerApiLiveTest extends BaseArtifactoryApiLiveTest {
 
     @Test
     public void testPromote() {
-        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, dockerTag, true);
+        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, dockerTag, null,true);
         boolean success = api().promote(dockerRepo, dockerPromote);
         assertTrue(success);
     }
 
     @Test
     public void testPromoteNonExistentImage() {
-        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, "0009", false);
+        PromoteImage dockerPromote = PromoteImage.create(dockerRepoPromoted, dockerImage, "0009", null,false);
         boolean success = api().promote(dockerRepo, dockerPromote);
         assertFalse(success);
     }

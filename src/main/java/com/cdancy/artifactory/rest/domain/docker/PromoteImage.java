@@ -31,13 +31,16 @@ public abstract class PromoteImage {
    @Nullable
    public abstract String tag();
 
+    @Nullable
+    public abstract String targetTag();
+
    public abstract boolean copy();
 
    PromoteImage() {
    }
 
-   @SerializedNames({ "targetRepo", "dockerRepository", "tag", "copy" })
-   public static PromoteImage create(String targetRepo, String dockerRepository, String tag, boolean copy) {
-      return new AutoValue_PromoteImage(targetRepo, dockerRepository, tag, copy);
-   }
+    @SerializedNames({ "targetRepo", "dockerRepository", "tag", "targetTag", "copy" })
+    public static PromoteImage create(String targetRepo, String dockerRepository, String tag, String targetTag, boolean copy) {
+        return new AutoValue_PromoteImage(targetRepo, dockerRepository, tag, targetTag, copy);
+    }
 }
