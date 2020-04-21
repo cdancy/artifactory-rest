@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     ext.jcloudsVersion = '2.1.2'
-    ext.autoValueVersion = '1.6.2'
+    ext.autoValueVersion = '1.7'
     ext.guiceVersion = '4.2.2'
 
     compile ("com.google.inject:guice:${guiceVersion}")
