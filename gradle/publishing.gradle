@@ -4,11 +4,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
-apply plugin: 'maven-publish'
 apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
 
 publishing {
@@ -18,7 +17,6 @@ publishing {
             artifact sourcesJar
             artifact docsJar
             artifact testsJar
-            artifact shadowJar
         }
     }
 }

@@ -1,5 +1,4 @@
 shadowJar {
-    classifier = 'all'
     mergeServiceFiles()
 
     def foundGroup = rootProject.findProperty('group')
