@@ -19,7 +19,7 @@ dependencies {
     ext.autoValueVersion = '1.8'
     ext.jcloudsVersion = '2.3.0'
     ext.guiceVersion = '5.0.1'
-    ext.autoServiceVersion = '1.0-rc7'
+    ext.autoServiceVersion = '1.0'
 
 
     implementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
