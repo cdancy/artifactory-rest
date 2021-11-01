@@ -1,4 +1,5 @@
 shadowJar {
+    classifier = 'all'
     mergeServiceFiles()
 
     def foundGroup = rootProject.findProperty('group')
@@ -15,6 +16,7 @@ shadowJar {
     relocate 'javax.annotation', "${newBasePackage}.shaded.javax.annotation"
     relocate 'javax.ws.rs', "${newBasePackage}.shaded.javax.ws.rs"
     relocate 'org.apache', "${newBasePackage}.shaded.org.apache"
+    relocate 'javax.xml.bind', "${newBasePackage}.shaded.javax.xml.bind"
 }
 
 task sourcesJar(type: Jar) {
@@ -23,11 +25,11 @@ task sourcesJar(type: Jar) {
 }
 
 task docsJar(type: Jar, dependsOn: javadoc) {
-    classifier 'docs'
+    classifier 'javadoc'
     from javadoc.destinationDir
 }
 
 task testsJar(type: Jar) {
-    classifier = 'tests'
+    classifier 'tests'
     from sourceSets.test.output
 }
