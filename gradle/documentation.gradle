@@ -1,6 +1,7 @@
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
+        mavenCentral()
     }
 
     dependencies {
@@ -19,9 +20,15 @@ githubPages {
         }
     }
     credentials {
-        username = project.releaseUsername
-        password = project.releasePassword
+        username = resolveProperty('githubUsername')
+        password = resolveProperty('githubPassword')
     }
 }
 
 publishGhPages.dependsOn javadoc
+
+String resolveProperty(String propKey) {
+    String propValue = System.getenv()[propKey]
+    if(propValue) { return propValue }
+    hasProperty(propKey) ? getProperty(propKey) : null
+}
