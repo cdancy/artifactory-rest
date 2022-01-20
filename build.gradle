@@ -41,7 +41,7 @@ dependencies {
     testImplementation ('ch.qos.logback:logback-classic:1.2.10')
 }
 
-ext.compatibilityVersion = '1.8'
+ext.compatibilityVersion = JavaVersion.VERSION_11
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
@@ -99,3 +99,11 @@ task integTest(type: Test, dependsOn: ['mockTest']) {
                         "test.artifactory.docker.tag" : "${testArtifactoryRestDockerTag}"] << authentication
 }
 
+javadoc {
+    source = sourceSets.main.allJava
+    options.with {
+        links "https://docs.oracle.com/en/java/javase/${compatibilityVersion}/docs/api"
+        links "https://google.github.io/guice/api-docs/${dependencies.guiceVersion}/javadoc/"
+        addStringOption('Xdoclint:none', '-quiet')
+    }
+}
