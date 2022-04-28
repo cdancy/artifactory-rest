@@ -70,7 +70,6 @@ public interface ArtifactApi {
     @Named("artifact:download")
     @Path("/{repoKey}/{itemPath}")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-    //@ResponseParser(DownloadResponseParser.class)
     @Consumes(MediaType.WILDCARD)
     @GET
     InputStream downloadArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath,
@@ -79,7 +78,6 @@ public interface ArtifactApi {
     @Named("artifact:downloadArchiveEntry")
     @Path("/{repoKey}/{archivePath}/{archiveEntryPath}")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-    //@ResponseParser(DownloadResponseParser.class)
     @Consumes(MediaType.WILDCARD)
     @GET
     InputStream downloadArchiveEntry(@PathParam("repoKey") String sourceRepo, @PathParam("archivePath") @ParamParser(ArchivePathParser.class) String archivePath, @PathParam("archiveEntryPath") String archiveEntryPath);
