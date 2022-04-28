@@ -19,12 +19,17 @@ package com.cdancy.artifactory.rest;
 import com.cdancy.artifactory.rest.config.ArtifactoryAuthenticationModule;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
@@ -97,6 +102,47 @@ public class BaseArtifactoryApiLiveTest extends BaseApiLiveTest<ArtifactoryApi> 
                 writer.close();
         }
         return randomFile;
+    }
+
+    public File createRandomArchiveFile(File[] files) {
+        List<String> filePaths = new ArrayList<>();
+        for (File file: files) {
+            filePaths.add(file.getAbsolutePath());
+        }
+        File zipFile = new File(System.getProperty("java.io.tmpdir") + "/" + randomUUID() + ".zip");
+        FileOutputStream fos = null;
+        ZipOutputStream zos = null;
+        FileInputStream fis = null;
+
+        try {
+            byte[] buffer =  new byte[1024];
+            fos = new FileOutputStream(zipFile);
+            zos = new ZipOutputStream(fos);
+            for (String filePath: filePaths) {
+                File srcFile = new File(filePath);
+                fis = new FileInputStream(srcFile);
+                zos.putNextEntry(new ZipEntry(srcFile.getName()));
+                int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    zos.write(buffer, 0, length);
+                }
+            }
+            return zipFile;
+        } catch (IOException ex) {
+            throw new RuntimeException("Exception when creating zip file: " + ex.getMessage());
+        } finally {
+            try {
+                if (zos != null) {
+                    zos.closeEntry();
+                    zos.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch(IOException ex) {
+                //ignore
+            }
+        }
     }
 
     public static String getFileChecksum(MessageDigest digest, File file) throws IOException {
