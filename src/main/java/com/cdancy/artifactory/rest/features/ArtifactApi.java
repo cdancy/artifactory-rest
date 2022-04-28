@@ -27,6 +27,8 @@ import com.cdancy.artifactory.rest.domain.error.RequestStatus;
 import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 
+import com.cdancy.artifactory.rest.parsers.ArchivePathParser;
+import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.io.Payload;
 import org.jclouds.javax.annotation.Nullable;
@@ -34,6 +36,7 @@ import org.jclouds.rest.annotations.*;
 
 import com.google.common.net.HttpHeaders;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -63,4 +66,21 @@ public interface ArtifactApi {
    @Fallback(RequestStatusFromError.class)
    @POST
    RequestStatus copyArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath, @QueryParam("to") String targetPath);
+
+    @Named("artifact:download")
+    @Path("/{repoKey}/{itemPath}")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    //@ResponseParser(DownloadResponseParser.class)
+    @Consumes(MediaType.WILDCARD)
+    @GET
+    InputStream downloadArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath,
+                                 @QueryParam("skipUpdateStats") boolean skipUpdateStats);
+
+    @Named("artifact:downloadArchiveEntry")
+    @Path("/{repoKey}/{archivePath}/{archiveEntryPath}")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    //@ResponseParser(DownloadResponseParser.class)
+    @Consumes(MediaType.WILDCARD)
+    @GET
+    InputStream downloadArchiveEntry(@PathParam("repoKey") String sourceRepo, @PathParam("archivePath") @ParamParser(ArchivePathParser.class) String archivePath, @PathParam("archiveEntryPath") String archiveEntryPath);
 }
