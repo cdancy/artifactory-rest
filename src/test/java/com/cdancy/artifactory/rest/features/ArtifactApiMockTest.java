@@ -18,6 +18,7 @@ package com.cdancy.artifactory.rest.features;
 
 import static com.cdancy.artifactory.rest.TestUtilities.assertFalse;
 import static com.cdancy.artifactory.rest.TestUtilities.assertNotNull;
+import static com.cdancy.artifactory.rest.TestUtilities.assertNull;
 import static com.cdancy.artifactory.rest.TestUtilities.assertTrue;
 
 import com.cdancy.artifactory.rest.ArtifactoryApi;
@@ -27,10 +28,13 @@ import com.cdancy.artifactory.rest.BaseArtifactoryMockTest;
 import com.google.common.collect.Lists;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import okio.Buffer;
 import org.jclouds.io.Payloads;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,5 +159,81 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
          jcloudsApi.close();
          server.shutdown();
       }
+    }
+
+    public void testDownloadArtifact() throws IOException {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        Buffer buffer = new Buffer();
+        InputStream in = getClass().getResourceAsStream("/readme.txt");
+        buffer.write(in.readAllBytes());
+
+        server.enqueue(new MockResponse().setBody(buffer).setResponseCode(200));
+
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+
+        try {
+            InputStream inputStream = api.downloadArtifact("libs-release-local", "my/artifact/readme.txt", false);
+            assertNotNull(inputStream);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testDownloadNonExistentArtifact() throws IOException {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+
+        try {
+            InputStream inputStream = api.downloadArtifact("libs-release-local", "my/artifact/nonexistent.txt", false);
+            assertNull(inputStream);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testDownloadArchiveEntry() throws IOException {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        Buffer buffer = new Buffer();
+        InputStream in = getClass().getResourceAsStream("/my-archive.zip");
+        buffer.write(in.readAllBytes());
+
+        server.enqueue(new MockResponse().setBody(buffer).setResponseCode(200));
+
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+
+        try {
+            InputStream inputStream = api.downloadArchiveEntry("libs-release-local", "my/artifact/my-artifact.zip", "file1");
+            assertNotNull(inputStream);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testDownloadNonExistentArchiveEntry() throws IOException {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+
+        try {
+            InputStream inputStream = api.downloadArchiveEntry("libs-release-local", "my/artifact/my-artifact.zip", "non-existent/file1");
+            assertNull(inputStream);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
     }
 }
