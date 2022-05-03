@@ -41,7 +41,7 @@ dependencies {
     testImplementation ('ch.qos.logback:logback-classic:1.2.11')
 }
 
-ext.compatibilityVersion = JavaVersion.VERSION_11
+ext.compatibilityVersion = JavaVersion.VERSION_1_8
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
