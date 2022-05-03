@@ -108,6 +108,26 @@ public class ArtifactApiMockTest extends BaseArtifactoryMockTest {
         }
     }
 
+    public void testMoveArtifact() throws Exception {
+        MockWebServer server = mockArtifactoryJavaWebServer();
+
+        String payload = payloadFromResource("/artifact-copy.json");
+        server.enqueue(new MockResponse().setBody(payload).setResponseCode(200));
+        ArtifactoryApi jcloudsApi = api(server.getUrl("/"));
+        ArtifactApi api = jcloudsApi.artifactApi();
+        try {
+            RequestStatus requestStatus = api.moveArtifact("libs-snapshot-local", "hello/world", "ext-snapshot-local/hello/world");
+            assertNotNull(requestStatus);
+            assertTrue(requestStatus.errors().size() == 0);
+            assertTrue(requestStatus.messages().size() == 1);
+            assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("info"));
+            assertSent(server, "POST", "/api/move/libs-snapshot-local/hello/world?failFast=1&suppressLayouts=0&to=ext-snapshot-local/hello/world", MediaType.APPLICATION_JSON);
+        } finally {
+            jcloudsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testCopyArtifactWithNonExistentSource() throws Exception {
         MockWebServer server = mockArtifactoryJavaWebServer();
 
