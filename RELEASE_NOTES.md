@@ -1,7 +1,10 @@
-### Version 1.1.0 5/3/2022)
+### Version 1.1.1 (TBA)
+* 
+
+### Version 1.1.0 (5/3/2022)
 * Adding artifactoryMove
 
-### Version 1.0.0 11/1/2021)
+### Version 1.0.0 (11/1/2021)
 * Migrate go maven central
 
 ### Version 0.9.8 (3/5/20)
