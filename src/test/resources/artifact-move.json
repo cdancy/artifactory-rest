@@ -1,0 +1,8 @@
+{
+  "messages":[
+    {
+      "level":"INFO",
+      "message":"movying libs-snapshot-local:hello/world to ext-snapshot-local:hello/world completed successfully, 1 artifacts and 1 folders were moved"
+    }
+  ]
+}

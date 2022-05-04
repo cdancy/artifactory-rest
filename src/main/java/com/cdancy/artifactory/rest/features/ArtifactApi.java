@@ -24,7 +24,9 @@ import javax.ws.rs.core.MediaType;
 import com.cdancy.artifactory.rest.binders.BindMatrixPropertiesToPath;
 import com.cdancy.artifactory.rest.domain.artifact.Artifact;
 import com.cdancy.artifactory.rest.domain.error.RequestStatus;
+
 import static com.cdancy.artifactory.rest.fallbacks.ArtifactoryFallbacks.RequestStatusFromError;
+
 import com.cdancy.artifactory.rest.filters.ArtifactoryAuthenticationFilter;
 
 import com.cdancy.artifactory.rest.parsers.ArchivePathParser;
@@ -44,28 +46,36 @@ import java.util.Map;
 @RequestFilters(ArtifactoryAuthenticationFilter.class)
 public interface ArtifactApi {
 
-   @Named("artifact:deploy")
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/{repoKey}/{itemPath}")
-   @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
-   @PUT
-   Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
-                           Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
+    @Named("artifact:deploy")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{repoKey}/{itemPath}")
+    @Headers(keys = HttpHeaders.CONTENT_TYPE, values = MediaType.APPLICATION_OCTET_STREAM)
+    @PUT
+    Artifact deployArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath,
+                            Payload inputStream, @Nullable @BinderParam(BindMatrixPropertiesToPath.class) Map<String, List<String>> properties);
 
-   @Named("artifact:delete")
-   @Path("/{repoKey}/{itemPath}")
-   @Fallback(FalseOnNotFoundOr404.class)
-   @Consumes(MediaType.WILDCARD)
-   @DELETE
-   boolean deleteArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
+    @Named("artifact:delete")
+    @Path("/{repoKey}/{itemPath}")
+    @Fallback(FalseOnNotFoundOr404.class)
+    @Consumes(MediaType.WILDCARD)
+    @DELETE
+    boolean deleteArtifact(@PathParam("repoKey") String repoKey, @PathParam("itemPath") String itemPath);
 
-   @Named("artifact:copy")
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/api/copy/{repoKey}/{itemPath}")
-   @QueryParams(keys = { "failFast", "suppressLayouts" }, values = { "1", "0" })
-   @Fallback(RequestStatusFromError.class)
-   @POST
-   RequestStatus copyArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath, @QueryParam("to") String targetPath);
+    @Named("artifact:copy")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/api/copy/{repoKey}/{itemPath}")
+    @QueryParams(keys = {"failFast", "suppressLayouts"}, values = {"1", "0"})
+    @Fallback(RequestStatusFromError.class)
+    @POST
+    RequestStatus copyArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath, @QueryParam("to") String targetPath);
+
+    @Named("artifact:move")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/api/move/{repoKey}/{itemPath}")
+    @QueryParams(keys = {"failFast", "suppressLayouts"}, values = {"1", "0"})
+    @Fallback(RequestStatusFromError.class)
+    @POST
+    RequestStatus moveArtifact(@PathParam("repoKey") String sourceRepo, @PathParam("itemPath") String sourcePath, @QueryParam("to") String targetPath);
 
     @Named("artifact:download")
     @Path("/{repoKey}/{itemPath}")

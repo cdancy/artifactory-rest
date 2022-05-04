@@ -125,6 +125,24 @@ public class ArtifactApiLiveTest extends BaseArtifactoryApiLiveTest {
         assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("info"));
     }
 
+    @Test (dependsOnMethods = "testDeployArtifact")
+    public void testMoveArtifact() {
+        RequestStatus requestStatus = api().moveArtifact(repoKey, itemPath, repoReleaseKey + "/" + itemPath);
+        assertNotNull(requestStatus);
+        assertTrue(requestStatus.errors().size() == 0);
+        assertTrue(requestStatus.messages().size() == 1);
+        assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("info"));
+    }
+
+    @Test (dependsOnMethods = "testMoveArtifact")
+    public void testMoveNonExistentArtifact() {
+        RequestStatus requestStatus = api().moveArtifact(repoKey, randomPath(), repoReleaseKey + "/" + randomPath());
+        assertNotNull(requestStatus);
+        assertTrue(requestStatus.errors().size() == 0);
+        assertTrue(requestStatus.messages().size() == 1);
+        assertTrue(requestStatus.messages().get(0).level().equalsIgnoreCase("error"));
+    }
+
     @Test (dependsOnMethods = "testCopyArtifact")
     public void testCopyNonExistentArtifact() {
         RequestStatus requestStatus = api().copyArtifact(repoKey, randomPath(), repoReleaseKey + "/" + randomPath());
