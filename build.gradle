@@ -107,6 +107,7 @@ javadoc {
     options.with {
         links "https://docs.oracle.com/javase/${compatibilityVersion.toString().split("\\.").last()}/docs/api"
         links "https://google.github.io/guice/api-docs/${dependencies.guiceVersion}/javadoc/"
+        links "https://javadoc.io/doc/org.apache.jclouds/jclouds-core/${dependencies.jcloudsVersion}"
         addStringOption('Xdoclint:none', '-quiet')
         addStringOption('source', '8')
     }
