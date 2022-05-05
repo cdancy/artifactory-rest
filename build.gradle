@@ -105,5 +105,6 @@ javadoc {
         links "https://docs.oracle.com/javase/${compatibilityVersion.toString().split("\\.").last()}/docs/api"
         links "https://google.github.io/guice/api-docs/${dependencies.guiceVersion}/javadoc/"
         addStringOption('Xdoclint:none', '-quiet')
+        addStringOption('source', '8')
     }
 }
