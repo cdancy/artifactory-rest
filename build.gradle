@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
@@ -24,7 +24,10 @@ dependencies {
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    implementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
+
+    // The ArtifactApi takes in org.jclouds.io.Payload, so it must be exposed as an API
+    api("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
+
     implementation ("com.google.inject:guice:${guiceVersion}")
     implementation ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
     implementation ("com.google.auto.service:auto-service-annotations:${autoServiceVersion}")
