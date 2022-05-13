@@ -1,5 +1,8 @@
-### Version 1.1.1 (TBA)
-* 
+### Version 1.1.2 (TBA)
+*
+
+### Version 1.1.1 (5/13/2022)
+* Ability to search for an artifact with a null property value
 
 ### Version 1.1.0 (5/3/2022)
 * Adding artifactoryMove
