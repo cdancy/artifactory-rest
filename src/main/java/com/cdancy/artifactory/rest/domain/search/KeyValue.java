@@ -19,12 +19,14 @@ package com.cdancy.artifactory.rest.domain.search;
 
 import com.google.auto.value.AutoValue;
 import org.jclouds.json.SerializedNames;
+import org.jclouds.javax.annotation.Nullable;
 
 @AutoValue
 public abstract class KeyValue {
 
    public abstract String key();
 
+   @Nullable
    public abstract String value();
 
 
